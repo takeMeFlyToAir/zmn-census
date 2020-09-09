@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: zmn-census
+  resources:
+    static-locations: classpath:static/,file:static/
+
+
+mybatis:
+  type-aliases-package: com.zmn.census.action.entity
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  config-location: classpath:mybatis/mybatis-config.xml
+
+
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
