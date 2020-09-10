@@ -9,7 +9,7 @@ import com.zmn.census.common.core.service.IService;
 import java.util.List;
 
 /**
- * @ClassName CommunityService
+ * @ClassName CommunityApi
  * Description 小区
  * Author zhaozhirong
  * Date 2020/9/9 16:43

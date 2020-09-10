@@ -14,4 +14,6 @@ public class CensusSurveyAddVO {
 
     private RoomAddressAddVO roomAddress;
 
+    private HouseHoldAddVO houseHold;
+
 }
