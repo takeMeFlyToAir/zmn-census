@@ -17,29 +17,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/common")
-@Api(tags = "提供前台地址选择项")
+@Api(tags = "通用查询")
 public class CommonController {
 
-
-    @Autowired
-    private CommunityApi communityApi;
-
-    @ApiOperation("查询所有街道")
-    @GetMapping(value = "/findAllTown")
-    public CommonResult<List<String>> findAllTown(){
-       return CommonResult.success(communityApi.findAllTown());
-    }
-
-    @ApiOperation("根据街道查询普查小区")
-    @GetMapping(value = "/findVillageByTown")
-    public CommonResult<List<String>> findVillageByTown(String town){
-        return CommonResult.success(communityApi.findVillageByTown(town));
-    }
-
-    @ApiOperation("根据街道和普查小区查询住宅小区")
-    @GetMapping(value = "/findCommunityByTownAndVillage")
-    public CommonResult<List<String>> findCommunityByTownAndVillage(CommunityQueryQO communityQueryQO){
-        return CommonResult.success(communityApi.findCommunityByTownAndVillage(communityQueryQO));
-    }
 
 }
