@@ -27,6 +27,8 @@ public class HouseHoldEntity  extends BaseEntity {
      * h5: "",//住房类型,h5List,（选择3-6的，跳至个人项目。）
      * h6: "1",//本户住房建筑面积
      * h7: "1",//本户住房间数
+     * h8: "1",//您家中是否有6个月及以上的孕妇（是/否）
+     * h9: "1",//填报人类型：住户，租户
      */
     private String h1;
     private String h2Live;
@@ -38,5 +40,7 @@ public class HouseHoldEntity  extends BaseEntity {
     private String h5;
     private String h6;
     private String h7;
+    private String h8;
+    private String h9;
 
 }
