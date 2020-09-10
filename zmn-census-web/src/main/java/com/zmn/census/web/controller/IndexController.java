@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "首页")
 public class IndexController {
 
+
     @Value("${env.name}")
     private String env;
 

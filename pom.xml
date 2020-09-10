@@ -9,10 +9,10 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>zmn-census-web</module>
+      <module>zmn-census-web</module>
       <module>zmn-census-action</module>
       <module>zmn-census-common</module>
-        <module>zmn-census-api</module>
+      <module>zmn-census-bean</module>
     </modules>
 
     <name>zmn-census</name>
@@ -56,32 +56,5 @@
   <dependencies>
 
   </dependencies>
-  <build>
-    <finalName>app</finalName>
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>**/*.xml</include>
-          <include>**/*.csv</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+
 </project>

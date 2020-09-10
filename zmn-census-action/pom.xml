@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.zmn</groupId>
-            <artifactId>zmn-census-api</artifactId>
+            <artifactId>zmn-census-bean</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--Mysql数据库驱动-->
