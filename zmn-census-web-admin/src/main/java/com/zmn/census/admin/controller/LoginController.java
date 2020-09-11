@@ -29,7 +29,7 @@ public class LoginController {
 	/**
 	 * 登录
 	 */
-	@GetMapping("/auth")
+	@PostMapping("/auth")
 	@ApiOperation("登录")
 	public CommonResult authLogin(
 			@RequestParam(value = "userName") String userName,

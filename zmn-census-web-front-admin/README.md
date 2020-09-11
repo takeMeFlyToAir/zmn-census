@@ -1,0 +1,1 @@
+npm install xlsx --registry=https://registry.npm.taobao.org
