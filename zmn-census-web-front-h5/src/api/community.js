@@ -2,6 +2,16 @@ import api from './index'
 // axios
 import request from '@/utils/request'
 
+// 查询某个小区
+export function community_getById(params) {
+  return request({
+    url: api.community.getById,
+    method: 'get',
+    params,
+    hideloading: true
+  })
+}
+
 // 查询所有街道
 export function community_findAllTown(params) {
   return request({

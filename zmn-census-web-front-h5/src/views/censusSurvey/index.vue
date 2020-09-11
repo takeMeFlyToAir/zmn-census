@@ -401,7 +401,7 @@
 </template>
 
 <script>
-  import { community_findAllTown, community_findVillageByTown, community_findCommunityByTownAndVillage,  } from '@/api/community.js'
+  import { community_getById,community_findAllTown, community_findVillageByTown, community_findCommunityByTownAndVillage,  } from '@/api/community.js'
   import { censusSurvey_save } from '@/api/censusSurvey.js'
 
   import { formatDate,getBirthYearAndMonthByIdNo,getBirthdayByIdNo } from '@/utils/index.js'
@@ -594,6 +594,7 @@
     }
   },
   created(){
+    this.dealLinkParam(this.$route.query)
     this.getTownList();
     let person = Object.assign({},this.personInfo)
     person.d2 = '户主'
@@ -665,6 +666,20 @@
     onFailed(errorInfo){
       console.log("onFailed",errorInfo)
       this.$toast.fail("请填写所有的必填项，注意输入框字体是红色的！")
+    },
+    dealLinkParam(query){
+      if(query && query.hasOwnProperty("id")){
+        let param = {id: query.id}
+        community_getById(param)
+          .then((res) => {
+            if(res.code == 200){
+              this.roomAddress.town = res.data.town;
+              this.roomAddress.village = res.data.village;
+              this.roomAddress.community = res.data.name;
+            }
+          })
+          .catch(() => { })
+      }
     },
     formatter(type, val) {
       if (type === 'year') {

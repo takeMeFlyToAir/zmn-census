@@ -1,9 +1,9 @@
 package com.zmn.census.action.service;
 
-import com.zmn.census.action.api.CensusSurveyApi;
-import com.zmn.census.action.api.HouseHoldApi;
-import com.zmn.census.action.api.PersonInfoApi;
-import com.zmn.census.action.api.RoomAddressApi;
+import com.zmn.census.action.api.CensusSurveyService;
+import com.zmn.census.action.api.HouseHoldService;
+import com.zmn.census.action.api.PersonInfoService;
+import com.zmn.census.action.api.RoomAddressService;
 import com.zmn.census.action.entity.HouseHoldEntity;
 import com.zmn.census.action.entity.PersonInfoEntity;
 import com.zmn.census.action.entity.RoomAddressEntity;
@@ -23,16 +23,16 @@ import java.util.List;
  * Version 1.0
  **/
 @Service
-public class CensusSurveyServiceImpl implements CensusSurveyApi {
+public class CensusSurveyServiceImpl implements CensusSurveyService {
 
     @Autowired
-    private RoomAddressApi roomAddressApi;
+    private RoomAddressService roomAddressService;
 
     @Autowired
-    private HouseHoldApi houseHoldApi;
+    private HouseHoldService houseHoldService;
 
     @Autowired
-    private PersonInfoApi personInfoApi;
+    private PersonInfoService personInfoService;
 
     @Override
     @Transactional
@@ -40,12 +40,12 @@ public class CensusSurveyServiceImpl implements CensusSurveyApi {
         RoomAddressEntity roomAddressEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getRoomAddress(), RoomAddressEntity.class);
         HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getHouseHold(), HouseHoldEntity.class);
         List<PersonInfoEntity> personInfoEntityList = VoAndBeanUtils.fromVOList(censusSurveyAddVO.getPersonInfoList(), PersonInfoEntity.class);
-        roomAddressApi.save(roomAddressEntity);
+        roomAddressService.save(roomAddressEntity);
         houseHoldEntity.setRoomAddressId(roomAddressEntity.getId());
-        houseHoldApi.save(houseHoldEntity);
+        houseHoldService.save(houseHoldEntity);
         for (PersonInfoEntity personInfoEntity : personInfoEntityList) {
             personInfoEntity.setRoomAddressId(roomAddressEntity.getId());
         }
-        personInfoApi.saveList(personInfoEntityList);
+        personInfoService.saveList(personInfoEntityList);
     }
 }

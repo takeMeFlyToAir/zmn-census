@@ -1,6 +1,6 @@
 package com.zmn.census.web.controller;
 
-import com.zmn.census.action.api.CensusSurveyApi;
+import com.zmn.census.action.api.CensusSurveyService;
 import com.zmn.census.api.vo.CensusSurveyAddVO;
 import com.zmn.census.common.core.result.CommonResult;
 import io.swagger.annotations.Api;
@@ -23,13 +23,13 @@ public class CensusSurveyController {
 
 
     @Autowired
-    private CensusSurveyApi censusSurveyApi;
+    private CensusSurveyService censusSurveyService;
 
     @ApiOperation("保存小区")
     @PostMapping(value = "/save")
     public CommonResult save(@RequestBody CensusSurveyAddVO censusAddVO){
         log.info("====================={}",censusAddVO);
-        censusSurveyApi.save(censusAddVO);
+        censusSurveyService.save(censusAddVO);
         return CommonResult.success();
     }
 

@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zmn.census.action.api.UserApi;
+import com.zmn.census.action.api.UserService;
 import com.zmn.census.action.entity.UserEntity;
 import com.zmn.census.action.mapper.UserMapper;
 import com.zmn.census.api.qo.UserQO;
@@ -26,7 +26,7 @@ import java.util.List;
  * Created by zhaozhirong on 2019/11/25.
  */
 @Service
-public class UserServiceImpl extends BaseService<UserEntity> implements UserApi {
+public class UserServiceImpl extends BaseService<UserEntity> implements UserService {
 
     @Autowired
     private UserMapper userMapper;

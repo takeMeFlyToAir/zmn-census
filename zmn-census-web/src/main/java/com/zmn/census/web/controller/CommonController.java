@@ -1,6 +1,5 @@
 package com.zmn.census.web.controller;
 
-import com.zmn.census.action.api.CommunityApi;
 import com.zmn.census.api.qo.CommunityQueryQO;
 import com.zmn.census.common.core.result.CommonResult;
 import io.swagger.annotations.Api;

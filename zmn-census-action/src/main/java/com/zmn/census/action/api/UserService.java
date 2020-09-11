@@ -14,7 +14,7 @@ import com.zmn.census.common.core.service.IService;
 /**
  * Created by zhaozhirong on 2019/11/25.
  */
-public interface UserApi extends IService<UserEntity> {
+public interface UserService extends IService<UserEntity> {
 
     UserVO add(UserAddVO userAddVO);
 

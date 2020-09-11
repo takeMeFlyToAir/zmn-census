@@ -1,6 +1,6 @@
 package com.zmn.census.action.service;
 
-import com.zmn.census.action.api.HouseHoldApi;
+import com.zmn.census.action.api.HouseHoldService;
 import com.zmn.census.action.entity.HouseHoldEntity;
 import com.zmn.census.action.mapper.HouseHoldMapper;
 import com.zmn.census.common.core.service.BaseService;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * Version 1.0
  **/
 @Service
-public class HouseHoldServiceImpl extends BaseService<HouseHoldEntity> implements HouseHoldApi {
+public class HouseHoldServiceImpl extends BaseService<HouseHoldEntity> implements HouseHoldService {
 
     @Autowired
     private HouseHoldMapper houseHoldMapper;

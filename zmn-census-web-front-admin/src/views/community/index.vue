@@ -45,18 +45,24 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建日期"  align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.createdDateStr }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center"  class-name="small-padding fixed-width">
+      <!--<el-table-column label="创建日期"  align="center">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.createdDateStr }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column width="400" label="操作" align="center"  class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini"  @click="handleEdit(row)">
+          <el-button type="mini" size="mini"  @click="handleEdit(row)">
             编辑
           </el-button>
           <el-button  size="mini" type="danger" @click="handleDelete(row.id)">
             删除
+          </el-button>
+          <el-button  size="mini" type="info" @click="fillCensus(row)">
+            填写问卷
+          </el-button>
+          <el-button  size="mini" type="primary" @click="qrCode(row)">
+            二维码
           </el-button>
         </template>
       </el-table-column>
@@ -85,19 +91,51 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="二维码"
+      :visible.sync="qrDialogFormVisible"
+      width="20%"
+      center>
+        <vue-q-art :config="config" :download="download"></vue-q-art>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import { apiGetList, apiAdd, apiDelete, apiEdit} from '@/api/community'
+  import { apiGetByKey } from '@/api/config'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
+  import VueQArt from 'vue-qart'
 
   export default {
     name: 'user',
-    components: { Pagination },
+    components: { Pagination,VueQArt  },
     data() {
       return {
+        frontUrl:'',
+        downloadButton:true,
+        downloadButtonText:'下载',
+        config: {
+          value: 'https://baidu.comsdfsdfsdfdsfsdfsdfsdfdsfsdfdsfdsfsdf',
+          imagePath: '/src/assets/image/logo.png',
+          size: 1,
+          filter: 'color',
+          version: 1,
+          fillType: 'scale_to_fit',
+        },
+        download: {
+          visible: true,
+          text: '下载二维码',
+          style: {
+            fontSize: '16px',
+            textAlign: 'center',
+            marginLeft: '60px'
+    },
+          filename:'二维码'
+        },
         tableKey: 0,
         list: null,
         total: 0,
@@ -113,6 +151,7 @@
 
         dialogStatus:'',
         dialogFormVisible:false,
+        qrDialogFormVisible:false,
         textMap: {
           edit: '编辑',
           create: '添加'
@@ -132,8 +171,33 @@
     },
     created() {
       this.getList()
+      this.getFrontUrl()
     },
     methods: {
+      getFrontUrl(){
+        let param = {key: 'census_fill'}
+        apiGetByKey(param).then((item) => {
+          if(item.code == 200 && item.data != null){
+            this.frontUrl = item.data.value
+          }
+        })
+      },
+      qrCode(row){
+        this.download.filename=row.name
+        this.qrDialogFormVisible = true
+      },
+      fillCensus(row){
+        if(this.frontUrl){
+          window.open(this.frontUrl+"?id="+row.id,'_blank')
+        }else {
+          this.$notify({
+            title: '提示',
+            message: '联系管理员配置前台访问的地址',
+            type: 'error',
+            duration: 3000
+          })
+        }
+      },
       getList(params) {
         if(params){
           Object.assign(this.listQuery, params)

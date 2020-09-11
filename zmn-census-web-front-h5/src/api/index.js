@@ -3,6 +3,7 @@ const api = {
   UserInfo: '/user/userinfo',
   UserName: '/user/name',
   community: {
+    getById:  '/community/getById',
     findAllTown:  '/community/findAllTown',
     findVillageByTown:  '/community/findVillageByTown',
     findCommunityByTownAndVillage:  '/community/findCommunityByTownAndVillage',

@@ -3,7 +3,7 @@ package com.zmn.census.action.service;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zmn.census.action.api.CommunityApi;
+import com.zmn.census.action.api.CommunityService;
 import com.zmn.census.action.entity.CommunityEntity;
 import com.zmn.census.action.mapper.CommunityMapper;
 import com.zmn.census.api.qo.CommunityQueryQO;
@@ -28,11 +28,16 @@ import java.util.List;
  * Version 1.0
  **/
 @Service
-public class CommunityServiceImpl extends BaseService<CommunityEntity> implements CommunityApi {
+public class CommunityServiceImpl extends BaseService<CommunityEntity> implements CommunityService {
 
     @Autowired
     private CommunityMapper communityMapper;
 
+
+    @Override
+    public CommunityVO get(Integer id) {
+        return VoAndBeanUtils.toVO(communityMapper.selectByPrimaryKey(id), CommunityVO.class);
+    }
 
     @Override
     public PagerResult<CommunityVO> findPage(Pager<CommunityQueryQO> pager) {

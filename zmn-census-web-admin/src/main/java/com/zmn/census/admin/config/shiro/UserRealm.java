@@ -1,6 +1,6 @@
 package com.zmn.census.admin.config.shiro;
 
-import com.zmn.census.action.api.UserApi;
+import com.zmn.census.action.api.UserService;
 import com.zmn.census.api.common.LoginUser;
 import com.zmn.census.api.vo.UserVO;
 import com.zmn.census.common.login.Constant;
@@ -23,7 +23,7 @@ import java.util.List;
 public class UserRealm extends AuthorizingRealm {
 
 	@Autowired
-	private UserApi userApi;
+	private UserService userService;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -47,7 +47,7 @@ public class UserRealm extends AuthorizingRealm {
 		String userName = (String) authenticationToken.getPrincipal();
 		String password = new String((char[]) authenticationToken.getCredentials());
 		log.info("===============login info===userName is {}, password is {}",userName,password);
-		UserVO userVO = userApi.login(userName,password);
+		UserVO userVO = userService.login(userName,password);
 		if (userVO == null) {
 			throw new UnknownAccountException();
 		}
