@@ -54,5 +54,10 @@ public class RoomAddressAddVO {
     @ApiModelProperty("填报人电话")
     private String fillPersonPhone;
 
+    @ApiModelProperty("普查员姓名")
+    private String examinePersonName;
+
+    @ApiModelProperty("备注")
+    private String remark;
 
 }

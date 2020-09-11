@@ -1,23 +1,17 @@
-package com.zmn.census.action.entity;
+package com.zmn.census.api.vo;
 
-import com.zmn.census.common.core.model.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Table;
-
 /**
- * @ClassName PersonInfoEntity
+ * @ClassName PersonInfoAddVO
  * Description 个人信息
  * Author zhaozhirong
- * Date 2020/9/9 17:58
+ * Date 2020/9/9 17;48
  * Version 1.0
  **/
 @Data
-@Table(name = "zmn_census_person_info")
-public class PersonInfoEntity extends BaseEntity {
-
-    private Integer roomAddressId;
+public class PersonInfoAddVO {
 
     @ApiModelProperty("姓名")
     private String d1;
@@ -71,5 +65,6 @@ public class PersonInfoEntity extends BaseEntity {
     private String d11;
 
     @ApiModelProperty("受教育程度")
-    private String d12;
+    private String d12; 
+
 }

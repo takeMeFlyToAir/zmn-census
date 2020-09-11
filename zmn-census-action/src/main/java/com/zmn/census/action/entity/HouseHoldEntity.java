@@ -30,6 +30,7 @@ public class HouseHoldEntity  extends BaseEntity {
      * h8: "1",//您家中是否有6个月及以上的孕妇（是/否）
      * h9: "1",//填报人类型：住户，租户
      */
+    private Integer roomAddressId;
     private String h1;
     private String h2Live;
     private String h2NoLive;

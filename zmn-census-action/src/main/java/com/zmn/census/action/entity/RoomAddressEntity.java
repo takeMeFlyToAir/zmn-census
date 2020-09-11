@@ -1,6 +1,7 @@
 package com.zmn.census.action.entity;
 
 import com.zmn.census.common.core.model.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Table;
@@ -72,6 +73,17 @@ public class RoomAddressEntity  extends BaseEntity {
      * 填报人电话
      */
     private String fillPersonPhone;
+
+
+    /**
+     * 普查员姓名
+     */
+    private String examinePersonName;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
 
 }

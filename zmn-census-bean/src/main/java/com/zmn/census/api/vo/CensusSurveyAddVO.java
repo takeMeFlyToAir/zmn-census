@@ -2,6 +2,8 @@ package com.zmn.census.api.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @ClassName CensusAddVO
  * Description TODO
@@ -15,5 +17,7 @@ public class CensusSurveyAddVO {
     private RoomAddressAddVO roomAddress;
 
     private HouseHoldAddVO houseHold;
+
+    private List<PersonInfoAddVO> personInfoList;
 
 }
