@@ -34,7 +34,7 @@ public class UserController {
     private UserApi userApi;
 
     @ApiOperation("分页查询用户")
-    @GetMapping(value = "/users")
+    @GetMapping(value = "/findPage")
     public CommonResult<PagerResult<UserVO>> findPage(Pager<UserQO> pager, UserQO userQO){
         try {
             pager.setCondition(userQO);
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @ApiOperation("添加用户")
-    @PostMapping(value = "/users")
+    @PostMapping(value = "/save")
     public CommonResult add(UserAddVO userAddVO){
         try {
             UserVO userUserNameVO = userApi.getByUserName(userAddVO.getUserName());
@@ -67,10 +67,10 @@ public class UserController {
     }
 
     @ApiOperation("删除用户")
-    @DeleteMapping(value = "/users/{userId}")
-    public CommonResult delete(@PathVariable Integer userId){
+    @PostMapping(value = "/delete")
+    public CommonResult delete(Integer id){
         try {
-            userApi.delete(userId);
+            userApi.delete(id);
             return CommonResult.success();
         }catch (Exception e){
             log.error(e.getMessage(),e);
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @ApiOperation("编辑用户")
-    @PutMapping(value = "/users")
+    @PostMapping(value = "/edit")
     public CommonResult edit(UserEditVO userEditVO){
         try {
             UserVO userUserNameVO = userApi.getByUserName(userEditVO.getUserName());
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @ApiOperation("新增和编辑校验手机号码的唯一性")
-    @GetMapping(value = "/users/existPhone")
+    @GetMapping(value = "/existPhone")
     public CommonResult existPhone(Integer id,String phone){
         try {
             UserVO userVO = userApi.getByPhone(phone);
@@ -111,7 +111,7 @@ public class UserController {
     }
 
     @ApiOperation("新增和编辑校验用户名的唯一性")
-    @GetMapping(value = "/users/existUserName")
+    @GetMapping(value = "/existUserName")
     public CommonResult existUserName(Integer id,String userName){
         try {
             UserVO userVO = userApi.getByUserName(userName);
@@ -128,7 +128,7 @@ public class UserController {
     }
 
     @ApiOperation("修改密码")
-    @RequestMapping(value = "/users/changePassword", method = {RequestMethod.PUT})
+    @PostMapping(value = "/changePassword")
     public CommonResult changePassword(UserChangePasswordVO userChangePasswordVO){
         try {
             LoginUser currentUser = UserUtil.getCurrentUser();

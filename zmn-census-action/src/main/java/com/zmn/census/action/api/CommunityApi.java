@@ -2,8 +2,13 @@ package com.zmn.census.action.api;
 
 import com.zmn.census.action.entity.CommunityEntity;
 import com.zmn.census.api.qo.CommunityQueryQO;
+import com.zmn.census.api.qo.UserQO;
 import com.zmn.census.api.vo.CommunityAddVO;
+import com.zmn.census.api.vo.CommunityEditVO;
 import com.zmn.census.api.vo.CommunityVO;
+import com.zmn.census.api.vo.UserVO;
+import com.zmn.census.common.core.result.Pager;
+import com.zmn.census.common.core.result.PagerResult;
 import com.zmn.census.common.core.service.IService;
 
 import java.util.List;
@@ -17,6 +22,8 @@ import java.util.List;
  **/
 public interface CommunityApi extends IService<CommunityEntity> {
 
+    PagerResult<CommunityVO> findPage(Pager<CommunityQueryQO> pager);
+
 
     List<CommunityVO> findList();
 
@@ -28,5 +35,6 @@ public interface CommunityApi extends IService<CommunityEntity> {
 
     List<String> findCommunityByTownAndVillage(CommunityQueryQO communityQueryQO);
 
+    CommunityVO edit(CommunityEditVO communityEditVO);
 
 }

@@ -12,11 +12,11 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/user',
-    name: '用户',
+    redirect: '/dashboard',
+    name: '首页',
     hidden: true,
     children: [{
-      path: 'user', component: _import('user/user')
+      path: 'dashboard', component: _import('dashboard/index')
     }]
   }
 ]
@@ -29,14 +29,62 @@ export const asyncRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: '/user/',
-    name: '用户',
+    redirect: '/dashboard',
+    name: '首页',
     children: [
       {
-        path: 'user',
+        path: 'dashboard',
+        name: '首页',
+        component: _import('dashboard/index'),
+        meta: {title: '首页', icon: 'dashboard'},
+      },
+    ]
+  },
+  {
+    path: '/census',
+    component: Layout,
+    redirect: '/census/',
+    name: '',
+    meta: {title: '问卷统计', icon: 'eye-open'},
+    children: [
+      {
+        path: '',
+        name: '问卷统计',
+        component: _import('census/index'),
+        meta: {title: '问卷统计', icon: 'eye-open'},
+        menu: 'census'
+      },
+    ]
+  },
+  {
+    path: '/community',
+    component: Layout,
+    redirect: '/community/',
+    name: '',
+    meta: {title: '小区管理', icon: 'tree'},
+    children: [
+      {
+        path: '',
+        name: '小区管理',
+        component: _import('community/index'),
+        meta: {title: '小区管理', icon: 'business1'},
+        menu: 'community'
+      },
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/',
+    name: '',
+    meta: {title: '用户权限', icon: 'user'},
+    children: [
+      {
+        path: '',
         name: '用户列表',
         component: _import('user/user'),
-        meta: {title: '用户', icon: 'user'},
+        meta: {title: '用户列表', icon: 'user'},
+        menu: 'user'
       },
     ]
   },

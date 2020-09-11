@@ -2,7 +2,7 @@ import api from '@/utils/api'
 
 export function apiGetList(params) {
   return api({
-    url: '/user/users',
+    url: '/user/findPage',
     method: 'get',
     params: params
   })
@@ -10,7 +10,7 @@ export function apiGetList(params) {
 
 export function apiAdd(params) {
   return api({
-    url: '/user/users',
+    url: '/user/save',
     method: 'post',
     params: params
   })
@@ -19,22 +19,24 @@ export function apiAdd(params) {
 
 export function apiEdit(params) {
   return api({
-    url: '/user/users',
-    method: 'put',
+    url: '/user/edit',
+    method: 'post',
     params: params
   })
 }
 
-export function apiDelete(id) {
+export function apiDelete(params) {
   return api({
-    url: '/user/users/'+id,
-    method: 'delete'
+    url: '/user/delete',
+    method: 'post',
+    params: params
+
   })
 }
 
 export function apiExistPhone(params) {
   return api({
-    url: '/user/users/existPhone',
+    url: '/user/existPhone',
     method: 'get',
     params: params
   })
@@ -42,7 +44,7 @@ export function apiExistPhone(params) {
 
 export function apiExistUserName(params) {
   return api({
-    url: '/user/users/existUserName',
+    url: '/user/existUserName',
     method: 'get',
     params: params
   })
@@ -50,8 +52,8 @@ export function apiExistUserName(params) {
 
 export function changePassword(params) {
   return api({
-    url: '/user/users/changePassword',
-    method: 'put',
+    url: '/user/changePassword',
+    method: 'post',
     params: params
   })
 }

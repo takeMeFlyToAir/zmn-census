@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.userName" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
-      <el-input v-model="listQuery.nickName" placeholder="昵称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.phone" placeholder="电话号码" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.town" placeholder="街道" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
+      <el-input v-model="listQuery.village" placeholder="普查小区" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.name" placeholder="住宅小区" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
 
       <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
@@ -30,19 +30,19 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="昵称" align="center">
+      <el-table-column label="街道" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.nickName }}</span>
+          <span>{{ row.town }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名"  align="center">
+      <el-table-column label="普查区"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.userName }}</span>
+          <span>{{ row.village }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话号码"  align="center">
+      <el-table-column label="小区名字"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.phone }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建日期"  align="center">
@@ -66,14 +66,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="temp.nickName" placeholder="昵称" />
+        <el-form-item label="街道" prop="town">
+          <el-input v-model="temp.town" placeholder="街道" />
         </el-form-item>
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="temp.userName"  placeholder="用户名" />
+        <el-form-item label="普查小区" prop="village">
+          <el-input v-model="temp.village"  placeholder="普查小区" />
         </el-form-item>
-        <el-form-item label="电话号码" prop="phone">
-          <el-input v-model="temp.phone"  placeholder="电话号码" />
+        <el-form-item label="住宅小区" prop="name">
+          <el-input v-model="temp.name"  placeholder="住宅小区" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  import { apiGetList, apiAdd, apiDelete, apiEdit, apiExistPhone, apiExistUserName } from '@/api/user'
+  import { apiGetList, apiAdd, apiDelete, apiEdit} from '@/api/community'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
 
@@ -97,21 +97,6 @@
     name: 'user',
     components: { Pagination },
     data() {
-      let checkPhone = (rule, value, callback) => {
-        const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
-        if (!value) {
-          return callback(new Error('电话号码不能为空'))
-        }
-        setTimeout(() => {
-          // Number.isInteger是es6验证数字是否为整数的方法,但是我实际用的时候输入的数字总是识别成字符串
-          // 所以我就在前面加了一个+实现隐式转换
-          if (phoneReg.test(value)) {
-            callback()
-          } else {
-            callback(new Error('电话号码格式不正确'))
-          }
-        }, 100)
-      }
       return {
         tableKey: 0,
         list: null,
@@ -120,9 +105,9 @@
         listQuery: {
           pageNo: 1,
           pageSize: 10,
-          userName: null,
-          nickName: null,
-          phone: null,
+          town: null,
+          village: null,
+          name: null,
         },
         downloadLoading: false,
 
@@ -134,17 +119,14 @@
         },
         temp:{
           id:null,
-          nickName:'',
-          userName:'',
-          phone:''
+          town:'',
+          village:'',
+          name:''
         },
         rules: {
-          nickName: [{ required: true, message: '昵称是必填', trigger: 'blur' }],
-          userName: [{ required: true, message: '用户名是必填', trigger: 'blur' }],
-          phone: [
-            { required: true, message: '电话号码是必填', trigger: 'blur' },
-            { validator: checkPhone, trigger: 'blur' }
-          ],
+          town: [{ required: true, message: '街道是必填', trigger: 'blur' }],
+          village: [{ required: true, message: '普查区是必填', trigger: 'blur' }],
+          name: [{ required: true, message: '小区名字是必填', trigger: 'blur' }],
         },
       }
     },
@@ -195,7 +177,7 @@
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({
-                  title: '新增用户',
+                  title: '新增小区',
                   message: '添加成功',
                   type: 'success',
                   duration: 3000
@@ -215,7 +197,7 @@
           apiDelete(param).then(() => {
             this.handleFilter()
             this.$notify({
-              title: '删除用户',
+              title: '删除小区',
               message: '删除成功',
               type: 'success',
               duration: 3000
@@ -243,7 +225,7 @@
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({
-                  title: '编辑用户',
+                  title: '编辑小区',
                   message: '编辑成功',
                   type: 'success',
                   duration: 3000
@@ -256,8 +238,8 @@
       handleDownload() {
         this.downloadLoading = true
         import('@/utils/vendor/Export2Excel').then(excel => {
-          const tHeader = ['昵称', '用户名', '电话号码','创建日期']
-          const filterVal = ['nickName', 'userName', 'phone','createdDateStr']
+          const tHeader = ['街道', '普查区', '小区名字','创建日期']
+          const filterVal = ['town', 'village', 'name','createdDateStr']
           const data = this.formatJson(filterVal)
           excel.export_json_to_excel({
             header: tHeader,

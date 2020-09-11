@@ -1,9 +1,13 @@
-package com.zmn.census.web.controller;
+package com.zmn.census.admin.controller;
 
 import com.zmn.census.action.api.CommunityApi;
 import com.zmn.census.api.qo.CommunityQueryQO;
+import com.zmn.census.api.vo.CommunityAddVO;
+import com.zmn.census.api.vo.CommunityEditVO;
 import com.zmn.census.api.vo.CommunityVO;
 import com.zmn.census.common.core.result.CommonResult;
+import com.zmn.census.common.core.result.Pager;
+import com.zmn.census.common.core.result.PagerResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,18 @@ public class CommunityController {
 
     @Autowired
     private CommunityApi communityApi;
+
+    @ApiOperation("分页查询小区")
+    @GetMapping(value = "/findPage")
+    public CommonResult<PagerResult<CommunityVO>> findPage(Pager<CommunityQueryQO> pager, CommunityQueryQO communityQueryQO){
+        try {
+            pager.setCondition(communityQueryQO);
+            return CommonResult.success(communityApi.findPage(pager));
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return CommonResult.failed();
+        }
+    }
 
 
     @ApiOperation("查询所有街道")
@@ -52,5 +68,25 @@ public class CommunityController {
     public CommonResult<List<CommunityVO>> findList(){
        return CommonResult.success(communityApi.findList());
     }
+
+    @ApiOperation("保存小区")
+    @PostMapping(value = "/save")
+    public CommonResult<CommunityVO> save(CommunityAddVO communityAddVO){
+        return CommonResult.success(communityApi.save(communityAddVO));
+    }
+
+    @ApiOperation("修改小区")
+    @PostMapping(value = "/edit")
+    public CommonResult<CommunityVO> edit(CommunityEditVO communityEditVO){
+        return CommonResult.success(communityApi.edit(communityEditVO));
+    }
+
+    @ApiOperation("删除小区")
+    @PostMapping(value = "/delete")
+    public CommonResult<CommunityVO> delete(Integer id){
+        communityApi.delete(id);
+        return CommonResult.success();
+    }
+
 
 }
