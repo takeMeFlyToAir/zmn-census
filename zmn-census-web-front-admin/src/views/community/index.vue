@@ -119,7 +119,7 @@
         downloadButton:true,
         downloadButtonText:'下载',
         config: {
-          value: 'https://baidu.comsdfsdfsdfdsfsdfsdfsdfdsfsdfdsfdsfsdf',
+          value: '',
           imagePath: '/src/assets/image/logo.png',
           size: 1,
           filter: 'color',
@@ -183,8 +183,19 @@
         })
       },
       qrCode(row){
-        this.download.filename=row.name
-        this.qrDialogFormVisible = true
+        if(this.frontUrl){
+          this.download.filename=row.name
+          this.config.value=this.frontUrl+"?id="+row.id
+          this.qrDialogFormVisible = true
+        }else {
+          this.$notify({
+            title: '提示',
+            message: '联系管理员配置前台访问的地址',
+            type: 'error',
+            duration: 3000
+          })
+        }
+
       },
       fillCensus(row){
         if(this.frontUrl){

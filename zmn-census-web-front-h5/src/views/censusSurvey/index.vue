@@ -1,398 +1,420 @@
 <!-- home -->
 <template>
-  <div class="index-container">
+  <div>
     <van-form @submit="onSubmit" @failed="onFailed" >
-      <van-collapse v-model="activeNames"  >
-        <!-- 地址信息 -->
-        <van-collapse-item size="large" title="地址信息" name="roomAddress">
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.province" label="省(区、市)：" label-width="8em" placeholder="陕西省"
-                     readonly
-                     :rules="[{ required: true, message: '请填写省' }]"
-          />
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.city" label="市(地、州、盟)：" label-width="8em" placeholder="西安市"
-                     readonly
-                     :rules="[{ required: true, message: '请填写市' }]"
-          />
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.county" label="县(市、区、旗)：" label-width="8em" placeholder="浐灞区"
-                     readonly
-                     :rules="[{ required: true, message: '请填写区' }]"
-          />
-          <van-field :disabled='submitButtonDisable' required readonly clickable label="乡(镇、街道)："  name="乡(镇、街道)" :value="roomAddress.town" label-width="8em" placeholder="请选择" @click="showPickerTown = true"
-                     :rules="[{ required: true, message:'请选择乡(镇、街道)' }]"
-          />
-          <van-popup v-model="showPickerTown" round position="bottom">
-            <van-picker
-              title="乡(镇、街道)"
-              show-toolbar
-              :columns="townList"
-              @cancel="showPickerTown = false"
-              @confirm="choiceTown"
+      <div class="div_top">
+        <div class="div_top_text">
+          人口普查
+        </div>
+      </div>
+      <div class="div_content">
+        <van-collapse v-model="activeNames"  >
+          <!-- 地址信息 -->
+          <van-collapse-item size="large" name="roomAddress"  >
+            <template #title>
+              <div  class="big_title">地址信息</div>
+            </template>
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.province" label="省(区、市)：" label-width="8em" placeholder="陕西省"
+                       readonly
+                       :rules="[{ required: true, message: '请填写省' }]"
             />
-          </van-popup>
-          <van-field :disabled='submitButtonDisable' required readonly clickable label="普查区：" name="普查区"  :value="roomAddress.village" label-width="8em" placeholder="请选择" @click="clickVillage"
-                     :rules="[{ required: true , message:'请选择普查区' }]"
-          />
-          <van-popup v-model="showPickerVillage" round position="bottom">
-            <van-picker
-              title="普查区"
-              show-toolbar
-              :columns="villageList"
-              @cancel="showPickerVillage = false"
-              @confirm="choiceVillage"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.city" label="市(地、州、盟)：" label-width="8em" placeholder="西安市"
+                       readonly
+                       :rules="[{ required: true, message: '请填写市' }]"
             />
-          </van-popup>
-          <van-field :disabled='submitButtonDisable' required readonly clickable label="住宅小区：" name="住宅小区"  :value="roomAddress.community" label-width="8em" placeholder="请选择" @click="clickCommunity"
-                     :rules="[{ required: true, message:'请选择住宅小区' }]"
-          />
-          <van-popup v-model="showPickerCommunity" round position="bottom">
-            <van-picker
-              title="住宅小区"
-              show-toolbar
-              :columns="communityList"
-              @cancel="showPickerCommunity = false"
-              @confirm="choiceCommunity"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.county" label="县(市、区、旗)：" label-width="8em" placeholder="浐灞区"
+                       readonly
+                       :rules="[{ required: true, message: '请填写区' }]"
             />
-          </van-popup>
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.buildNum" label="楼栋号："  type="digit" label-width="8em" placeholder="输入楼栋号"
-          />
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.unitNum" label="单元号："  type="digit" label-width="8em" placeholder="输入单元号"
-          />
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.floorNum" label="楼层："  type="digit" label-width="8em" placeholder="输入楼层号"
-          />
-          <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="房间号："  name="房间号"    label-width="8em" placeholder="输入楼栋号"
-                     :rules="[{ required: true , message:'请填写房间号'}]"
-          />
-          <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="填报人电话：" name="填报人电话"   type="tel"    label-width="8em" placeholder="输入填报人电话"
-                     :rules="[{ pattern:mobilePattern, message: '请输入正确的电话' }]"
-          />
-        </van-collapse-item>
-        <!-- 住户信息 -->
-        <van-collapse-item size="large" title="住户信息" name="houseHold" >
-          <div class="houseHold_item">
-            <p class="houseHold_title">H1.户别：</p>
-            <van-field :disabled='submitButtonDisable' required readonly clickable label="户别："  name="户别"  :value="houseHold.h1" label-width="5em" placeholder="请选择" @click="showPickerH1 = true"
-                       :rules="[{ required: true , message:'请选择户别' }]"
+            <van-field :disabled='submitButtonDisable' required readonly clickable label="乡(镇、街道)："  name="乡(镇、街道)" :value="roomAddress.town" label-width="8em" placeholder="请选择" @click="showPickerTown = true"
+                       :rules="[{ required: true, message:'请选择乡(镇、街道)' }]"
             />
-            <van-popup v-model="showPickerH1" round position="bottom">
+            <van-popup v-model="showPickerTown" round position="bottom">
               <van-picker
-                title="户别"
+                title="乡(镇、街道)"
                 show-toolbar
-                :columns="h1List"
-                @cancel="showPickerH1 = false"
-                @confirm="choiceH1"
+                :columns="townList"
+                @cancel="showPickerTown = false"
+                @confirm="choiceTown"
               />
             </van-popup>
-          </div>
-
-          <div class="houseHold_item">
-            <p class="houseHold_title">H2.本户应登记人数：</p>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="12em" label="2020年10月31日晚居住本户的人数：">
-              <template #input>
-                <van-stepper v-model="houseHold.h2Live" min="0" />
-              </template>
-            </van-field>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="12em" label="户口在本户，2020年10月31日晚未住本户的人数：">
-              <template #input>
-                <van-stepper v-model="houseHold.h2NoLive"  min="0" />
-              </template>
-            </van-field>
-          </div>
-
-          <div class="houseHold_item">
-            <p class="houseHold_title">H3.本户2019年11月1日至2020年10月31日期间的出生人口：</p>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="男：">
-              <template #input>
-                <van-stepper v-model="houseHold.h3Man" min="0" />
-              </template>
-            </van-field>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="女：">
-              <template #input>
-                <van-stepper v-model="houseHold.h3Woman"  min="0" />
-              </template>
-            </van-field>
-          </div>
-
-          <div class="houseHold_item">
-            <p class="houseHold_title">H4.本户2019年11月1日至2020年10月31日期间的死亡人口：</p>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="男：">
-              <template #input>
-                <van-stepper v-model="houseHold.h4Man" min="0" />
-              </template>
-            </van-field>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="女：">
-              <template #input>
-                <van-stepper v-model="houseHold.h4Woman"  min="0" />
-              </template>
-            </van-field>
-          </div>
-
-          <div class="houseHold_item">
-            <p class="houseHold_title">H5.住房类型：</p>
-            <van-field :disabled='submitButtonDisable' required readonly clickable label="住房类型："  name="住房类型" :value="houseHold.h5" label-width="5em" placeholder="请选择" @click="showPickerH5 = true"
-                       :rules="[{ required: true, message:'请选择住房类型' }]"
+            <van-field :disabled='submitButtonDisable' required readonly clickable label="普查区：" name="普查区"  :value="roomAddress.village" label-width="8em" placeholder="请选择" @click="clickVillage"
+                       :rules="[{ required: true , message:'请选择普查区' }]"
             />
-            <van-popup v-model="showPickerH5" round position="bottom">
+            <van-popup v-model="showPickerVillage" round position="bottom">
               <van-picker
-                title="户别"
+                title="普查区"
                 show-toolbar
-                :columns="h5List"
-                @cancel="showPickerH5 = false"
-                @confirm="choiceH5"
+                :columns="villageList"
+                @cancel="showPickerVillage = false"
+                @confirm="choiceVillage"
               />
             </van-popup>
-          </div>
-
-          <div  class="houseHold_item" v-if="isShowH6AndH7">
-            <p class="houseHold_title">H6.本户住房建筑面积：</p>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="平方米：">
-              <template #input>
-                <van-stepper v-model="houseHold.h6" min="1" />
-              </template>
-            </van-field>
-          </div>
-
-          <div  class="houseHold_item" v-if="isShowH6AndH7">
-            <p class="houseHold_title">H7.本户现在住房数：</p>
-            <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="间：">
-              <template #input>
-                <van-stepper v-model="houseHold.h7" min="1" />
-              </template>
-            </van-field>
-          </div>
-          <div class="houseHold_item">
-            <p class="houseHold_title">H8.您家中是否有6个月及以上的孕妇：</p>
-            <van-field :disabled='submitButtonDisable' required readonly clickable label="是/否："  name="孕妇" :value="houseHold.h8" label-width="5em" placeholder="请选择" @click="showPickerH8 = true"
-                       :rules="[{ required: true, message:'请选择是/否' }]"
+            <van-field :disabled='submitButtonDisable' required readonly clickable label="住宅小区：" name="住宅小区"  :value="roomAddress.community" label-width="8em" placeholder="请选择" @click="clickCommunity"
+                       :rules="[{ required: true, message:'请选择住宅小区' }]"
             />
-            <van-popup v-model="showPickerH8" round position="bottom">
+            <van-popup v-model="showPickerCommunity" round position="bottom">
               <van-picker
-                title="孕妇"
+                title="住宅小区"
                 show-toolbar
-                :columns="h8List"
-                @cancel="showPickerH8 = false"
-                @confirm="choiceH8"
+                :columns="communityList"
+                @cancel="showPickerCommunity = false"
+                @confirm="choiceCommunity"
               />
             </van-popup>
-          </div>
-          <div class="houseHold_item">
-            <p class="houseHold_title">H9.填报人类型：</p>
-            <van-field :disabled='submitButtonDisable' required readonly clickable label="类型：" name="类型"  :value="houseHold.h9" label-width="5em" placeholder="请选择" @click="showPickerH9 = true"
-                       :rules="[{ required: true, message:'请选择填报人类型' }]"
+            <van-field required :disabled='submitButtonDisable' v-model="roomAddress.buildNum" label="楼栋号："  type="digit" label-width="8em" placeholder="输入楼栋号"
+                       :rules="[{ required: true , message:'请填写楼栋号'}]"
             />
-            <van-popup v-model="showPickerH9" round position="bottom">
-              <van-picker
-                title="填报人类型"
-                show-toolbar
-                :columns="h9List"
-                @cancel="showPickerH9 = false"
-                @confirm="choiceH9"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.unitNum" label="单元号："  type="digit" label-width="8em" placeholder="输入单元号"
+            />
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.floorNum" label="楼层："  type="digit" label-width="8em" placeholder="输入楼层号"
+            />
+            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="房间号："  name="房间号"    label-width="8em" placeholder="输入楼栋号"
+                       :rules="[{ required: true , message:'请填写房间号'}]"
+            />
+            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="填报人电话：" name="填报人电话"   type="tel"    label-width="8em" placeholder="输入填报人电话"
+                       :rules="[{ pattern:mobilePattern, message: '请输入正确的电话' }]"
+            />
+          </van-collapse-item>
+          <!-- 住户信息 -->
+          <van-collapse-item size="large"  name="houseHold" >
+            <template #title>
+              <div  class="big_title">住户信息</div>
+            </template>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H1.户别：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable label="户别："  name="户别"  :value="houseHold.h1" label-width="5em" placeholder="请选择" @click="showPickerH1 = true"
+                         :rules="[{ required: true , message:'请选择户别' }]"
               />
-            </van-popup>
-          </div>
-        </van-collapse-item>
-        <!-- 个人信息列表 -->
-        <van-collapse-item size="large" title="个人信息列表" name="personInfo">
-          <van-cell v-if="!submitButtonDisable" title="新增个人信息"  @click="addPerson"  icon="add-o">
-          </van-cell>
+              <van-popup v-model="showPickerH1" round position="bottom">
+                <van-picker
+                  title="户别"
+                  show-toolbar
+                  :columns="h1List"
+                  @cancel="showPickerH1 = false"
+                  @confirm="choiceH1"
+                />
+              </van-popup>
+            </div>
 
-          <van-collapse v-model="activePersonInfoList">
-            <van-collapse-item size="large" v-for="(item, index) in personInfoList" :name="index" >
-              <template #title>
-                <div>
-                  <span>{{(index+1)+':  '+item.d1}}</span>
-                  <div style="float: right" v-if="index != 0 && !submitButtonDisable ">
-                    <van-button :style="{marginRight:'30px'}" round  icon="cross" type="danger"  size="small" @click="deletePerson(index)"/>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H2.本户应登记人数：</p>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="12em" label="2020年10月31日晚居住本户的人数：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h2Live" min="0" />
+                </template>
+              </van-field>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="12em" label="户口在本户，2020年10月31日晚未住本户的人数：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h2NoLive"  min="0" />
+                </template>
+              </van-field>
+            </div>
+
+            <div class="houseHold_item">
+              <p class="houseHold_title">H3.本户2019年11月1日至2020年10月31日期间的出生人口：</p>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="男：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h3Man" min="0" />
+                </template>
+              </van-field>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="女：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h3Woman"  min="0" />
+                </template>
+              </van-field>
+            </div>
+
+            <div class="houseHold_item">
+              <p class="houseHold_title">H4.本户2019年11月1日至2020年10月31日期间的死亡人口：</p>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="男：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h4Man" min="0" />
+                </template>
+              </van-field>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="女：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h4Woman"  min="0" />
+                </template>
+              </van-field>
+            </div>
+
+            <div class="houseHold_item">
+              <p class="houseHold_title">H5.住房类型：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable label="住房类型："  name="住房类型" :value="houseHold.h5" label-width="5em" placeholder="请选择" @click="showPickerH5 = true"
+                         :rules="[{ required: true, message:'请选择住房类型' }]"
+              />
+              <van-popup v-model="showPickerH5" round position="bottom">
+                <van-picker
+                  title="户别"
+                  show-toolbar
+                  :columns="h5List"
+                  @cancel="showPickerH5 = false"
+                  @confirm="choiceH5"
+                />
+              </van-popup>
+            </div>
+
+            <div  class="houseHold_item" v-if="isShowH6AndH7">
+              <p class="houseHold_title">H6.本户住房建筑面积：</p>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="平方米：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h6" min="1" />
+                </template>
+              </van-field>
+            </div>
+
+            <div  class="houseHold_item" v-if="isShowH6AndH7">
+              <p class="houseHold_title">H7.本户现在住房数：</p>
+              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="间：">
+                <template #input>
+                  <van-stepper v-model="houseHold.h7" min="1" />
+                </template>
+              </van-field>
+            </div>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H8.您家中是否有怀孕6个月及以上的孕妇：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable label="是/否："  name="孕妇" :value="houseHold.h8" label-width="5em" placeholder="请选择" @click="showPickerH8 = true"
+                         :rules="[{ required: true, message:'请选择是/否' }]"
+              />
+              <van-popup v-model="showPickerH8" round position="bottom">
+                <van-picker
+                  title="孕妇"
+                  show-toolbar
+                  :columns="h8List"
+                  @cancel="showPickerH8 = false"
+                  @confirm="choiceH8"
+                />
+              </van-popup>
+            </div>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H9.填报人类型：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable label="类型：" name="类型"  :value="houseHold.h9" label-width="5em" placeholder="请选择" @click="showPickerH9 = true"
+                         :rules="[{ required: true, message:'请选择填报人类型' }]"
+              />
+              <van-popup v-model="showPickerH9" round position="bottom">
+                <van-picker
+                  title="填报人类型"
+                  show-toolbar
+                  :columns="h9List"
+                  @cancel="showPickerH9 = false"
+                  @confirm="choiceH9"
+                />
+              </van-popup>
+            </div>
+          </van-collapse-item>
+          <!-- 个人信息列表 -->
+          <van-collapse-item size="large" name="personInfo">
+            <template #title>
+              <div  class="big_title">个人信息列表</div>
+            </template>
+            <van-cell v-if="!submitButtonDisable" title="新增个人信息"  @click="addPerson"  icon="add-o">
+            </van-cell>
+
+            <van-collapse v-model="activePersonInfoList">
+              <van-collapse-item size="large" v-for="(item, index) in personInfoList" :name="index" >
+                <template #title>
+                  <div>
+                    <span>{{(index+1)+':  '+item.d1}}</span>
+                    <div style="float: right" v-if="index != 0 && !submitButtonDisable ">
+                      <van-button :style="{marginRight:'30px'}" round  icon="cross" type="danger"  size="small" @click="deletePerson(index)"/>
+                    </div>
                   </div>
+                </template>
+                <van-field :disabled='submitButtonDisable' required v-model="item.d1" label="D1.姓名："  name="姓名" label-width="8em" placeholder="输入姓名"
+                           :rules="[{ required: true,message:'请填写姓名' }]"
+                />
+                <van-field required readonly clickable :disabled="index == 0 || submitButtonDisable" label="D2.与户主关系："
+                           name="与户主关系"  :value="item.d2" label-width="8em" placeholder="请选择" @click="clickD2(index)"
+                           :rules="[{ required: true,message:'请选择户主关系' }]"
+                />
+                <van-popup v-model="item.showPickerD2" round position="bottom">
+                  <van-picker
+                    title="与户主关系"
+                    show-toolbar
+                    :columns="d2List"
+                    @cancel="item.showPickerD2 = false"
+                    @confirm="choiceD2"
+                  />
+                </van-popup>
+                <van-field :disabled='submitButtonDisable' required v-model="item.d3" label="D3.公民身份证号：" name="身份证号"  label-width="8em" placeholder="输入身份证号"
+                           @blur="showD11AndD12(index)"
+                           :rules="[{ pattern:idCardNumPattern, message: '请输入正确的身份证号' }]"
+                />
+
+                <van-field :disabled='submitButtonDisable' required readonly clickable label="D4.性别：" name="性别" :value="item.d4" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD4')"
+                           :rules="[{ required: true ,message:'请选择性别'}]"
+                />
+                <van-popup v-model="item.showPickerD4" round position="bottom">
+                  <van-picker
+                    title="性别"
+                    show-toolbar
+                    :columns="d4List"
+                    @cancel="item.showPickerD4 = false"
+                    @confirm="choiceD4"
+                  />
+                </van-popup>
+                <van-field :disabled='submitButtonDisable' required readonly clickable label="D5.出生年月："  name="出生年月"  :value="item.d5" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD5')"
+                           :rules="[{ required: true,message:'请选择出生年月' }]"
+                />
+                <van-popup v-model="item.showPickerD5" round position="bottom">
+                  <van-datetime-picker
+                    v-model="currentDate"
+                    type="year-month"
+                    title="选择年月"
+                    :min-date="minDate"
+                    :max-date="maxDate"
+                    :formatter="formatter"
+                    @cancel="item.showPickerD5 = false"
+                    @confirm="choiceD5"
+                  />
+                </van-popup>
+                <van-field :disabled='submitButtonDisable' required v-model="item.d6" label="D6.民族："   name="民族"  label-width="8em" placeholder="输入民族"
+                           :rules="[{ required: true,message:'请填写民族' }]"
+                />
+
+                <van-field :disabled='submitButtonDisable' required readonly clickable label="D7.普查时点居住地：" name="普查时点居住地" :value="item.d7" label-width="8em" placeholder="请选择"
+                           @click="recordCurrentPersonInfoIndex(index,'showPickerD7')"
+                           :rules="[{ required: true,message:'请选择普查时点居住地' }]"
+                />
+                <van-popup v-model="item.showPickerD7" round position="bottom">
+                  <van-picker
+                    title="普查时点居住地"
+                    show-toolbar
+                    :columns="d7List"
+                    @cancel="item.showPickerD7 = false"
+                    @confirm="choiceD7"
+                  />
+                </van-popup>
+                <div v-if="item.isShowD7Other" style="margin-left: 50px">
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d7Province" label="省（区、市）"  label-width="8em" placeholder="输入省"
+                             :rules="[{ required: true }]"
+                  />
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d7City" label="市（地、州、盟）"   label-width="8em" placeholder="输入市"
+                             :rules="[{ required: true }]"
+                  />
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d7County" label="县（市、区、旗）"   label-width="8em" placeholder="输入县"
+                             :rules="[{ required: true }]"
+                  />
                 </div>
-              </template>
-              <van-field :disabled='submitButtonDisable' required v-model="item.d1" label="D1.姓名："  name="姓名" label-width="8em" placeholder="输入姓名"
-                         :rules="[{ required: true,message:'请填写姓名' }]"
-              />
-              <van-field required readonly clickable :disabled="index == 0 || submitButtonDisable" label="D2.与户主关系："
-                         name="与户主关系"  :value="item.d2" label-width="8em" placeholder="请选择" @click="clickD2(index)"
-                         :rules="[{ required: true,message:'请选择户主关系' }]"
-              />
-              <van-popup v-model="item.showPickerD2" round position="bottom">
-                <van-picker
-                  title="与户主关系"
-                  show-toolbar
-                  :columns="d2List"
-                  @cancel="item.showPickerD2 = false"
-                  @confirm="choiceD2"
-                />
-              </van-popup>
-              <van-field :disabled='submitButtonDisable' required v-model="item.d3" label="D3.公民身份证号：" name="身份证号"  label-width="8em" placeholder="输入身份证号"
-                         @blur="showD11AndD12(index)"
-                         :rules="[{ pattern:idCardNumPattern, message: '请输入正确的身份证号' }]"
-              />
 
-              <van-field :disabled='submitButtonDisable' required readonly clickable label="D4.性别：" name="性别" :value="item.d4" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD4')"
-                         :rules="[{ required: true ,message:'请选择性别'}]"
-              />
-              <van-popup v-model="item.showPickerD4" round position="bottom">
-                <van-picker
-                  title="性别"
-                  show-toolbar
-                  :columns="d4List"
-                  @cancel="item.showPickerD4 = false"
-                  @confirm="choiceD4"
+                <van-field :disabled='submitButtonDisable' required readonly clickable label="D8.户口登记地：" name="户口登记地" :value="item.d8" label-width="8em" placeholder="请选择"
+                           @click="recordCurrentPersonInfoIndex(index,'showPickerD8')"
+                           :rules="[{ required: true, message:'请选择户口登记地' }]"
                 />
-              </van-popup>
-              <van-field :disabled='submitButtonDisable' required readonly clickable label="D5.出生年月："  name="出生年月"  :value="item.d5" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD5')"
-                         :rules="[{ required: true,message:'请选择出生年月' }]"
-              />
-              <van-popup v-model="item.showPickerD5" round position="bottom">
-                <van-datetime-picker
-                  v-model="currentDate"
-                  type="year-month"
-                  title="选择年月"
-                  :min-date="minDate"
-                  :max-date="maxDate"
-                  :formatter="formatter"
-                  @cancel="item.showPickerD5 = false"
-                  @confirm="choiceD5"
-                />
-              </van-popup>
-              <van-field :disabled='submitButtonDisable' required v-model="item.d6" label="D6.民族："   name="民族"  label-width="8em" placeholder="输入民族"
-                         :rules="[{ required: true,message:'请填写民族' }]"
-              />
-
-              <van-field :disabled='submitButtonDisable' required readonly clickable label="D7.普查时点居住地：" name="普查时点居住地" :value="item.d7" label-width="8em" placeholder="请选择"
-                         @click="recordCurrentPersonInfoIndex(index,'showPickerD7')"
-                         :rules="[{ required: true,message:'请选择普查时点居住地' }]"
-              />
-              <van-popup v-model="item.showPickerD7" round position="bottom">
-                <van-picker
-                  title="普查时点居住地"
-                  show-toolbar
-                  :columns="d7List"
-                  @cancel="item.showPickerD7 = false"
-                  @confirm="choiceD7"
-                />
-              </van-popup>
-              <div v-if="item.isShowD7Other" style="margin-left: 50px">
-                <van-field :disabled='submitButtonDisable' required v-model="item.d7Province" label="省（区、市）"  label-width="8em" placeholder="输入省"
-                           :rules="[{ required: true }]"
-                />
-                <van-field :disabled='submitButtonDisable' required v-model="item.d7City" label="市（地、州、盟）"   label-width="8em" placeholder="输入市"
-                           :rules="[{ required: true }]"
-                />
-                <van-field :disabled='submitButtonDisable' required v-model="item.d7County" label="县（市、区、旗）"   label-width="8em" placeholder="输入县"
-                           :rules="[{ required: true }]"
-                />
-              </div>
-
-              <van-field :disabled='submitButtonDisable' required readonly clickable label="D8.户口登记地：" name="户口登记地" :value="item.d8" label-width="8em" placeholder="请选择"
-                         @click="recordCurrentPersonInfoIndex(index,'showPickerD8')"
-                         :rules="[{ required: true, message:'请选择户口登记地' }]"
-              />
-              <van-popup v-model="item.showPickerD8" round position="bottom">
-                <van-picker
-                  title="普查时点居住地"
-                  show-toolbar
-                  :columns="d8List"
-                  @cancel="item.showPickerD8 = false"
-                  @confirm="choiceD8"
-                />
-              </van-popup>
-              <div v-if="item.isShowD8Other" style="margin-left: 50px">
-                <van-field :disabled='submitButtonDisable' required v-model="item.d8Province" label="省（区、市）"  label-width="8em" placeholder="输入省"
-                           :rules="[{ required: true }]"
-                />
-                <van-field :disabled='submitButtonDisable' required v-model="item.d8City" label="市（地、州、盟）"   label-width="8em" placeholder="输入市"
-                           :rules="[{ required: true }]"
-                />
-                <van-field :disabled='submitButtonDisable' required v-model="item.d8County" label="县（市、区、旗）"   label-width="8em" placeholder="输入县"
-                           :rules="[{ required: true }]"
-                />
-              </div>
-             <div v-if="item.isShowD9">
-               <van-field :disabled='submitButtonDisable' required readonly clickable label="D9.离开户口登记地时间："  name="离开户口登记地时间":value="item.d9" label-width="8em" placeholder="请选择"
-                          @click="recordCurrentPersonInfoIndex(index,'showPickerD9')"
-                          :rules="[{ required: true, message:'请选择离开户口登记地时间' }]"
-               />
-               <van-popup v-model="item.showPickerD9" round position="bottom">
-                 <van-picker
-                   title="普查时点居住地"
-                   show-toolbar
-                   :columns="d9List"
-                   @cancel="item.showPickerD9 = false"
-                   @confirm="choiceD9"
-                 />
-               </van-popup>
-             </div>
-              <div v-if="item.isShowD10">
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D10.离开户口登记地原因：" name="离开户口登记地原因" :value="item.d10" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD10')"
-                           :rules="[{ required: true,message:'请选择离开户口登记地原因' }]"
-                />
-                <van-popup v-model="item.showPickerD10" round position="bottom">
+                <van-popup v-model="item.showPickerD8" round position="bottom">
                   <van-picker
-                    title="离开户口登记地原因"
+                    title="普查时点居住地"
                     show-toolbar
-                    :columns="d10List"
-                    @cancel="item.showPickerD10 = false"
-                    @confirm="choiceD10"
+                    :columns="d8List"
+                    @cancel="item.showPickerD8 = false"
+                    @confirm="choiceD8"
                   />
                 </van-popup>
-              </div>
-
-              <div v-if="item.isShowD11">
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D11.受教育程度：" name="受教育程度" :value="item.d11" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD11')"
-                           :rules="[{ required: true ,message:'请选择受教育程度'}]"
-                />
-                <van-popup v-model="item.showPickerD11" round position="bottom">
-                  <van-picker
-                    title="受教育程度"
-                    show-toolbar
-                    :columns="d11List"
-                    @cancel="item.showPickerD11 = false"
-                    @confirm="choiceD11"
+                <div v-if="item.isShowD8Other" style="margin-left: 50px">
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d8Province" label="省（区、市）"  label-width="8em" placeholder="输入省"
+                             :rules="[{ required: true }]"
                   />
-                </van-popup>
-              </div>
-
-              <div v-if="item.isShowD12">
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D12.是否识字：" name="是否识字" :value="item.d12" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD12')"
-                           :rules="[{ required: true, message:'请选择是否识字' }]"
-                />
-                <van-popup v-model="item.showPickerD12" round position="bottom">
-                  <van-picker
-                    title="受教育程度"
-                    show-toolbar
-                    :columns="d12List"
-                    @cancel="item.showPickerD12 = false"
-                    @confirm="choiceD12"
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d8City" label="市（地、州、盟）"   label-width="8em" placeholder="输入市"
+                             :rules="[{ required: true }]"
                   />
-                </van-popup>
-              </div>
-            </van-collapse-item>
-          </van-collapse>
+                  <van-field :disabled='submitButtonDisable' required v-model="item.d8County" label="县（市、区、旗）"   label-width="8em" placeholder="输入县"
+                             :rules="[{ required: true }]"
+                  />
+                </div>
+                <div v-if="item.isShowD9">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D9.离开户口登记地时间："  name="离开户口登记地时间":value="item.d9" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD9')"
+                             :rules="[{ required: true, message:'请选择离开户口登记地时间' }]"
+                  />
+                  <van-popup v-model="item.showPickerD9" round position="bottom">
+                    <van-picker
+                      title="普查时点居住地"
+                      show-toolbar
+                      :columns="d9List"
+                      @cancel="item.showPickerD9 = false"
+                      @confirm="choiceD9"
+                    />
+                  </van-popup>
+                </div>
+                <div v-if="item.isShowD10">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D10.离开户口登记地原因：" name="离开户口登记地原因" :value="item.d10" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD10')"
+                             :rules="[{ required: true,message:'请选择离开户口登记地原因' }]"
+                  />
+                  <van-popup v-model="item.showPickerD10" round position="bottom">
+                    <van-picker
+                      title="离开户口登记地原因"
+                      show-toolbar
+                      :columns="d10List"
+                      @cancel="item.showPickerD10 = false"
+                      @confirm="choiceD10"
+                    />
+                  </van-popup>
+                </div>
 
-        </van-collapse-item>
-        <!-- 其他信息 -->
-        <van-collapse-item size="large" title="其他信息" name="otherInfo">
-          <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
-          />
-          <van-field
-            :disabled='submitButtonDisable'
-            v-model="roomAddress.remark"
-            rows="2"
-            label-width="8em"
-            autosize
-            label="备注："
-            type="textarea"
-            maxlength="100"
-            placeholder="请输入备注"
-            show-word-limit
-          />
-        </van-collapse-item>
-      </van-collapse>
-      <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit" :disabled="submitButtonDisable">
-          {{submitButtonText}}
+                <div v-if="item.isShowD11">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D11.受教育程度：" name="受教育程度" :value="item.d11" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD11')"
+                             :rules="[{ required: true ,message:'请选择受教育程度'}]"
+                  />
+                  <van-popup v-model="item.showPickerD11" round position="bottom">
+                    <van-picker
+                      title="受教育程度"
+                      show-toolbar
+                      :columns="d11List"
+                      @cancel="item.showPickerD11 = false"
+                      @confirm="choiceD11"
+                    />
+                  </van-popup>
+                </div>
+
+                <div v-if="item.isShowD12">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D12.是否识字：" name="是否识字" :value="item.d12" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD12')"
+                             :rules="[{ required: true, message:'请选择是否识字' }]"
+                  />
+                  <van-popup v-model="item.showPickerD12" round position="bottom">
+                    <van-picker
+                      title="受教育程度"
+                      show-toolbar
+                      :columns="d12List"
+                      @cancel="item.showPickerD12 = false"
+                      @confirm="choiceD12"
+                    />
+                  </van-popup>
+                </div>
+              </van-collapse-item>
+            </van-collapse>
+
+          </van-collapse-item>
+          <!-- 其他信息 -->
+          <van-collapse-item size="large"  name="otherInfo">
+            <template #title>
+              <div  class="big_title" >其他信息</div>
+            </template>
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
+            />
+            <van-field
+              :disabled='submitButtonDisable'
+              v-model="roomAddress.remark"
+              rows="2"
+              label-width="8em"
+              autosize
+              label="备注："
+              type="textarea"
+              maxlength="100"
+              placeholder="请输入备注"
+              show-word-limit
+            />
+          </van-collapse-item>
+        </van-collapse>
+      </div>
+      <div class="div_foot" >
+        <van-button round block type="info" size="normal" native-type="submit" :disabled="submitButtonDisable">
+          <template #default>
+            <div class="submit_button_text">{{submitButtonText}}</div>
+          </template>
         </van-button>
       </div>
     </van-form>
@@ -409,7 +431,10 @@
   export default {
   data() {
     return {
-      submitButtonText:'提交',
+      xxx:{
+        color:'red'
+      },
+      submitButtonText:'提       交',
       submitButtonDisable:false,
       idCardNumPattern: /^(\d{15}|\d18|^\d{17}(\d|X|x))$/,
       mobilePattern: /^1[3456789]\d{9}$/,
@@ -417,7 +442,7 @@
       minDate: new Date(1900, 1, 1),
       maxDate: new Date(2020, 12, 30),
       currentDate: new Date(),
-      activeNames:['roomAddress', 'houseHold', 'personInfo'],
+      activeNames:['roomAddress', 'houseHold', 'personInfo','otherInfo'],
       // activeNames:[],
       showPickerTown: false,
       showPickerVillage: false,
@@ -545,7 +570,7 @@
          '大学专科',
          '大学本科',
          '硕士研究生',
-         '博士研 ',
+         '博士研究生 ',
       ],
       d12List:[
          '是',
@@ -900,34 +925,47 @@
 }
 </script>
 <style lang="scss" scoped>
-  .collapse_title{
-    font-size: 1.5em;
+
+  .submit_button_text{
+    font-size: 1.2em;
+    font-weight: bold;
   }
-.index-container {
-  .warpper {
-    padding: 12px;
-    background: #fff;
-    .demo-home__title {
-      margin: 0 0 6px;
-      font-size: 32px;
-      .demo-home__title img,
-      .demo-home__title span {
-        display: inline-block;
-        vertical-align: middle;
-      }
-      img {
-        width: 32px;
-      }
-      span {
-        margin-left: 16px;
-        font-weight: 500;
-      }
-    }
-    .demo-home__desc {
-      margin: 0 0 20px;
-      color: rgba(69, 90, 100, 0.6);
-      font-size: 14px;
-    }
+  .big_title {
+    font-size: 1.1em;
+    color: black;
+    line-height: 1.2em;
   }
-}
+
+  .div_top{
+    color: white;
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    background-color: #1989fa;
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+  }
+
+  .div_top_text{
+    font-size: 1.6em;
+  }
+
+  .div_content{
+    margin-top: 45px;
+    margin-bottom: 20px;
+    /*height: 14.6rem;*/
+    /*overflow: auto;*/
+  }
+  .div_foot{
+    background-color: white;
+    position:fixed;
+    bottom:0;
+    width: 35%;
+    height: 12px;
+    margin-left: 32.5%;
+    margin-bottom: 35px;
+  }
 </style>
