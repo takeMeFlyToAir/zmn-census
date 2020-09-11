@@ -1,5 +1,6 @@
 package com.zmn.census.api.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -14,10 +15,13 @@ import java.util.List;
 @Data
 public class CensusSurveyAddVO {
 
+    @ApiModelProperty("房间地址信息")
     private RoomAddressAddVO roomAddress;
 
+    @ApiModelProperty("住户信息")
     private HouseHoldAddVO houseHold;
 
+    @ApiModelProperty("个人信息")
     private List<PersonInfoAddVO> personInfoList;
 
 }

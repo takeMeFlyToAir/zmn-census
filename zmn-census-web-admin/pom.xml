@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>zmn-census-web</artifactId>
+    <artifactId>zmn-census-web-admin</artifactId>
 
 
     <dependencies>
@@ -31,12 +31,16 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>zmn-census-web</finalName>
+        <finalName>zmn-census-web-admin</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

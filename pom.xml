@@ -13,6 +13,7 @@
       <module>zmn-census-action</module>
       <module>zmn-census-common</module>
       <module>zmn-census-bean</module>
+        <module>zmn-census-web-admin</module>
     </modules>
 
     <name>zmn-census</name>

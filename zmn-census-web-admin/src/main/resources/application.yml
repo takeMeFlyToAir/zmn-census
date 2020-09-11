@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
   profiles:
@@ -8,7 +8,6 @@ spring:
     name: zmn-census
   resources:
     static-locations: classpath:static/,file:static/
-
 
 mybatis:
   type-aliases-package: com.zmn.census.action.entity
@@ -21,3 +20,4 @@ pagehelper:
   params: count=countSql
   reasonable: true
   support-methods-arguments: true
+
