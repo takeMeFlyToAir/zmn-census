@@ -5,7 +5,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: zmn-census
+    name: zmn-census-admin
   resources:
     static-locations: classpath:static/,file:static/
 
