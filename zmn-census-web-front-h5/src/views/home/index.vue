@@ -1,8 +1,11 @@
 <!-- home -->
 <template>
   <div class="index-container">
-    <van-area title="标题" :area-list="areaList" />
-
+    <van-row gutter="20">
+      <van-col span="8">span: 8</van-col>
+      <van-col span="8">span: 8</van-col>
+      <van-col span="8">span: 8</van-col>
+    </van-row>
   </div>
 </template>
 

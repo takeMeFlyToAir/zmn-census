@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div>
+  <div class="page">
     <van-form @submit="onSubmit" @failed="onFailed" >
       <div class="div_top">
         <div class="div_top_text">
@@ -69,7 +69,7 @@
             />
             <van-field :disabled='submitButtonDisable' v-model="roomAddress.floorNum" label="楼层："  type="digit" label-width="8em" placeholder="输入楼层号"
             />
-            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="房间号："  name="房间号"    label-width="8em" placeholder="输入楼栋号"
+            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="房间号："  name="房间号"    label-width="8em" placeholder="输入房间号"
                        :rules="[{ required: true , message:'请填写房间号'}]"
             />
             <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="填报人电话：" name="填报人电话"   type="tel"    label-width="8em" placeholder="输入填报人电话"
@@ -82,7 +82,9 @@
               <div  class="big_title">住户信息</div>
             </template>
             <div class="houseHold_item">
-              <p class="houseHold_title">H1.户别：</p>
+              <p class="houseHold_title houseHold_title_tip">H1.户别：</p>
+              <p class="question_tip">提示：这里的住户类别与户口本上的“户别”无关,应以实际居住情况为准,家庭户即
+                有家庭成员关系或单身居住生活的,集体户即相互之间没有家庭成员关系</p>
               <van-field :disabled='submitButtonDisable' required readonly clickable label="户别："  name="户别"  :value="houseHold.h1" label-width="5em" placeholder="请选择" @click="showPickerH1 = true"
                          :rules="[{ required: true , message:'请选择户别' }]"
               />
@@ -165,7 +167,8 @@
             </div>
 
             <div  class="houseHold_item" v-if="isShowH6AndH7">
-              <p class="houseHold_title">H7.本户现在住房数：</p>
+              <p class="houseHold_title houseHold_title_tip">H7.本户现在住房数：</p>
+              <p class="question_tip">提示：本户住房间数—指除厨房、厕所、过道和厅以外的所有自然间数(包括扩建的房间)</p>
               <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="间：">
                 <template #input>
                   <van-stepper v-model="houseHold.h7" min="1" />
@@ -226,8 +229,12 @@
                 />
                 <van-field required readonly clickable :disabled="index == 0 || submitButtonDisable" label="D2.与户主关系："
                            name="与户主关系"  :value="item.d2" label-width="8em" placeholder="请选择" @click="clickD2(index)"
-                           :rules="[{ required: true,message:'请选择户主关系' }]"
-                />
+                           :rules="[{ required: true,message:'请选择户主关系' }]">
+
+                </van-field>
+                <p class="question_tip question_tip_field">
+                  提示：指被登记人与本户户主的关系,普查员根据申报人的回答据情填报,申报人不是户主的,注意在填报时,不要将某人与申报人的关系错填为与户主的关系
+                </p>
                 <van-popup v-model="item.showPickerD2" round position="bottom">
                   <van-picker
                     title="与户主关系"
@@ -411,14 +418,17 @@
         </van-collapse>
       </div>
       <div class="div_foot" >
-        <van-button round block type="info" size="normal" native-type="submit" :disabled="submitButtonDisable">
-          <template #default>
-            <div class="submit_button_text">{{submitButtonText}}</div>
-          </template>
-        </van-button>
+       <div class="div_button">
+         <van-button round block type="info" size="small"  native-type="submit" :disabled="submitButtonDisable">
+           <!--{{submitButtonText}}-->
+           <template #default>
+             <div class="submit_button_text">{{submitButtonText}}</div>
+           </template>
+         </van-button>
+       </div>
       </div>
-    </van-form>
 
+    </van-form>
   </div>
 </template>
 
@@ -434,7 +444,7 @@
       xxx:{
         color:'red'
       },
-      submitButtonText:'提       交',
+      submitButtonText:'提交',
       submitButtonDisable:false,
       idCardNumPattern: /^(\d{15}|\d18|^\d{17}(\d|X|x))$/,
       mobilePattern: /^1[3456789]\d{9}$/,
@@ -926,46 +936,66 @@
 </script>
 <style lang="scss" scoped>
 
-  .submit_button_text{
-    font-size: 1.2em;
-    font-weight: bold;
+
+  .page{
+    height: 100%;
   }
-  .big_title {
-    font-size: 1.1em;
-    color: black;
-    line-height: 1.2em;
+
+  .van-form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .div_top{
-    color: white;
-    z-index: 100;
-    position: fixed;
-    top: 0;
     background-color: #1989fa;
-    width: 100%;
-    height: 45px;
+    height: 40px;
+
+    color: white;
     display: flex;
     justify-content: center; /* 水平居中 */
     align-items: center;     /* 垂直居中 */
   }
-
   .div_top_text{
     font-size: 1.6em;
   }
 
   .div_content{
-    margin-top: 45px;
-    margin-bottom: 20px;
-    /*height: 14.6rem;*/
-    /*overflow: auto;*/
+    flex: 1;
+    overflow: scroll;
   }
   .div_foot{
-    background-color: white;
-    position:fixed;
-    bottom:0;
-    width: 35%;
-    height: 12px;
-    margin-left: 32.5%;
-    margin-bottom: 35px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
   }
+  .submit_button_text{
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+
+  .div_button{
+    width: 30%;
+    padding: 5px 0px;
+  }
+  .question_tip{
+    font-family: Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif !important;
+    color: red;
+    font-size: 0.9em;
+    padding: 0;
+    margin: 0;
+    font-weight: bold !important;
+    font-style:normal  !important;
+  }
+  .question_tip_field{
+    padding-left: 1em;
+  }
+
+  .houseHold_title_tip{
+    padding-bottom: 0px;
+    margin-bottom: 5px;
+  }
+
 </style>
