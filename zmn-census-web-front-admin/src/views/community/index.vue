@@ -81,7 +81,7 @@
           <!--<span>{{ row.createdDateStr }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column width="300" label="操作"   class-name="small-padding" align="center">
+      <el-table-column width="400" label="操作"   class-name="small-padding" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="mini" size="mini"  @click="handleEdit(row)">
             编辑
@@ -94,6 +94,9 @@
           </el-button>
           <el-button  size="mini" type="primary" @click="qrCode(row)">
             二维码
+          </el-button>
+          <el-button type="mini" size="mini"  @click="countShow(row)">
+            统计
           </el-button>
         </template>
       </el-table-column>
@@ -147,22 +150,53 @@
         <vue-q-art :config="config" :download="download"></vue-q-art>
     </el-dialog>
 
+    <el-dialog
+      :visible.sync="chartDialogFormVisible"
+      center>
+      <line-chart :chartData="surveyCount"/>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import { apiCommunityGetList, apiCommunityAdd, apiCommunityDelete, apiCommunityEdit} from '@/api/community'
+  import { apiCensusSurveyCommonCount, apiCensusSurveySurveyCount} from '@/api/censusSurvey'
+
   import { apiUserFindList} from '@/api/user'
   import { apiGetByKey } from '@/api/config'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
   import VueQArt from 'vue-qart'
+  import LineChart from '@/components/echarts/LineChart'
 
   export default {
     name: 'user',
-    components: { Pagination,VueQArt  },
+    components: { Pagination,VueQArt,LineChart  },
     data() {
       return {
+        surveyCount:{
+          title:'问卷数和人数',
+          name:'问卷数和人数',
+          legend: {
+            data: ['问卷数', '人数']
+          },
+          xData: [],
+          series:[
+            {
+              name: '问卷数',
+              type: 'line',
+              data: [],
+              animationDuration:6000
+            },
+            {
+              name: '人数',
+              type: 'line',
+              data: [],
+              animationDuration:6000
+            }
+          ]
+        },
         userList:[],
         frontUrl:'',
         downloadButton:true,
@@ -203,6 +237,7 @@
         dialogStatus:'',
         dialogFormVisible:false,
         qrDialogFormVisible:false,
+        chartDialogFormVisible:false,
         textMap: {
           // edit: '编辑',
           create: '添加'
@@ -232,6 +267,24 @@
       this.getFrontUrl()
     },
     methods: {
+      getSurveyCount(communityId){
+        let param = {communityId:communityId}
+        apiCensusSurveySurveyCount(param).then((res) => {
+          if(res.code == 200){
+            let xData = [];
+            let surveyData = [];
+            let personData = [];
+            res.data.forEach(item => {
+              xData.push(item.time);
+              surveyData.push(item.surveyCount);
+              personData.push(item.personCount);
+            })
+            this.surveyCount.xData = xData;
+            this.surveyCount.series[0].data = surveyData;
+            this.surveyCount.series[1].data = personData;
+          }
+        })
+      },
       choiceCharge(user){
         this.temp.chargePersonId = user.id;
         this.temp.chargePersonName = user.nickName;
@@ -266,7 +319,10 @@
             duration: 3000
           })
         }
-
+      },
+      countShow(row){
+        this.getSurveyCount(row.id)
+        this.chartDialogFormVisible = true
       },
       fillCensus(row){
         if(this.frontUrl){
