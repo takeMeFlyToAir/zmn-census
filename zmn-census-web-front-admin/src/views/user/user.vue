@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.userName" placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
-      <el-input v-model="listQuery.nickName" placeholder="昵称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.phone" placeholder="电话号码" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.userName" placeholder="用户名" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
+      <el-input v-model="listQuery.nickName" placeholder="昵称" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.phone" placeholder="电话号码" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
 
-      <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button  class="filter-item" type="primary"  @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleAdd">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleAdd">
         添加
       </el-button>
-      <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button  :loading="downloadLoading" class="filter-item" type="primary"  @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -52,9 +52,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center"  class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini"  @click="handleEdit(row)">
-            编辑
-          </el-button>
+          <!--<el-button type="primary" size="mini"  @click="handleEdit(row)">-->
+            <!--编辑-->
+          <!--</el-button>-->
           <el-button  size="mini" type="danger" @click="handleDelete(row.id)">
             删除
           </el-button>
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  import { apiGetList, apiAdd, apiDelete, apiEdit, apiExistPhone, apiExistUserName } from '@/api/user'
+  import { apiUserGetList, apiUserAdd, apiUserDelete, apiUserEdit, apiUserExistPhone, apiUserExistUserName } from '@/api/user'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
 
@@ -129,7 +129,7 @@
         dialogStatus:'',
         dialogFormVisible:false,
         textMap: {
-          edit: '编辑',
+          // edit: '编辑',
           create: '添加'
         },
         temp:{
@@ -157,7 +157,7 @@
           Object.assign(this.listQuery, params)
         }
         this.listLoading = true
-        apiGetList(this.listQuery).then(response => {
+        apiUserGetList(this.listQuery).then(response => {
           this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
@@ -191,7 +191,7 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              apiAdd(this.temp).then(() => {
+              apiUserAdd(this.temp).then(() => {
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({
@@ -212,7 +212,7 @@
           type: 'warning'
         }).then(() => {
           let param = {id:id}
-          apiDelete(param).then(() => {
+          apiUserDelete(param).then(() => {
             this.handleFilter()
             this.$notify({
               title: '删除用户',
@@ -239,7 +239,7 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              apiEdit(this.temp).then(() => {
+              apiUserEdit(this.temp).then(() => {
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({

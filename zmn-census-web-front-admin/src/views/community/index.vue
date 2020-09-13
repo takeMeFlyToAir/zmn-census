@@ -1,17 +1,26 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.town" placeholder="街道" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
-      <el-input v-model="listQuery.village" placeholder="普查小区" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.name" placeholder="住宅小区" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-select v-model="listQuery.chargePersonId" placeholder="请选择" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+        <el-option
+          v-for="item in userList"
+          :key="item.id"
+          :label="item.nickName"
+          :value="item.id">
+        </el-option>
+      </el-select>
+      <el-input v-model="listQuery.town" placeholder="街道" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
+      <el-input v-model="listQuery.village" placeholder="普查小区" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.name" placeholder="住宅小区" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
 
-      <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+
+      <el-button  class="filter-item" type="primary" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleAdd">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary"  @click="handleAdd">
         添加
       </el-button>
-      <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button  :loading="downloadLoading" class="filter-item" type="primary"  @click="handleDownload">
         导出
       </el-button>
     </div>
@@ -45,20 +54,45 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="计划户数"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.planHoldCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="实际户数"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.realHoldCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="计划人数"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.planPersonCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="实际人数"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.realPersonCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="负责人"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.chargePersonName }}</span>
+        </template>
+      </el-table-column>
       <!--<el-table-column label="创建日期"  align="center">-->
         <!--<template slot-scope="{row}">-->
           <!--<span>{{ row.createdDateStr }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column width="400" label="操作" align="center"  class-name="small-padding fixed-width">
+      <el-table-column width="300" label="操作" align="center"  class-name="small-padding">
         <template slot-scope="{row,$index}">
           <el-button type="mini" size="mini"  @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button  size="mini" type="danger" @click="handleDelete(row.id)">
-            删除
-          </el-button>
-          <el-button  size="mini" type="info" @click="fillCensus(row)">
+          <!--<el-button  size="mini" type="danger" @click="handleDelete(row.id)">-->
+            <!--删除-->
+          <!--</el-button>-->
+          <el-button  size="mini" type="danger" @click="fillCensus(row)">
             填写问卷
           </el-button>
           <el-button  size="mini" type="primary" @click="qrCode(row)">
@@ -71,7 +105,7 @@
     <pagination v-show="total>0" :total="total" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
         <el-form-item label="街道" prop="town">
           <el-input v-model="temp.town" placeholder="街道" />
         </el-form-item>
@@ -80,6 +114,22 @@
         </el-form-item>
         <el-form-item label="住宅小区" prop="name">
           <el-input v-model="temp.name"  placeholder="住宅小区" />
+        </el-form-item>
+        <el-form-item label="计划统计户数" prop="planHoldCount">
+          <el-input type="number" v-model="temp.planHoldCount"  placeholder="计划统计户数" />
+        </el-form-item>
+        <el-form-item label="计划统计人数" prop="planPersonCount">
+          <el-input type="number"  v-model="temp.planPersonCount"  placeholder="计划统计人数" />
+        </el-form-item>
+        <el-form-item label="负责人" prop="chargePersonId">
+          <el-select v-model="temp.chargePersonName" placeholder="请选择" @change="choiceCharge">
+            <el-option
+              v-for="item in userList"
+              value-key="id"
+              :label="item.nickName"
+              :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -104,7 +154,8 @@
 </template>
 
 <script>
-  import { apiGetList, apiAdd, apiDelete, apiEdit} from '@/api/community'
+  import { apiCommunityGetList, apiCommunityAdd, apiCommunityDelete, apiCommunityEdit} from '@/api/community'
+  import { apiUserFindList} from '@/api/user'
   import { apiGetByKey } from '@/api/config'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -115,6 +166,7 @@
     components: { Pagination,VueQArt  },
     data() {
       return {
+        userList:[],
         frontUrl:'',
         downloadButton:true,
         downloadButtonText:'下载',
@@ -133,7 +185,7 @@
             fontSize: '16px',
             textAlign: 'center',
             marginLeft: '60px'
-    },
+        },
           filename:'二维码'
         },
         tableKey: 0,
@@ -143,6 +195,7 @@
         listQuery: {
           pageNo: 1,
           pageSize: 10,
+          chargePersonId: null,
           town: null,
           village: null,
           name: null,
@@ -153,32 +206,52 @@
         dialogFormVisible:false,
         qrDialogFormVisible:false,
         textMap: {
-          edit: '编辑',
+          // edit: '编辑',
           create: '添加'
         },
         temp:{
           id:null,
           town:'',
           village:'',
-          name:''
+          planHoldCount:0,
+          planPersonCount:0,
+          chargePersonId:'',
+          chargePersonName:'',
         },
         rules: {
           town: [{ required: true, message: '街道是必填', trigger: 'blur' }],
           village: [{ required: true, message: '普查区是必填', trigger: 'blur' }],
           name: [{ required: true, message: '小区名字是必填', trigger: 'blur' }],
+          planHoldCount: [{ required: true, message: '计划统计户数是必填', trigger: 'blur' }],
+          planPersonCount: [{ required: true, message: '计划统计人数是必填', trigger: 'blur' }],
+          chargePersonId: [{ required: true, message: '负责人是必填', trigger: 'blur' }],
         },
       }
     },
     created() {
       this.getList()
+      this.getUserList()
       this.getFrontUrl()
     },
     methods: {
+      choiceCharge(user){
+        this.temp.chargePersonId = user.id;
+        this.temp.chargePersonName = user.nickName;
+        console.log(user)
+      },
       getFrontUrl(){
         let param = {key: 'census_fill'}
-        apiGetByKey(param).then((item) => {
-          if(item.code == 200 && item.data != null){
-            this.frontUrl = item.data.value
+        apiGetByKey(param).then((res) => {
+          if(res.code == 200 && res.data != null){
+            this.frontUrl = res.data.value
+          }
+        })
+      },
+      getUserList(){
+        let param = {}
+        apiUserFindList(param).then((res) => {
+          if(res.code == 200){
+            this.userList = res.data
           }
         })
       },
@@ -214,7 +287,7 @@
           Object.assign(this.listQuery, params)
         }
         this.listLoading = true
-        apiGetList(this.listQuery).then(response => {
+        apiCommunityGetList(this.listQuery).then(response => {
           this.list = response.data.data
           this.total = response.data.total
           this.listLoading = false
@@ -227,13 +300,17 @@
       resetTemp(){
         this.temp = {
           id:null,
-          nickName:'',
-          userName:'',
-          phone:''
+          town:'',
+          village:'',
+          planHoldCount:'0',
+          planPersonCount:'0',
+          chargePersonId:'',
+          chargePersonName:'',
         }
       },
       handleAdd(){
         this.resetTemp()
+        console.log(this.temp)
         this.dialogStatus='add'
         this.dialogFormVisible=true
         this.$nextTick(() => {
@@ -248,7 +325,7 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              apiAdd(this.temp).then(() => {
+              apiCommunityAdd(this.temp).then(() => {
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({
@@ -269,7 +346,7 @@
           type: 'warning'
         }).then(() => {
           let param = {id:id}
-          apiDelete(param).then(() => {
+          apiCommunityDelete(param).then(() => {
             this.handleFilter()
             this.$notify({
               title: '删除小区',
@@ -296,7 +373,7 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              apiEdit(this.temp).then(() => {
+              apiCommunityEdit(this.temp).then(() => {
                 this.dialogFormVisible = false
                 this.handleFilter()
                 this.$notify({

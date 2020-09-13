@@ -22,4 +22,16 @@ public class CommunityAddVO {
     @ApiModelProperty("小区名字")
     private String name;
 
+    @ApiModelProperty("计划统计户数")
+    private String planHoldCount;
+
+    @ApiModelProperty("计划统计人数")
+    private String planPersonCount;
+
+    @ApiModelProperty("负责人id")
+    private Integer chargePersonId;
+
+    @ApiModelProperty("负责人姓名")
+    private String chargePersonName;
+
 }

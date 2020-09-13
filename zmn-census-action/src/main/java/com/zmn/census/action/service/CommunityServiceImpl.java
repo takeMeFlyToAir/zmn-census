@@ -55,6 +55,9 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
         if(StrUtil.isNotEmpty(condition.getName())){
             criteria.andLike("name", "%"+condition.getName()+"%");
         }
+        if(condition.getChargePersonId() != null){
+            criteria.andEqualTo("chargePersonId", condition.getChargePersonId());
+        }
         PageHelper.startPage(pager.getPageNo(),pager.getPageSize());
         List<CommunityEntity> filterList = this.selectByExample(example);
         PageInfo<CommunityEntity> pageInfo = new PageInfo<>(filterList);
@@ -98,6 +101,8 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
     public CommunityVO edit(CommunityEditVO communityEditVO) {
         CommunityEntity communityEntity = VoAndBeanUtils.fromVO(communityEditVO, CommunityEntity.class);
         this.updateNotNull(communityEntity);
+        //编辑房间表中的小区信息
+
         return VoAndBeanUtils.toVO(communityEntity,CommunityVO.class);
     }
 }

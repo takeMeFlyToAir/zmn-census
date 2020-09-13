@@ -22,4 +22,6 @@ public class CommunityQueryQO {
     @ApiModelProperty("小区名字")
     private String name;
 
+    @ApiModelProperty("负责人id")
+    private Integer chargePersonId;
 }

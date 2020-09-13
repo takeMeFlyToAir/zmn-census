@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * Created by zhaozhirong on 2019/11/25.
@@ -44,6 +46,19 @@ public class UserController {
             return CommonResult.failed();
         }
     }
+
+
+    @ApiOperation("查询所有用户")
+    @GetMapping(value = "/findList")
+    public CommonResult<List<UserVO>> findList(UserQO userQO){
+        try {
+            return CommonResult.success(userService.findList(userQO));
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            return CommonResult.failed();
+        }
+    }
+
 
     @ApiOperation("添加用户")
     @PostMapping(value = "/save")

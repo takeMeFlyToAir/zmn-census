@@ -1,6 +1,7 @@
 package com.zmn.census.action.api;
 
 import com.zmn.census.action.entity.RoomAddressEntity;
+import com.zmn.census.api.vo.CommunityEditVO;
 import com.zmn.census.common.core.service.IService;
 
 /**
@@ -11,4 +12,7 @@ import com.zmn.census.common.core.service.IService;
  * Version 1.0
  **/
 public interface RoomAddressService extends IService<RoomAddressEntity> {
+
+    void updateCommunity(CommunityEditVO communityEditVO);
+
 }

@@ -11,6 +11,8 @@ import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 import com.zmn.census.common.core.service.IService;
 
+import java.util.List;
+
 /**
  * Created by zhaozhirong on 2019/11/25.
  */
@@ -23,6 +25,8 @@ public interface UserService extends IService<UserEntity> {
     UserVO getById(Integer id);
 
     PagerResult<UserVO> findPage(Pager<UserQO> pager);
+
+    List<UserVO> findList(UserQO userQO);
 
     UserVO getByUserName(String userName);
 

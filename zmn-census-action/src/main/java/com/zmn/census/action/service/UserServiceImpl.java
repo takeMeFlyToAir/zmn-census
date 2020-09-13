@@ -46,7 +46,7 @@ public class UserServiceImpl extends BaseService<UserEntity> implements UserServ
 
     @Override
     public UserVO getById(Integer id) {
-        return VoAndBeanUtils.toVO(this.getById(id), UserVO.class);
+        return VoAndBeanUtils.toVO(userMapper.selectByPrimaryKey(id), UserVO.class);
     }
 
 
@@ -71,6 +71,27 @@ public class UserServiceImpl extends BaseService<UserEntity> implements UserServ
         PageInfo<UserEntity> pageInfo = new PageInfo<>(filterList);
         PagerResult<UserEntity> pagerResult = new PagerResult<>(pageInfo.getList(), pageInfo.getTotal());
         return PagerResult.toVOPagerResult(pagerResult, UserVO.class);
+    }
+
+    @Override
+    public List<UserVO> findList(UserQO userQO) {
+        UserQO condition = userQO;
+        Example example = new Example(UserEntity.class);
+        example.setOrderByClause(" created_date desc ");
+        Example.Criteria criteria = example.createCriteria().andEqualTo("deleted", 0);
+
+        if(StrUtil.isNotEmpty(condition.getUserName())){
+            criteria.andLike("userName", "%"+condition.getUserName()+"%");
+        }
+        if(StrUtil.isNotEmpty(condition.getNickName())){
+            criteria.andLike("nickName", "%"+condition.getNickName()+"%");
+        }
+        if(StrUtil.isNotEmpty(condition.getPhone())){
+            criteria.andLike("phone", "%"+condition.getPhone()+"%");
+        }
+        List<UserEntity> filterList = this.selectByExample(example);
+        return VoAndBeanUtils.toVOList(filterList,UserVO.class);
+
     }
 
     @Override

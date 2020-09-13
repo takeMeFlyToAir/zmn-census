@@ -21,7 +21,7 @@
   </el-dialog>
 </template>
 <script>
-  import { apiChangePassword } from '@/api/user'
+  import { apiUserChangePassword } from '@/api/user'
   export default {
     name: 'changePassword',
     props: {
@@ -71,7 +71,7 @@
                             type: 'warning'
                         }).then(() =>{
                             console.log(this.userChangePassword)
-                             userServer.changePassword(this.userChangePassword)
+                          apiUserChangePassword(this.userChangePassword)
                                 .then(res=>{
                                     if(res.code == 200){
                                         this.$message({

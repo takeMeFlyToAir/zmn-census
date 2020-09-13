@@ -10,9 +10,9 @@
       <div class="div_content">
         <van-collapse v-model="activeNames"  >
           <!-- 地址信息 -->
-          <van-collapse-item size="large" name="roomAddress"  >
+          <van-collapse-item size="large" name="roomAddress"  class="big_title" >
             <template #title>
-              <div  class="big_title">地址信息</div>
+              <div>地址信息</div>
             </template>
             <van-field :disabled='submitButtonDisable' v-model="roomAddress.province" label="省(区、市)：" label-width="8em" placeholder="陕西省"
                        readonly
@@ -77,9 +77,9 @@
             />
           </van-collapse-item>
           <!-- 住户信息 -->
-          <van-collapse-item size="large"  name="houseHold" >
+          <van-collapse-item size="large"  name="houseHold"  class="big_title">
             <template #title>
-              <div  class="big_title">住户信息</div>
+              <div  >住户信息</div>
             </template>
             <div class="houseHold_item">
               <p class="houseHold_title houseHold_title_tip">H1.户别：</p>
@@ -207,9 +207,9 @@
             </div>
           </van-collapse-item>
           <!-- 个人信息列表 -->
-          <van-collapse-item size="large" name="personInfo">
+          <van-collapse-item size="large" name="personInfo"  class="big_title">
             <template #title>
-              <div  class="big_title">个人信息列表</div>
+              <div >个人信息列表</div>
             </template>
             <van-cell v-if="!submitButtonDisable" title="新增个人信息"  @click="addPerson"  icon="add-o">
             </van-cell>
@@ -396,9 +396,9 @@
 
           </van-collapse-item>
           <!-- 其他信息 -->
-          <van-collapse-item size="large"  name="otherInfo">
+          <van-collapse-item size="large"  name="otherInfo" class="big_title" >
             <template #title>
-              <div  class="big_title" >其他信息</div>
+              <div  >其他信息</div>
             </template>
             <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
             />
@@ -996,6 +996,9 @@
   .houseHold_title_tip{
     padding-bottom: 0px;
     margin-bottom: 5px;
+  }
+  .big_title >>> .van-collapse-item__wrapper {
+    background-color: red !important;
   }
 
 </style>

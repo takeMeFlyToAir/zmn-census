@@ -1,6 +1,6 @@
 import api from '@/utils/api'
 
-export function apiGetList(params) {
+export function apiCommunityGetList(params) {
   return api({
     url: '/community/findPage',
     method: 'get',
@@ -8,7 +8,7 @@ export function apiGetList(params) {
   })
 }
 
-export function apiAdd(params) {
+export function apiCommunityAdd(params) {
   return api({
     url: '/community/save',
     method: 'post',
@@ -17,7 +17,7 @@ export function apiAdd(params) {
 }
 
 
-export function apiEdit(params) {
+export function apiCommunityEdit(params) {
   return api({
     url: '/community/edit',
     method: 'post',
@@ -25,7 +25,7 @@ export function apiEdit(params) {
   })
 }
 
-export function apiDelete(params) {
+export function apiCommunityDelete(params) {
   return api({
     url: '/community/delete',
     method: 'post',

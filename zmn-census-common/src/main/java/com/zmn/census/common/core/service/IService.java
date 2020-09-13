@@ -36,8 +36,6 @@ import java.util.List;
  */
 public interface IService<T extends BaseEntity> {
 
-    T getById(Object key);
-
     int save(T entity);
 
     int saveNotNull(T entity);

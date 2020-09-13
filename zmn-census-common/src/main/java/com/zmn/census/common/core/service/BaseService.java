@@ -48,10 +48,6 @@ public abstract class BaseService<T  extends BaseEntity> implements IService<T> 
 
 
 
-    @Override
-    public T getById(Object key) {
-        return myMapper.selectByPrimaryKey(key);
-    }
 
     @Override
     public int save(T entity) {
@@ -69,7 +65,7 @@ public abstract class BaseService<T  extends BaseEntity> implements IService<T> 
 
     @Override
     public int delete(Integer id) {
-        T baseEntity = this.getById(id);
+        T baseEntity = myMapper.selectByPrimaryKey(id);
         baseEntity.setDeleted(1);
         return myMapper.updateByPrimaryKeySelective(baseEntity);
     }
