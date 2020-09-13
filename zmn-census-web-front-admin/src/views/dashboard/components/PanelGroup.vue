@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            小区总数
+            总小区数
           </div>
-          <count-to :start-val="0" :end-val="communityCount" :duration="1" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="business.allCommunityCount" :duration="1" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            完成小区数量
+            总问卷数
           </div>
-          <count-to :start-val="0" :end-val="communityCountForFinish" :duration="1" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="business.allSurveyCount" :duration="1" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +33,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            问卷填报数量
+            总人数
           </div>
-          <count-to :start-val="0" :end-val="fillAllCensusCount" :duration="1"   class="card-panel-num" />
+          <count-to :start-val="0" :end-val="business.allPersonCount" :duration="1"   class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -46,9 +46,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            收集的个人总数
+            今日问卷数
           </div>
-          <count-to :start-val="0" :end-val="fillAllPersonCount" :duration="1" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="business.todaySurveyCount" :duration="1" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -67,10 +67,7 @@ export default {
   },
   data() {
     return{
-      communityCount: 250,
-      communityCountForFinish: 250,
-      fillAllCensusCount: 111,
-      fillAllPersonCount: 432,
+
     }
   },
   components: {

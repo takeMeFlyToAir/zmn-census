@@ -7,13 +7,13 @@ import com.zmn.census.action.entity.HouseHoldEntity;
 import com.zmn.census.action.entity.PersonInfoEntity;
 import com.zmn.census.action.entity.RoomAddressEntity;
 import com.zmn.census.action.mapper.RoomAddressMapper;
+import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
-import com.zmn.census.api.vo.CensusSurveyAddVO;
-import com.zmn.census.api.vo.CensusSurveyVO;
-import com.zmn.census.api.vo.CommunityUpdateCountVO;
+import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 import com.zmn.census.common.utils.object.VoAndBeanUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,6 +90,22 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             communityUpdateCountVO.setAddPersonCount(-roomAddressEntity.getPersonCount());
             communityService.updateCount(communityUpdateCountVO);
         }
+    }
+
+    @Override
+    public CensusSurveyCommonCountVO getCommonCount() {
+        CensusSurveyCommonCountVO censusSurveyCommonCountVO = new CensusSurveyCommonCountVO();
+        censusSurveyCommonCountVO.setAllCommunityCount(roomAddressMapper.selectAllCommunityCount());
+        censusSurveyCommonCountVO.setAllSurveyCount(roomAddressMapper.selectAllSurveyCount());
+        censusSurveyCommonCountVO.setAllPersonCount(roomAddressMapper.selectAllPersonCount());
+        censusSurveyCommonCountVO.setYesterdaySurveyCount(roomAddressMapper.selectYesterdaySurveyCount());
+        censusSurveyCommonCountVO.setTodaySurveyCount(roomAddressMapper.selectTodaySurveyCount());
+        return censusSurveyCommonCountVO;
+    }
+
+    @Override
+    public List<CensusSurveyCountVO> findListSurveyCount(CensusSurveyCountQO censusSurveyCountQO) {
+        return roomAddressMapper.selectSurveyCount(censusSurveyCountQO);
     }
 
 

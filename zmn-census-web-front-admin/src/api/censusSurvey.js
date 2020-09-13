@@ -14,3 +14,21 @@ export function apiCensusSurveyDelete(params) {
     params: params
   })
 }
+
+export function apiCensusSurveyCommonCount(params) {
+  return api({
+    url: '/censusSurvey/commonCount',
+    method: 'get',
+    params: params
+  })
+}
+
+
+export function apiCensusSurveySurveyCount(params) {
+  return api({
+    url: '/censusSurvey/surveyCount',
+    method: 'get',
+    params: params
+  })
+}
+

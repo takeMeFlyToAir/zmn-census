@@ -82,4 +82,42 @@
         where t1.deleted=0 and  t1.id = #{id}
     </select>
 
+    <select id="selectAllCommunityCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM zmn_census_community where deleted = 0
+    </select>
+
+    <select id="selectAllSurveyCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM zmn_census_room_address where deleted = 0
+    </select>
+
+    <select id="selectAllPersonCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM zmn_census_person_info where deleted = 0
+    </select>
+
+    <select id="selectYesterdaySurveyCount" resultType="java.lang.Integer">
+       SELECT COUNT(*) FROM zmn_census_room_address WHERE deleted =0 AND  TO_DAYS(created_date) = TO_DAYS(NOW())-1;
+    </select>
+
+    <select id="selectTodaySurveyCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM zmn_census_room_address WHERE deleted =0 AND  TO_DAYS(created_date) = TO_DAYS(NOW())
+    </select>
+
+    <select id="selectSurveyCount" parameterType="com.zmn.census.api.qo.CensusSurveyCountQO" resultType="com.zmn.census.api.vo.CensusSurveyCountVO">
+        SELECT
+        DATE_FORMAT(created_date, '%Y-%m-%d') AS time,
+        count(*) AS surveyCount,
+        SUM(person_count) AS personCount
+        FROM
+            zmn_census_room_address
+        <where>
+            AND deleted =0
+            <if test="communityId !=null">
+                and community_id= #{communityId,jdbcType=INTEGER}
+            </if>
+
+        </where>
+        GROUP BY  time
+        ORDER BY time ASC;
+    </select>
+
 </mapper>
