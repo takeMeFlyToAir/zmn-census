@@ -203,7 +203,7 @@
         downloadButtonText:'下载',
         config: {
           value: '',
-          imagePath: '/src/assets/image/logo.png',
+          imagePath: '/logo.png',
           size: 1,
           filter: 'Color',
           // filter: 'Threshold',
