@@ -29,62 +29,59 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      border
-      fit
-      highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center"  >
+      <el-table-column label="ID" prop="id" sortable="custom"   >
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="街道" align="center">
+      <el-table-column label="街道" >
         <template slot-scope="{row}">
           <span>{{ row.town }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="普查区"  align="center">
+      <el-table-column label="普查区"  >
         <template slot-scope="{row}">
           <span>{{ row.village }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="小区名字"  align="center">
+      <el-table-column label="小区名字"  >
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="计划户数"  align="center">
+      <el-table-column label="计划户数"  >
         <template slot-scope="{row}">
           <span>{{ row.planHoldCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际户数"  align="center">
+      <el-table-column label="实际户数"  >
         <template slot-scope="{row}">
           <span>{{ row.realHoldCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="计划人数"  align="center">
+      <el-table-column label="计划人数"  >
         <template slot-scope="{row}">
           <span>{{ row.planPersonCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际人数"  align="center">
+      <el-table-column label="实际人数"  >
         <template slot-scope="{row}">
           <span>{{ row.realPersonCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="负责人"  align="center">
+      <el-table-column label="负责人"  >
         <template slot-scope="{row}">
           <span>{{ row.chargePersonName }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column label="创建日期"  align="center">-->
+      <!--<el-table-column label="创建日期"  >-->
         <!--<template slot-scope="{row}">-->
           <!--<span>{{ row.createdDateStr }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column width="300" label="操作" align="center"  class-name="small-padding">
+      <el-table-column width="300" label="操作"   class-name="small-padding" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="mini" size="mini"  @click="handleEdit(row)">
             编辑
@@ -174,7 +171,8 @@
           value: '',
           imagePath: '/src/assets/image/logo.png',
           size: 1,
-          filter: 'color',
+          filter: 'Color',
+          // filter: 'Threshold',
           version: 1,
           fillType: 'scale_to_fit',
         },
@@ -194,7 +192,7 @@
         listLoading: true,
         listQuery: {
           pageNo: 1,
-          pageSize: 10,
+          pageSize: 5,
           chargePersonId: null,
           town: null,
           village: null,

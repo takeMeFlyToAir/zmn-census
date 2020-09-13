@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zmn.census.action.mapper.HouseHoldMapper">
+
+
+    <resultMap type="com.zmn.census.api.vo.HouseHoldVO" id="ZmnCensusHouseHoldMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="roomAddressId" column="room_address_id" jdbcType="INTEGER"/>
+        <result property="h1" column="h1" jdbcType="VARCHAR"/>
+        <result property="h2Live" column="h2_live" jdbcType="VARCHAR"/>
+        <result property="h2NoLive" column="h2_no_live" jdbcType="VARCHAR"/>
+        <result property="h3Man" column="h3_man" jdbcType="VARCHAR"/>
+        <result property="h3Woman" column="h3_woman" jdbcType="VARCHAR"/>
+        <result property="h4Man" column="h4_man" jdbcType="VARCHAR"/>
+        <result property="h4Woman" column="h4_woman" jdbcType="VARCHAR"/>
+        <result property="h5" column="h5" jdbcType="VARCHAR"/>
+        <result property="h6" column="h6" jdbcType="VARCHAR"/>
+        <result property="h7" column="h7" jdbcType="VARCHAR"/>
+        <result property="h8" column="h8" jdbcType="VARCHAR"/>
+        <result property="h9" column="h9" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+        <result property="modifiedDate" column="modified_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="queryByRoomAddressId" resultMap="ZmnCensusHouseHoldMap">
+        select
+        *
+        from zmn_census_house_hold t1
+        where t1.deleted=0 and  t1.room_address_id = #{roomAddressId}
+    </select>
+
+    <update id="deleteByRoomAddressId">
+        update zmn_census_house_hold set deleted = 1 where
+        room_address_id = #{roomAddressId}
+    </update>
+</mapper>

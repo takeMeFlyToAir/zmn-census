@@ -21,5 +21,13 @@
         GROUP BY name;
     </select>
 
+    <update id="updateCount" parameterType="com.zmn.census.api.vo.CommunityUpdateCountVO">
+        UPDATE zmn_census_community
+        SET
+        real_hold_count = real_hold_count + #{addHoldCount},
+        real_person_count = real_person_count + #{addPersonCount}
+        WHERE id = #{id};
+    </update>
+
 
 </mapper>

@@ -24,10 +24,10 @@ public class CommunityEditVO extends BaseIdVO {
     private String name;
 
     @ApiModelProperty("计划统计户数")
-    private String planHoldCount;
+    private Integer planHoldCount;
 
     @ApiModelProperty("计划统计人数")
-    private String planPersonCount;
+    private Integer planPersonCount;
 
     @ApiModelProperty("负责人id")
     private Integer chargePersonId;

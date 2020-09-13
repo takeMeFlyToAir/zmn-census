@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zmn.census.action.mapper.PersonInfoMapper">
+
+    <resultMap type="com.zmn.census.api.vo.PersonInfoVO" id="ZmnCensusPersonInfoMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="roomAddressId" column="room_address_id" jdbcType="INTEGER"/>
+        <result property="d1" column="d1" jdbcType="VARCHAR"/>
+        <result property="d2" column="d2" jdbcType="VARCHAR"/>
+        <result property="d3" column="d3" jdbcType="VARCHAR"/>
+        <result property="d4" column="d4" jdbcType="VARCHAR"/>
+        <result property="d5" column="d5" jdbcType="VARCHAR"/>
+        <result property="d6" column="d6" jdbcType="VARCHAR"/>
+        <result property="d7" column="d7" jdbcType="VARCHAR"/>
+        <result property="d7Province" column="d7_province" jdbcType="VARCHAR"/>
+        <result property="d7City" column="d7_city" jdbcType="VARCHAR"/>
+        <result property="d7County" column="d7_county" jdbcType="VARCHAR"/>
+        <result property="d8" column="d8" jdbcType="VARCHAR"/>
+        <result property="d8Province" column="d8_province" jdbcType="VARCHAR"/>
+        <result property="d8City" column="d8_city" jdbcType="VARCHAR"/>
+        <result property="d8County" column="d8_county" jdbcType="VARCHAR"/>
+        <result property="d9" column="d9" jdbcType="VARCHAR"/>
+        <result property="d10" column="d10" jdbcType="VARCHAR"/>
+        <result property="d11" column="d11" jdbcType="VARCHAR"/>
+        <result property="d12" column="d12" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
+        <result property="modifiedDate" column="modified_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="queryByRoomAddressId" resultMap="ZmnCensusPersonInfoMap">
+        select
+        *
+        from zmn_census_person_info t1
+        where t1.deleted=0 and  t1.room_address_id = #{roomAddressId}
+    </select>
+
+    <update id="deleteByRoomAddressId">
+        update zmn_census_person_info set deleted = 1 where
+        room_address_id = #{roomAddressId}
+    </update>
+
+</mapper>

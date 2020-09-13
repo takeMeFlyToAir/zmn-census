@@ -461,6 +461,10 @@
       villageList: [],
       communityList: [],
       roomAddress: {
+        chargePersonId: '',
+        chargePersonName: '',
+        communityId: '',
+        personCount: '',
         province: '陕西省',
         city: '西安市',
         county : '浐灞区',
@@ -659,6 +663,7 @@
         this.$toast.fail(validateMsg)
         return
       }
+      this.roomAddress.personCount = this.personInfoList.length
       console.log("onSubmit",values)
       let censusSurvey = {
         roomAddress: this.roomAddress,
@@ -708,6 +713,9 @@
         community_getById(param)
           .then((res) => {
             if(res.code == 200){
+              this.roomAddress.chargePersonId = res.data.chargePersonId;
+              this.roomAddress.chargePersonName = res.data.chargePersonName;
+              this.roomAddress.communityId = res.data.id;
               this.roomAddress.town = res.data.town;
               this.roomAddress.village = res.data.village;
               this.roomAddress.community = res.data.name;

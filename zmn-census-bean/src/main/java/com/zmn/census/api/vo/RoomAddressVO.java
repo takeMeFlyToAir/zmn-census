@@ -20,6 +20,9 @@ public class RoomAddressVO extends BaseVO {
     @ApiModelProperty("负责人姓名")
     private String chargePersonName;
 
+    @ApiModelProperty("实际填写个人数")
+    private Integer personCount;
+
     @ApiModelProperty("小区id")
     private Integer communityId;
 

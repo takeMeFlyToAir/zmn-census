@@ -20,4 +20,8 @@ public class PersonInfoServiceImpl extends BaseService<PersonInfoEntity> impleme
     @Autowired
     private PersonInfoMapper personInfoMapper;
 
+    @Override
+    public void deleteByRoomAddressId(Integer roomAddressId) {
+
+    }
 }

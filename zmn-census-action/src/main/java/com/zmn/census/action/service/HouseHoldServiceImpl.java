@@ -20,4 +20,8 @@ public class HouseHoldServiceImpl extends BaseService<HouseHoldEntity> implement
     @Autowired
     private HouseHoldMapper houseHoldMapper;
 
+    @Override
+    public void deleteByRoomAddressId(Integer roomAddressId) {
+
+    }
 }

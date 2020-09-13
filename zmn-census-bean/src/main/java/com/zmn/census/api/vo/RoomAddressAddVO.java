@@ -25,6 +25,9 @@ public class RoomAddressAddVO {
     @ApiModelProperty("小区id")
     private Integer communityId;
 
+    @ApiModelProperty("实际填写个人数")
+    private Integer personCount;
+
     @ApiModelProperty("省")
     private String province;
 

@@ -11,4 +11,7 @@ import com.zmn.census.common.core.service.IService;
  * Version 1.0
  **/
 public interface HouseHoldService extends IService<HouseHoldEntity> {
+
+    void deleteByRoomAddressId(Integer roomAddressId);
+
 }

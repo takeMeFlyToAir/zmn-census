@@ -1,6 +1,10 @@
 package com.zmn.census.action.api;
 
+import com.zmn.census.api.qo.CensusSurveyQueryQO;
 import com.zmn.census.api.vo.CensusSurveyAddVO;
+import com.zmn.census.api.vo.CensusSurveyVO;
+import com.zmn.census.common.core.result.Pager;
+import com.zmn.census.common.core.result.PagerResult;
 
 /**
  * @ClassName CensusSurveyService
@@ -13,5 +17,8 @@ public interface CensusSurveyService {
 
     void save(CensusSurveyAddVO censusSurveyAddVO);
 
+    PagerResult<CensusSurveyVO> findPage(Pager<CensusSurveyQueryQO> pager);
+
+    void deleteAll(Integer roomAddressId);
 
 }

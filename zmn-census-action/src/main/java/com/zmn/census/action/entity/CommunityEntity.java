@@ -24,16 +24,16 @@ public class CommunityEntity extends BaseEntity {
     private String name;
 
     @ApiModelProperty("计划统计户数")
-    private String planHoldCount;
+    private Integer planHoldCount;
 
     @ApiModelProperty("实际统计户数")
-    private String realHoldCount;
+    private Integer realHoldCount;
 
     @ApiModelProperty("计划统计人数")
-    private String planPersonCount;
+    private Integer planPersonCount;
 
     @ApiModelProperty("实际统计人数")
-    private String realPersonCount;
+    private Integer realPersonCount;
 
     @ApiModelProperty("负责人id")
     private Integer chargePersonId;

@@ -24,4 +24,12 @@ public class CensusSurveyAddVO {
     @ApiModelProperty("个人信息")
     private List<PersonInfoAddVO> personInfoList;
 
+    public CommunityUpdateCountVO getCommunityUpdateCountVO(){
+        CommunityUpdateCountVO communityUpdateCountVO = new CommunityUpdateCountVO();
+        communityUpdateCountVO.setId(roomAddress.getCommunityId());
+        communityUpdateCountVO.setAddHoldCount(1);
+        communityUpdateCountVO.setAddPersonCount(personInfoList.size());
+        return communityUpdateCountVO;
+    }
+
 }

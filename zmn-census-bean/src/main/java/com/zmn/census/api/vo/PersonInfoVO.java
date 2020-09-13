@@ -1,23 +1,22 @@
-package com.zmn.census.action.entity;
+package com.zmn.census.api.vo;
 
-import com.zmn.census.common.core.model.BaseEntity;
+import cn.hutool.core.util.StrUtil;
+import com.zmn.census.common.core.model.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Table;
-
 /**
- * @ClassName PersonInfoEntity
+ * @ClassName PersonInfoAddVO
  * Description 个人信息
  * Author zhaozhirong
- * Date 2020/9/9 17:58
+ * Date 2020/9/9 17;48
  * Version 1.0
  **/
 @Data
-@Table(name = "zmn_census_person_info")
-public class PersonInfoEntity extends BaseEntity {
+public class PersonInfoVO extends BaseVO {
 
     private Integer roomAddressId;
+
 
     @ApiModelProperty("姓名")
     private String d1;
@@ -72,4 +71,26 @@ public class PersonInfoEntity extends BaseEntity {
 
     @ApiModelProperty("是否识字")
     private String d12;
+
+    private String d7AddressALl;
+    private String d8AddressALl;
+
+    public String getD7AddressAll(){
+        if(StrUtil.isNotBlank(this.getD7Province())
+                && StrUtil.isNotBlank(this.getD7City())
+                && StrUtil.isNotBlank(this.getD7County()) ){
+            return StrUtil.join("", this.getD7Province(), this.getD7City(), this.getD7County());
+        }
+        return "";
+    }
+
+    public String getD8AddressAll(){
+        if(StrUtil.isNotBlank(this.getD8Province())
+                && StrUtil.isNotBlank(this.getD8City())
+                && StrUtil.isNotBlank(this.getD8County()) ){
+           return StrUtil.join("", this.getD8Province(), this.getD8City(), this.getD8County());
+        }
+        return "";
+    }
+
 }

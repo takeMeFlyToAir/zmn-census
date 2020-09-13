@@ -4,11 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zmn.census.action.api.CommunityService;
+import com.zmn.census.action.api.RoomAddressApi;
 import com.zmn.census.action.entity.CommunityEntity;
 import com.zmn.census.action.mapper.CommunityMapper;
 import com.zmn.census.api.qo.CommunityQueryQO;
 import com.zmn.census.api.vo.CommunityAddVO;
 import com.zmn.census.api.vo.CommunityEditVO;
+import com.zmn.census.api.vo.CommunityUpdateCountVO;
 import com.zmn.census.api.vo.CommunityVO;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
@@ -16,6 +18,7 @@ import com.zmn.census.common.core.service.BaseService;
 import com.zmn.census.common.utils.object.VoAndBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -32,6 +35,9 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
 
     @Autowired
     private CommunityMapper communityMapper;
+
+    @Autowired
+    private RoomAddressApi roomAddressApi;
 
 
     @Override
@@ -98,11 +104,17 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
     }
 
     @Override
+    @Transactional
     public CommunityVO edit(CommunityEditVO communityEditVO) {
         CommunityEntity communityEntity = VoAndBeanUtils.fromVO(communityEditVO, CommunityEntity.class);
         this.updateNotNull(communityEntity);
         //编辑房间表中的小区信息
-
+        roomAddressApi.updateCommunityInfo(communityEditVO);
         return VoAndBeanUtils.toVO(communityEntity,CommunityVO.class);
+    }
+
+    @Override
+    public void updateCount(CommunityUpdateCountVO communityUpdateCountVO) {
+        communityMapper.updateCount(communityUpdateCountVO);
     }
 }

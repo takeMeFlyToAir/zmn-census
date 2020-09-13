@@ -20,37 +20,34 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      border
-      fit
-      highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center"  >
+      <el-table-column label="ID" prop="id" sortable="custom"   >
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="昵称" align="center">
+      <el-table-column label="昵称" >
         <template slot-scope="{row}">
           <span>{{ row.nickName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名"  align="center">
+      <el-table-column label="用户名"  >
         <template slot-scope="{row}">
           <span>{{ row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话号码"  align="center">
+      <el-table-column label="电话号码"  >
         <template slot-scope="{row}">
           <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建日期"  align="center">
+      <el-table-column label="创建日期"  >
         <template slot-scope="{row}">
           <span>{{ row.createdDateStr }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center"  class-name="small-padding fixed-width">
+      <el-table-column label="操作"   class-name="small-padding fixed-width" align="center">
         <template slot-scope="{row,$index}">
           <!--<el-button type="primary" size="mini"  @click="handleEdit(row)">-->
             <!--编辑-->
@@ -119,7 +116,7 @@
         listLoading: true,
         listQuery: {
           pageNo: 1,
-          pageSize: 10,
+          pageSize: 5,
           userName: null,
           nickName: null,
           phone: null,
