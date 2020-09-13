@@ -22,6 +22,6 @@ public class HouseHoldServiceImpl extends BaseService<HouseHoldEntity> implement
 
     @Override
     public void deleteByRoomAddressId(Integer roomAddressId) {
-
+        houseHoldMapper.deleteByRoomAddressId(roomAddressId);
     }
 }

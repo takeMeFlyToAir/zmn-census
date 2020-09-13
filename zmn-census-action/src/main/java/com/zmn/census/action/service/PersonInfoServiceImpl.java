@@ -22,6 +22,6 @@ public class PersonInfoServiceImpl extends BaseService<PersonInfoEntity> impleme
 
     @Override
     public void deleteByRoomAddressId(Integer roomAddressId) {
-
+        personInfoMapper.deleteByRoomAddressId(roomAddressId);
     }
 }

@@ -186,13 +186,13 @@
           <span>{{ row.roomAddress.createdDateStr }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column width="100px" label="操作" align="center"  class-name="small-padding">-->
-        <!--<template slot-scope="{row,$index}">-->
-          <!--<el-button  size="mini" type="danger" @click="handleDelete(row.id)">-->
-          <!--删除-->
-          <!--</el-button>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column width="100px" label="操作" align="center"  class-name="small-padding">
+        <template slot-scope="{row,$index}">
+          <el-button  size="mini" type="danger" @click="handleDelete(row.id)">
+          删除
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" @pagination="getList" />
