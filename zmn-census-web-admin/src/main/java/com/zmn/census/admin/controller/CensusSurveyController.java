@@ -1,12 +1,11 @@
 package com.zmn.census.admin.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSON;
 import com.zmn.census.action.api.CensusSurveyService;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
-import com.zmn.census.api.vo.CensusSurveyCommonCountVO;
-import com.zmn.census.api.vo.CensusSurveyCountVO;
-import com.zmn.census.api.vo.CensusSurveyVO;
-import com.zmn.census.api.vo.CommunityVO;
+import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.result.CommonResult;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
@@ -19,7 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
+
+import static com.zmn.census.common.core.result.ResultCode.DOWNLOAD_FILE_ERROR;
 
 
 /**
@@ -72,6 +76,30 @@ public class CensusSurveyController {
         }catch (Exception e){
             log.error(e.getMessage(),e);
             return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("下载")
+    @GetMapping("/download")
+    public void downloadFailedUsingJson(HttpServletResponse response,CensusSurveyQueryQO censusSurveyQueryQO) throws IOException {
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = URLEncoder.encode("测试", "UTF-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            // 这里需要设置不关闭流
+            List<CensusDownloadVO> downloadDataList= censusSurveyService.findDownloadData(censusSurveyQueryQO);
+            EasyExcel.write(response.getOutputStream(), CensusDownloadVO.class).autoCloseStream(Boolean.FALSE).sheet("模板")
+                    .doWrite(downloadDataList);
+        } catch (Exception e) {
+            log.error("下载文件出错{}",e);
+            // 重置response
+            response.reset();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().println(JSON.toJSONString(CommonResult.failed(DOWNLOAD_FILE_ERROR)));
         }
     }
 

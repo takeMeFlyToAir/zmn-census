@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,6 +107,23 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
     @Override
     public List<CensusSurveyCountVO> findListSurveyCount(CensusSurveyCountQO censusSurveyCountQO) {
         return roomAddressMapper.selectSurveyCount(censusSurveyCountQO);
+    }
+
+    @Override
+    public List<CensusDownloadVO> findDownloadData(CensusSurveyQueryQO censusSurveyQueryQO) {
+        ArrayList<CensusDownloadVO> censusDownloadVOS = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            CensusDownloadVO censusDownloadVO = new CensusDownloadVO();
+            censusDownloadVO.setCommunity("小区"+i);
+            censusDownloadVO.setBuildNum("楼栋"+i);
+            censusDownloadVO.setUnitNum("单元"+i);
+            censusDownloadVO.setFloorNum("楼层"+i);
+            censusDownloadVO.setRoomNum("房间"+i);
+            censusDownloadVO.setExaminePersonName("检查人"+i);
+            censusDownloadVO.setFillPersonPhone("填报人电话"+i);
+            censusDownloadVOS.add(censusDownloadVO);
+        }
+        return censusDownloadVOS;
     }
 
 

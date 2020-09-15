@@ -46,7 +46,7 @@ public class UserRealm extends AuthorizingRealm {
 		System.out.println("-------身份认证方法--------");
 		String userName = (String) authenticationToken.getPrincipal();
 		String password = new String((char[]) authenticationToken.getCredentials());
-		log.info("===============login info===userName is {}, password is {}",userName,password);
+		log.info("===============login info===userName is {}",userName);
 		UserVO userVO = userService.login(userName,password);
 		if (userVO == null) {
 			throw new UnknownAccountException();

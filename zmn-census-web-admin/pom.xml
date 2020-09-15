@@ -37,6 +37,8 @@
             <version>${shiro.version}</version>
         </dependency>
 
+
+
     </dependencies>
 
     <build>

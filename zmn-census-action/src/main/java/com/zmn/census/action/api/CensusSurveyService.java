@@ -2,10 +2,7 @@ package com.zmn.census.action.api;
 
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
-import com.zmn.census.api.vo.CensusSurveyAddVO;
-import com.zmn.census.api.vo.CensusSurveyCommonCountVO;
-import com.zmn.census.api.vo.CensusSurveyCountVO;
-import com.zmn.census.api.vo.CensusSurveyVO;
+import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 
@@ -29,6 +26,9 @@ public interface CensusSurveyService {
     CensusSurveyCommonCountVO getCommonCount();
 
     List<CensusSurveyCountVO> findListSurveyCount(CensusSurveyCountQO censusSurveyCountQO);
+
+    List<CensusDownloadVO> findDownloadData(CensusSurveyQueryQO censusSurveyQueryQO);
+
 
 
 

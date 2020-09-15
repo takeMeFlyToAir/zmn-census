@@ -11,6 +11,7 @@ public enum ResultCode implements IErrorCode {
     PARAM_EFFECTIVE_FAILED(90004, "参数有效性校验"),
     UNAUTHORIZED(20011, "登陆已过期,请重新登陆"),
     PATH_ERROR(501, "请求路径不存在"),
+    DOWNLOAD_FILE_ERROR(444, "下载文件出错"),
     FORBIDDEN(403, "权限不足");
     private long code;
     private String message;

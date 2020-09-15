@@ -44,6 +44,10 @@
 
     <knife4j.version>2.0.2</knife4j.version>
 
+    <easyexcel.version>2.2.3</easyexcel.version>
+    <asm.version>5.2</asm.version>
+
+
 
   </properties>
 

@@ -1009,4 +1009,8 @@
     background-color: red !important;
   }
 
+  /deep/ .big_title > .van-cell--large {
+    background-color: #ebedf0;
+  }
+
 </style>
