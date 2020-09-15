@@ -22,7 +22,7 @@
                        readonly
                        :rules="[{ required: true, message: '请填写市' }]"
             />
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.county" label="县(市、区、旗)：" label-width="8em" placeholder="浐灞区"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.county" label="县(市、区、旗)：" label-width="8em" placeholder="浐灞生态区"
                        readonly
                        :rules="[{ required: true, message: '请填写区' }]"
             />
@@ -62,15 +62,15 @@
                 @confirm="choiceCommunity"
               />
             </van-popup>
-            <van-field required :disabled='submitButtonDisable' v-model="roomAddress.buildNum" label="楼栋号："  type="digit" label-width="8em" placeholder="输入楼栋号"
+            <van-field required :disabled='submitButtonDisable' v-model="roomAddress.buildNum" label="楼栋号："  type="digit" label-width="8em" placeholder="请输入楼号/组,例如:1"
                        :rules="[{ required: true , message:'请填写楼栋号'}]"
             />
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.unitNum" label="单元号："  type="digit" label-width="8em" placeholder="输入单元号"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.unitNum" label="单元号："  type="digit" label-width="8em" placeholder="请输入单元号,例如:2,如无填0"
             />
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.floorNum" label="楼层："  type="digit" label-width="8em" placeholder="输入楼层号"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.floorNum" label="楼层："  type="digit" label-width="8em" placeholder="请输入楼层,如3"
             />
-            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="房间号："  name="房间号"    label-width="8em" placeholder="输入房间号"
-                       :rules="[{ required: true , message:'请填写房间号'}]"
+            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="门牌号："  name="门牌号"    label-width="8em" placeholder="请输入门牌号,例如:2702"
+                       :rules="[{ required: true , message:'请填写门牌号'}]"
             />
             <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="填报人电话：" name="填报人电话"   type="tel"    label-width="8em" placeholder="输入填报人电话"
                        :rules="[{ pattern:mobilePattern, message: '请输入正确的电话' }]"
@@ -159,16 +159,14 @@
 
             <div  class="houseHold_item" v-if="isShowH6AndH7">
               <p class="houseHold_title">H6.本户住房建筑面积：</p>
-              <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="平方米：">
-                <template #input>
-                  <van-stepper v-model="houseHold.h6" min="1" />
-                </template>
-              </van-field>
+              <van-field :disabled='submitButtonDisable'  v-model="houseHold.h6"  placeholder="输入住房面积" required name="stepper" type="digit" label-width="5em" label="平方米："
+                         :rules="[{ required: true, message:'请填写住房面积' }]"
+              />
             </div>
 
             <div  class="houseHold_item" v-if="isShowH6AndH7">
               <p class="houseHold_title houseHold_title_tip">H7.本户现在住房数：</p>
-              <p class="question_tip">提示：本户住房间数—指除厨房、厕所、过道和厅以外的所有自然间数(包括扩建的房间)</p>
+              <p class="question_tip">提示：本户住房间数指除厨房、厕所、过道和厅以外的所有自然间数(包含扩建的房间),租户合租住同一所住房的,在填写住房间数时,填写其独立使用的房间数</p>
               <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="间：">
                 <template #input>
                   <van-stepper v-model="houseHold.h7" min="1" />
@@ -233,7 +231,7 @@
 
                 </van-field>
                 <p class="question_tip question_tip_field">
-                  提示：指被登记人与本户户主的关系,普查员根据申报人的回答据情填报,申报人不是户主的,注意在填报时,不要将某人与申报人的关系错填为与户主的关系
+                  提示：这里的户主按家庭日常生活习惯确定为户主,在登记集体户时,任选一人登记为户主,本户其他成员与户主关系一律登记为其他
                 </p>
                 <van-popup v-model="item.showPickerD2" round position="bottom">
                   <van-picker
@@ -467,7 +465,7 @@
         personCount: '',
         province: '陕西省',
         city: '西安市',
-        county : '浐灞区',
+        county : '浐灞生态区',
         town: '',
         village: '',
         community: '',
@@ -505,14 +503,14 @@
       ],
       houseHold:{
         h1: "",//户别
-        h2Live: "3",//本户应登记人数,2020年10月31日晚居住本户的人数 _____人
+        h2Live: "0",//本户应登记人数,2020年10月31日晚居住本户的人数 _____人
         h2NoLive: "0",//户口在本户，2020年10月31日晚未住本户的人数 _____人
         h3Man: "0",//本户2019年11月1日至2020年10月31日期间的出生人口,男人
         h3Woman: "0",//本户2019年11月1日至2020年10月31日期间的出生人口,女人
         h4Man: "0",//本户2019年11月1日至2020年10月31日期间的死亡人口,男人
         h4Woman: "0",//本户2019年11月1日至2020年10月31日期间的死亡人口,女人
         h5: "",//住房类型,h5List,（选择3-6的，跳至个人项目。）
-        h6: "1",//本户住房建筑面积
+        h6: "",//本户住房建筑面积
         h7: "1",//本户住房间数
         h8: "",//您家中是否有6个月及以上的孕妇（是/否）
         h9: "",//填报人类型：住户，租户
