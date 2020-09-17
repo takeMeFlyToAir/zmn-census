@@ -140,9 +140,23 @@
                 </template>
               </van-field>
             </div>
-
             <div class="houseHold_item">
-              <p class="houseHold_title">H5.住房类型：</p>
+              <p class="houseHold_title">H5.您家中是否有怀孕6个月及以上的孕妇：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable label="是/否："  name="孕妇" :value="houseHold.h8" label-width="5em" placeholder="请选择" @click="showPickerH8 = true"
+                         :rules="[{ required: true, message:'请选择是/否' }]"
+              />
+              <van-popup v-model="showPickerH8" round position="bottom">
+                <van-picker
+                  title="孕妇"
+                  show-toolbar
+                  :columns="h8List"
+                  @cancel="showPickerH8 = false"
+                  @confirm="choiceH8"
+                />
+              </van-popup>
+            </div>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H6.住房类型：</p>
               <van-field :disabled='submitButtonDisable' required readonly clickable label="住房类型："  name="住房类型" :value="houseHold.h5" label-width="5em" placeholder="请选择" @click="showPickerH5 = true"
                          :rules="[{ required: true, message:'请选择住房类型' }]"
               />
@@ -158,35 +172,20 @@
             </div>
 
             <div  class="houseHold_item" v-if="isShowH6AndH7">
-              <p class="houseHold_title">H6.本户住房建筑面积：</p>
+              <p class="houseHold_title">H7.本户住房建筑面积：</p>
               <van-field :disabled='submitButtonDisable'  v-model="houseHold.h6"  placeholder="输入住房面积" required name="stepper" type="digit" label-width="5em" label="平方米："
                          :rules="[{ required: true, message:'请填写住房面积' }]"
               />
             </div>
 
             <div  class="houseHold_item" v-if="isShowH6AndH7">
-              <p class="houseHold_title houseHold_title_tip">H7.本户现在住房数：</p>
+              <p class="houseHold_title houseHold_title_tip">H8.本户现在住房数：</p>
               <p class="question_tip">提示：本户住房间数指除厨房、厕所、过道和厅以外的所有自然间数(包含扩建的房间),租户合租住同一所住房的,在填写住房间数时,填写其独立使用的房间数</p>
               <van-field :disabled='submitButtonDisable'  required name="stepper" label-width="5em" label="间：">
                 <template #input>
                   <van-stepper v-model="houseHold.h7" min="1" />
                 </template>
               </van-field>
-            </div>
-            <div class="houseHold_item">
-              <p class="houseHold_title">H8.您家中是否有怀孕6个月及以上的孕妇：</p>
-              <van-field :disabled='submitButtonDisable' required readonly clickable label="是/否："  name="孕妇" :value="houseHold.h8" label-width="5em" placeholder="请选择" @click="showPickerH8 = true"
-                         :rules="[{ required: true, message:'请选择是/否' }]"
-              />
-              <van-popup v-model="showPickerH8" round position="bottom">
-                <van-picker
-                  title="孕妇"
-                  show-toolbar
-                  :columns="h8List"
-                  @cancel="showPickerH8 = false"
-                  @confirm="choiceH8"
-                />
-              </van-popup>
             </div>
             <div class="houseHold_item">
               <p class="houseHold_title">H9.填报人类型：</p>
@@ -417,10 +416,14 @@
       </div>
       <div class="div_foot" >
        <div class="div_button">
-         <van-button round block type="info" size="small"  native-type="submit" :disabled="submitButtonDisable">
-           <!--{{submitButtonText}}-->
+         <van-button v-if="!isAgain" round block type="info" size="small"  native-type="submit" :disabled="submitButtonDisable">
            <template #default>
              <div class="submit_button_text">{{submitButtonText}}</div>
+           </template>
+         </van-button>
+         <van-button v-if="isAgain" round block type="info" size="small"  native-type="button" @click="againFill">
+           <template #default>
+             <div class="submit_button_text">继续填报</div>
            </template>
          </van-button>
        </div>
@@ -437,12 +440,14 @@
   import { formatDate,getBirthYearAndMonthByIdNo,getBirthdayByIdNo } from '@/utils/index.js'
 
   export default {
+    inject:['reload'],
   data() {
     return {
       xxx:{
         color:'red'
       },
       submitButtonText:'提交',
+      isAgain:false,
       submitButtonDisable:false,
       idCardNumPattern: /^(\d{15}|\d18|^\d{17}(\d|X|x))$/,
       mobilePattern: /^1[3456789]\d{9}$/,
@@ -682,7 +687,8 @@
           censusSurvey_save(censusSurvey)
             .then((res) => {
               if(res.code == 200){
-                this.submitButtonText='提交完成'
+                this.submitButtonText='提交';
+                this.isAgain = true;
                 this.$toast.success("提交成功，衷心感谢您的参与！")
               }else{
                 console.log(res)
@@ -704,6 +710,10 @@
     onFailed(errorInfo){
       console.log("onFailed",errorInfo)
       this.$toast.fail("请填写所有的必填项，注意输入框字体是红色的！")
+    },
+    againFill(){
+      console.log('333')
+      this.reload()
     },
     dealLinkParam(query){
       if(query && query.hasOwnProperty("id")){
