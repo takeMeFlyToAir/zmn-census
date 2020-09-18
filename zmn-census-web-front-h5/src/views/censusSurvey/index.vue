@@ -397,7 +397,8 @@
             <template #title>
               <div  >其他信息</div>
             </template>
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
+            <van-field required :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
+                       :rules="[{ required: true, message:'请输入普查员姓名' }]"
             />
             <van-field
               :disabled='submitButtonDisable'
@@ -438,6 +439,9 @@
   import { censusSurvey_save } from '@/api/censusSurvey.js'
 
   import { formatDate,getBirthYearAndMonthByIdNo,getBirthdayByIdNo } from '@/utils/index.js'
+
+  import { mapGetters } from 'vuex'
+
 
   export default {
     inject:['reload'],
@@ -643,11 +647,12 @@
     this.personInfoList.push(person)
     let length = this.personInfoList.length
     this.activePersonInfoList.splice(length,0,length-1)
+    this.roomAddress.examinePersonName = this.examinePersonName
   },
-  computed: {
-  },
-
-  mounted() { },
+    computed: {
+      ...mapGetters(['examinePersonName'])
+    },
+    mounted() { },
 
   methods: {
     onSubmit(values) {
@@ -664,6 +669,12 @@
       })
       if(!validateResult){
         this.$toast.fail(validateMsg)
+        return
+      }
+      let length = this.personInfoList.length
+      let maxPersonCount = parseInt(this.houseHold.h2Live)+parseInt(this.houseHold.h2NoLive)
+      if(length != maxPersonCount){
+        this.$toast.fail("个人信息列表的人员个数，必须等于住户信息中H2问题的两数之和")
         return
       }
       this.roomAddress.personCount = this.personInfoList.length
@@ -712,7 +723,7 @@
       this.$toast.fail("请填写所有的必填项，注意输入框字体是红色的！")
     },
     againFill(){
-      console.log('333')
+      this.$store.dispatch('setExaminePersonName', this.roomAddress.examinePersonName)
       this.reload()
     },
     dealLinkParam(query){
@@ -744,7 +755,7 @@
       let length = this.personInfoList.length
       let maxPersonCount = parseInt(this.houseHold.h2Live)+parseInt(this.houseHold.h2NoLive)
       if(length >= maxPersonCount){
-        this.$toast.fail("能够添加的多的个人项目总和是上述H1问题的两数之和")
+        this.$toast.fail("个人信息列表的人员个数，只能等于住户信息中H2问题的两数之和")
         return
       }
       this.personInfoList.push(Object.assign({},this.personInfo))

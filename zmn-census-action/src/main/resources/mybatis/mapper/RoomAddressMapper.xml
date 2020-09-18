@@ -64,6 +64,9 @@
             <if test="roomNum !=null and roomNum!=''">
                 AND t1.room_num LIKE concat('%',#{roomNum,jdbcType=VARCHAR},'%')
             </if>
+            <if test="examinePersonName !=null and examinePersonName!=''">
+                AND t1.examine_person_name LIKE concat('%',#{examinePersonName,jdbcType=VARCHAR},'%')
+            </if>
             <if test="chargePersonId !=null">
                 and t1.charge_person_id= #{chargePersonId,jdbcType=INTEGER}
             </if>

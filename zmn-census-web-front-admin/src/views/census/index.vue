@@ -18,6 +18,7 @@
       <el-input v-model="listQuery.roomNum" placeholder="房间号" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <br>
       <br>
+      <el-input v-model="listQuery.examinePersonName" placeholder="普查员" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-date-picker
         v-model="timeQuery"
         type="daterange"
@@ -45,6 +46,7 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
+      height="350"
       style="width: 100%;"
     >
       <el-table-column type="expand">
@@ -249,7 +251,7 @@
         timeQuery:[],
         listQuery: {
           pageNo: 1,
-          pageSize: 5,
+          pageSize: 10,
           chargePersonId: null,
           town: null,
           village: null,
@@ -258,6 +260,7 @@
           unitNum: null,
           floorNum: null,
           roomNum: null,
+          examinePersonName: null,
           startTime:'',
           endTime:'',
         },

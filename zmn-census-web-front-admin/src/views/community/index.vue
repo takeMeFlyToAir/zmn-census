@@ -29,6 +29,7 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
+      height="410"
       style="width: 100%;"
     >
       <el-table-column label="ID" prop="id" sortable="custom"   >
@@ -226,7 +227,7 @@
         listLoading: true,
         listQuery: {
           pageNo: 1,
-          pageSize: 5,
+          pageSize: 10,
           chargePersonId: null,
           town: null,
           village: null,

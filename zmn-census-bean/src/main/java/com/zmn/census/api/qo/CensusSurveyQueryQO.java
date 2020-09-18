@@ -40,6 +40,9 @@ public class CensusSurveyQueryQO {
     @ApiModelProperty("房间号")
     private String roomNum;
 
+    @ApiModelProperty("普查员姓名")
+    private String examinePersonName;
+
     @ApiModelProperty("开始时间")
     private String startTime;
 

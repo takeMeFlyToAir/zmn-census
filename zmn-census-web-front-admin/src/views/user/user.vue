@@ -116,7 +116,7 @@
         listLoading: true,
         listQuery: {
           pageNo: 1,
-          pageSize: 5,
+          pageSize: 10,
           userName: null,
           nickName: null,
           phone: null,
