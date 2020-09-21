@@ -72,7 +72,7 @@
             <van-field :disabled='submitButtonDisable' required v-model="roomAddress.roomNum" label="门牌号："  name="门牌号"    label-width="8em" placeholder="请输入门牌号,例如:2702"
                        :rules="[{ required: true , message:'请填写门牌号'}]"
             />
-            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="填报人电话：" name="填报人电话"   type="tel"    label-width="8em" placeholder="输入填报人电话"
+            <van-field :disabled='submitButtonDisable' required v-model="roomAddress.fillPersonPhone" label="被访人电话：" name="被访人电话"   type="tel"    label-width="8em" placeholder="输入被访人电话"
                        :rules="[{ pattern:mobilePattern, message: '请输入正确的电话' }]"
             />
           </van-collapse-item>
@@ -188,13 +188,13 @@
               </van-field>
             </div>
             <div class="houseHold_item">
-              <p class="houseHold_title">H9.填报人类型：</p>
+              <p class="houseHold_title">H9.被访人类型：</p>
               <van-field :disabled='submitButtonDisable' required readonly clickable label="类型：" name="类型"  :value="houseHold.h9" label-width="5em" placeholder="请选择" @click="showPickerH9 = true"
-                         :rules="[{ required: true, message:'请选择填报人类型' }]"
+                         :rules="[{ required: true, message:'请选择被访人类型' }]"
               />
               <van-popup v-model="showPickerH9" round position="bottom">
                 <van-picker
-                  title="填报人类型"
+                  title="被访人类型"
                   show-toolbar
                   :columns="h9List"
                   @cancel="showPickerH9 = false"
@@ -258,7 +258,7 @@
                     @confirm="choiceD4"
                   />
                 </van-popup>
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D5.出生年月："  name="出生年月"  :value="item.d5" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD5')"
+                <van-field :disabled='true' required readonly clickable label="D5.出生年月："  name="出生年月"  :value="item.d5" label-width="8em" placeholder="请选择" @click="clickD5(index)"
                            :rules="[{ required: true,message:'请选择出生年月' }]"
                 />
                 <van-popup v-model="item.showPickerD5" round position="bottom">
@@ -308,7 +308,7 @@
                 />
                 <van-popup v-model="item.showPickerD8" round position="bottom">
                   <van-picker
-                    title="普查时点居住地"
+                    title="户口登记地"
                     show-toolbar
                     :columns="d8List"
                     @cancel="item.showPickerD8 = false"
@@ -326,16 +326,31 @@
                              :rules="[{ required: true }]"
                   />
                 </div>
-                <div v-if="item.isShowD9">
+                <div v-if="item.isShowD9 && item.isShowD9Before">
                   <van-field :disabled='submitButtonDisable' required readonly clickable label="D9.离开户口登记地时间："  name="离开户口登记地时间":value="item.d9" label-width="8em" placeholder="请选择"
-                             @click="recordCurrentPersonInfoIndex(index,'showPickerD9')"
+                             @click="clickD9(index,'showPickerD9')"
+                             :rules="[{ required: true, message:'请选择离开户口登记地时间' }]"
+                  />
+                  <van-popup v-model="item.showPickerD9" round position="bottom">
+                    <van-picker
+                      title="离开户口登记地时间"
+                      show-toolbar
+                      :columns="d9ListBefore"
+                      @cancel="item.showPickerD9 = false"
+                      @confirm="choiceD9"
+                    />
+                  </van-popup>
+                </div>
+                <div v-if="item.isShowD9  && item.isShowD9After">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D9.离开户口登记地时间："  name="离开户口登记地时间":value="item.d9" label-width="8em" placeholder="请选择"
+                             @click="clickD9(index,'showPickerD9')"
                              :rules="[{ required: true, message:'请选择离开户口登记地时间' }]"
                   />
                   <van-popup v-model="item.showPickerD9" round position="bottom">
                     <van-picker
                       title="普查时点居住地"
                       show-toolbar
-                      :columns="d9List"
+                      :columns="d9ListAfter"
                       @cancel="item.showPickerD9 = false"
                       @confirm="choiceD9"
                     />
@@ -522,7 +537,7 @@
         h6: "",//本户住房建筑面积
         h7: "1",//本户住房间数
         h8: "",//您家中是否有6个月及以上的孕妇（是/否）
-        h9: "",//填报人类型：住户，租户
+        h9: "",//被访人类型：住户，租户
       },
       activePersonInfoList:[],
       currentPersonInfoIndex: null,
@@ -558,8 +573,10 @@
         '其他县（市、区、旗），请在下面填写地址',
         '户口待定',
       ],
-      d9List: [
+      d9ListBefore: [
         '没有离开户口登记地',
+      ],
+      d9ListAfter: [
         '不满半年',
         '半年以上',
         '一年',
@@ -603,6 +620,8 @@
         isShowD7Other:false,
         isShowD8Other:false,
         isShowD9:true,
+        isShowD9Before:true,
+        isShowD9After:false,
         isShowD10:true,
         isShowD11:true,
         isShowD12:true,
@@ -630,6 +649,7 @@
         d8City: "",//户口登记地不在本地的市
         d8County: "",//户口登记地不在本地的县
         d9: "",//离开户口登记地时间
+        d9List: [],//离开户口登记地时间
         d10: "",//离开户口登记地原因
         d11: "",//是否识字
         d12: "",//受教育程度
@@ -659,18 +679,18 @@
       let validateResult = true;
       let validateMsg = "";
       //校验个人项目中的出生年月和身份证号是否匹配
-      this.personInfoList.forEach((item,index) => {
-        let idCardNumBirthYearAndMonth = getBirthYearAndMonthByIdNo(item.d3)
-        if(idCardNumBirthYearAndMonth != item.d5){
-          validateResult = false
-          validateMsg=item.d1+"的身份证和出生年月不匹配，请检查"
-          return
-        }
-      })
-      if(!validateResult){
-        this.$toast.fail(validateMsg)
-        return
-      }
+      // this.personInfoList.forEach((item,index) => {
+      //   let idCardNumBirthYearAndMonth = getBirthYearAndMonthByIdNo(item.d3)
+      //   if(idCardNumBirthYearAndMonth != item.d5){
+      //     validateResult = false
+      //     validateMsg=item.d1+"的身份证和出生年月不匹配，请检查"
+      //     return
+      //   }
+      // })
+      // if(!validateResult){
+      //   this.$toast.fail(validateMsg)
+      //   return
+      // }
       let length = this.personInfoList.length
       let maxPersonCount = parseInt(this.houseHold.h2Live)+parseInt(this.houseHold.h2NoLive)
       if(length != maxPersonCount){
@@ -784,6 +804,19 @@
       }
       this.currentPersonInfoIndex = index;
     },
+    clickD5(index){
+      if(!this.personInfoList[index].d3){
+        this.$toast.fail("请先填写身份证");
+      }
+    },
+    clickD9(index,showPicker){
+      if(!this.personInfoList[index].d8){
+        this.$toast.fail("请先选择D8");
+        return
+      }
+      this.personInfoList[index][showPicker] = true;
+      this.currentPersonInfoIndex = index;
+    },
     recordCurrentPersonInfoIndex(index,showPicker){
       this.personInfoList[index][showPicker] = true;
       this.currentPersonInfoIndex = index;
@@ -880,6 +913,15 @@
     choiceD8(value, index){
       this.personInfoList[this.currentPersonInfoIndex].d8 = value
       this.personInfoList[this.currentPersonInfoIndex].showPickerD8 = false
+      this.personInfoList[this.currentPersonInfoIndex].d9 = '';
+      if(index == 0){
+        this.personInfoList[this.currentPersonInfoIndex].isShowD9Before = true;
+        this.personInfoList[this.currentPersonInfoIndex].isShowD9After = false;
+      }else{
+        this.personInfoList[this.currentPersonInfoIndex].isShowD9Before = false;
+        this.personInfoList[this.currentPersonInfoIndex].isShowD9After = true;
+      }
+      console.log(this.personInfoList[this.currentPersonInfoIndex].d9List)
       if(index == 3){
         this.personInfoList[this.currentPersonInfoIndex].isShowD8Other = true;
       }else {
@@ -919,6 +961,8 @@
       if(!this.idCardNumPattern.test(idCardNum)){
         return
       }
+      let birthYearAndMonth = getBirthYearAndMonthByIdNo(idCardNum)
+      this.personInfoList[index].d5 = birthYearAndMonth
       let birthdayByIdNo = getBirthdayByIdNo(idCardNum)
       if(birthdayByIdNo >= this.showD11Condition){
         this.personInfoList[index].isShowD11 = false
@@ -971,8 +1015,8 @@
   .van-form{
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    //display: flex;
+    //flex-direction: column;
     height: 100%;
   }
 
@@ -990,8 +1034,8 @@
   }
 
   .div_content{
-    flex: 1;
-    overflow: scroll;
+    //flex: 1;
+    //overflow: scroll;
   }
   .div_foot{
     display: flex;
