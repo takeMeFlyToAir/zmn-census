@@ -83,6 +83,8 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
     @Override
     public CommunityVO save(CommunityAddVO communityAddVO) {
         CommunityEntity communityEntity = VoAndBeanUtils.fromVO(communityAddVO, CommunityEntity.class);
+        communityEntity.setRealHoldCount(0);
+        communityEntity.setRealPersonCount(0);
         this.save(communityEntity);
         return VoAndBeanUtils.toVO(communityEntity,CommunityVO.class);
     }

@@ -31,8 +31,8 @@
     data() {
       return {
         loginForm: {
-          userName: 'zzr',
-          password: '123456'
+          userName: '',
+          password: ''
         },
         loginRules: {
           userName: [{required: true, trigger: 'blur', message: "请输入用户名"}],
