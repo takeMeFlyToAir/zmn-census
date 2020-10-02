@@ -3,12 +3,19 @@ package com.zmn.census.admin.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.zmn.census.action.api.CensusSurveyService;
+import com.zmn.census.action.api.HouseHoldService;
+import com.zmn.census.action.api.PersonInfoService;
+import com.zmn.census.action.api.RoomAddressApi;
+import com.zmn.census.action.entity.HouseHoldEntity;
+import com.zmn.census.action.entity.PersonInfoEntity;
+import com.zmn.census.action.entity.RoomAddressEntity;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
 import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.result.CommonResult;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
+import com.zmn.census.common.utils.object.VoAndBeanUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +45,15 @@ public class CensusSurveyController {
 
     @Autowired
     private CensusSurveyService censusSurveyService;
+
+    @Autowired
+    private RoomAddressApi roomAddressApi;
+
+    @Autowired
+    private HouseHoldService houseHoldService;
+
+    @Autowired
+    private PersonInfoService personInfoService;
 
     @ApiOperation("分页查询问卷")
     @PostMapping(value = "/findPage")
@@ -101,6 +117,30 @@ public class CensusSurveyController {
             response.setCharacterEncoding("utf-8");
             response.getWriter().println(JSON.toJSONString(CommonResult.failed(DOWNLOAD_FILE_ERROR)));
         }
+    }
+
+    @ApiOperation("更新地址信息")
+    @PostMapping(value = "/editRoomAddress")
+    public CommonResult editRoomAddress(RoomAddressEditVO roomAddressEditVO){
+        RoomAddressEntity roomAddressEntity = VoAndBeanUtils.fromVO(roomAddressEditVO, RoomAddressEntity.class);
+        roomAddressApi.updateNotNull(roomAddressEntity);
+        return CommonResult.success();
+    }
+
+    @ApiOperation("更新户主信息")
+    @PostMapping(value = "/editHouseHold")
+    public CommonResult editHouseHold(HouseHoldEditVO houseHoldEditVO){
+        HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(houseHoldEditVO, HouseHoldEntity.class);
+        houseHoldService.updateNotNull(houseHoldEntity);
+        return CommonResult.success();
+    }
+
+    @ApiOperation("更新个人信息")
+    @PostMapping(value = "/editPersonInfo")
+    public CommonResult editPersonInfo(PersonInfoEditVO personInfoEditVO){
+        PersonInfoEntity personInfoEntity = VoAndBeanUtils.fromVO(personInfoEditVO, PersonInfoEntity.class);
+        personInfoService.updateNotNull(personInfoEntity);
+        return CommonResult.success();
     }
 
 }

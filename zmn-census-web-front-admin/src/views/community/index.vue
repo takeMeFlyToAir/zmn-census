@@ -29,7 +29,6 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      height="410"
       style="width: 100%;"
     >
       <el-table-column label="ID" prop="id" sortable="custom"   >
@@ -152,6 +151,7 @@
     </el-dialog>
 
     <el-dialog
+      v-if="chartDialogFormVisible"
       :visible.sync="chartDialogFormVisible"
       center>
       <line-chart :chartData="surveyCount"/>
@@ -166,7 +166,6 @@
 
   import { apiUserFindList} from '@/api/user'
   import { apiGetByKey } from '@/api/config'
-  import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
   import VueQArt from 'vue-qart'
   import LineChart from '@/components/echarts/LineChart'
@@ -338,6 +337,7 @@
         }
       },
       getList(params) {
+        console.log(this.listQuery)
         if(params){
           Object.assign(this.listQuery, params)
         }

@@ -32,3 +32,27 @@ export function apiCensusSurveySurveyCount(params) {
   })
 }
 
+export function apiCensusSurveyEditRoomAddress(params) {
+  return api({
+    url: '/censusSurvey/editRoomAddress',
+    method: 'post',
+    params: params
+  })
+}
+
+
+export function apiCensusSurveyEditHouseHold(params) {
+  return api({
+    url: '/censusSurvey/editHouseHold',
+    method: 'post',
+    params: params
+  })
+}
+
+export function apiCensusSurveyEditPersonInfo(params) {
+  return api({
+    url: '/censusSurvey/editPersonInfo',
+    method: 'post',
+    params: params
+  })
+}

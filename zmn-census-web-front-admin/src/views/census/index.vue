@@ -46,7 +46,6 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
-      height="350"
       style="width: 100%;"
     >
       <el-table-column type="expand">
@@ -79,11 +78,18 @@
                   <span>{{ row.h4Man }}/{{ row.h4Woman }}</span>
                 </template>
               </el-table-column>
+              <el-table-column prop="h8" label="孕妇"> </el-table-column>
               <el-table-column prop="h5" label="住房类型"> </el-table-column>
               <el-table-column prop="h6" label="建筑面积"> </el-table-column>
               <el-table-column prop="h7" label="房间数"> </el-table-column>
-              <el-table-column prop="h8" label="孕妇"> </el-table-column>
               <el-table-column prop="h9" label="填报人类型"> </el-table-column>
+              <el-table-column width="100px" label="操作" align="center"  class-name="small-padding">
+                <template slot-scope="{row,$index}">
+                  <el-button  size="mini" type="primary" @click="showHouseHold(row)">
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
             <el-table
               :row-style="getRowClass" :header-row-style="getRowClass" :header-cell-style="getRowClass"
@@ -113,6 +119,13 @@
               <el-table-column prop="d10" label="离开户口登记地原因" width="100px"> </el-table-column>
               <el-table-column prop="d11" label="教育程度"  width="100px"> </el-table-column>
               <el-table-column prop="d12" label="识字" width="50px"> </el-table-column>
+              <el-table-column width="100px" label="操作" align="center"  class-name="small-padding">
+                <template slot-scope="{row,$index}">
+                  <el-button  size="mini" type="primary" @click="showPersonInfo(row)">
+                    编辑
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </template>
@@ -188,23 +201,244 @@
           <span>{{ row.roomAddress.createdDateStr }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" label="操作" align="center"  class-name="small-padding">
+      <el-table-column width="150px" label="操作" align="center"  class-name="small-padding">
         <template slot-scope="{row,$index}">
           <el-button  size="mini" type="danger" @click="handleDelete(row.id)">
           删除
+          </el-button>
+          <el-button  size="mini" type="primary" @click="showRoomAddress(row.roomAddress)">
+            编辑
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" @pagination="getList" />
+
+
+    <el-dialog title="住址信息编辑" :visible.sync="roomAddressForDialogFormVisible" >
+      <el-form :model="roomAddress" label-position="left" label-width="100px" >
+        <el-form-item label="楼栋号：">
+          <el-input v-model="roomAddress.buildNum" placeholder="楼栋号" />
+        </el-form-item>
+        <el-form-item label="单元号：">
+          <el-input v-model="roomAddress.unitNum" placeholder="单元号" />
+        </el-form-item>
+        <el-form-item label="楼层：">
+          <el-input v-model="roomAddress.floorNum" placeholder="楼层" />
+        </el-form-item>
+        <el-form-item label="房间号：">
+          <el-input v-model="roomAddress.roomNum" placeholder="房间号" />
+        </el-form-item>
+        <el-form-item label="被访人电话：">
+          <el-input v-model="roomAddress.fillPersonPhone" placeholder="被访人电话" />
+        </el-form-item>
+        <el-form-item label="普查员姓名：">
+          <el-input v-model="roomAddress.examinePersonName" placeholder="普查员姓名" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="resetRoomAddress">取 消</el-button>
+        <el-button type="primary" @click="submitRoomAddress">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="户主信息编辑" :visible.sync="houseHoldForDialogFormVisible"  >
+      <el-form :model="houseHold" label-position="right" label-width="350px">
+        <el-form-item label="H1.户别：">
+          <el-select v-model="houseHold.h1" placeholder="户别">
+            <el-option
+              v-for="item in h1List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="H2.2020年10月31日晚居住本户的人数：">
+          <el-input v-model="houseHold.h2Live" />
+        </el-form-item>
+        <el-form-item label="H2.户口在本户，2020年10月31日晚未住本户的人数：">
+          <el-input v-model="houseHold.h2NoLive" />
+        </el-form-item>
+        <el-form-item label="H3.男：">
+          <el-input v-model="houseHold.h3Man" />
+        </el-form-item>
+        <el-form-item label="H3.女：">
+          <el-input v-model="houseHold.h3Woman" />
+        </el-form-item>
+        <el-form-item label="H4.男：">
+          <el-input v-model="houseHold.h4Man" />
+        </el-form-item>
+        <el-form-item label="H4.女：">
+          <el-input v-model="houseHold.h4Woman" />
+        </el-form-item>
+        <el-form-item label="H5.您家中是否有怀孕6个月及以上的孕妇：">
+          <el-select v-model="houseHold.h8" placeholder="孕妇">
+            <el-option
+              v-for="item in h8List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="H6.住房类型：">
+          <el-select v-model="houseHold.h5" placeholder="住房类型">
+            <el-option
+              v-for="item in h5List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="H7.本户住房建筑面积：">
+          <el-input v-model="houseHold.h6" />
+        </el-form-item>
+        <el-form-item label="H8.本户现在住房数：">
+          <el-input v-model="houseHold.h7" />
+        </el-form-item>
+        <el-form-item label="H9.被访人类型：">
+          <el-select v-model="houseHold.h9" placeholder="被访人类型">
+            <el-option
+              v-for="item in h9List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="resetHouseHold">取 消</el-button>
+        <el-button type="primary" @click="submitHouseHold">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="个人信息编辑" :visible.sync="personInfoForDialogFormVisible" >
+      <el-form :model="personInfo"  label-position="right" label-width="230px">
+        <el-form-item label="D1.姓名：">
+          <el-input v-model="personInfo.d1" />
+        </el-form-item>
+        <el-form-item label="D2.与户主关系：">
+          <el-select v-model="personInfo.d2" placeholder="与户主关系">
+            <el-option
+              v-for="item in d2List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="D3.公民身份号码：">
+          <el-input v-model="personInfo.d3" />
+        </el-form-item>
+        <el-form-item label="D4.性别：">
+          <el-select v-model="personInfo.d4" placeholder="性别">
+            <el-option
+              v-for="item in d4List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="D5.出生年月：">
+          <el-input v-model="personInfo.d5" />
+        </el-form-item>
+        <el-form-item label="D6.民族：">
+          <el-input v-model="personInfo.d6" />
+        </el-form-item>
+        <el-form-item label="D7.普查时点居住地：">
+          <el-select v-model="personInfo.d7" placeholder="普查时点居住地">
+            <el-option
+              v-for="item in d7List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="普查时点居住地不在本地的省：">
+          <el-input v-model="personInfo.d7Province" />
+        </el-form-item>
+        <el-form-item label="普查时点居住地不在本地的市：">
+          <el-input v-model="personInfo.d7City" />
+        </el-form-item>
+        <el-form-item label="普查时点居住地不在本地的县：">
+          <el-input v-model="personInfo.d7County" />
+        </el-form-item>
+        <el-form-item label="D8.户口登记地：">
+          <el-select v-model="personInfo.d8" placeholder="户口登记地">
+            <el-option
+              v-for="item in d8List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="户口登记地不在本地的省：">
+          <el-input v-model="personInfo.d8Province" />
+        </el-form-item>
+        <el-form-item label="户口登记地不在本地的市：">
+          <el-input v-model="personInfo.d8City" />
+        </el-form-item>
+        <el-form-item label="户口登记地不在本地的县：">
+          <el-input v-model="personInfo.d8County" />
+        </el-form-item>
+        <el-form-item label="D9.离开户口登记地时间：">
+          <el-select v-model="personInfo.d9" placeholder="离开户口登记地时间">
+            <el-option
+              v-for="item in d9List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="D10.离开户口登记地原因：">
+          <el-select v-model="personInfo.d10" placeholder="离开户口登记地原因">
+            <el-option
+              v-for="item in d10List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="D11.受教育程度：">
+          <el-select v-model="personInfo.d11" placeholder="受教育程度">
+            <el-option
+              v-for="item in d11List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="D12.是否识字：">
+          <el-select v-model="personInfo.d12" placeholder="是否识字">
+            <el-option
+              v-for="item in d12List"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="resetPersonInfo">取 消</el-button>
+        <el-button type="primary" @click="submitPersonInfo">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { apiCensusSurveyGetList, apiCensusSurveyDelete} from '@/api/censusSurvey'
+  import { apiCensusSurveyGetList, apiCensusSurveyDelete, apiCensusSurveyEditRoomAddress, apiCensusSurveyEditHouseHold, apiCensusSurveyEditPersonInfo} from '@/api/censusSurvey'
   import { apiUserFindList} from '@/api/user'
-  import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
 
   export default {
@@ -265,6 +499,144 @@
           endTime:'',
         },
         downloadLoading: false,
+        roomAddressForDialogFormVisible: false,
+        houseHoldForDialogFormVisible: false,
+        personInfoForDialogFormVisible: false,
+        h1List: [
+          '家庭户',
+          '集体户'
+        ],
+        h5List:[
+          '普通住房',
+          '集体住所',
+          '工作地住所',
+          '其他住房',
+          '无住房',
+        ],
+        h8List:[
+          '是',
+          '否'
+        ],
+        h9List:[
+          '住户',
+          '租户'
+        ],
+        roomAddress: {
+          id: '',
+          buildNum: '',
+          unitNum: '',
+          floorNum: '',
+          roomNum: '',
+          fillPersonPhone: '',
+          examinePersonName: '',
+        },
+        houseHold: {
+          id: '',
+          h1: '',
+          h2Live: '',
+          h2NoLive: '',
+          h3Man: '',
+          h3Woman: '',
+          h4Man: '',
+          h4Woman: '',
+          h5: '',
+          h6: '',
+          h7: '',
+          h8: '',
+          h9: '',
+        },
+        d2List: [
+          '户主',
+          '配偶',
+          '子女',
+          '父母',
+          '岳父母或公婆',
+          '祖父母',
+          '媳婿',
+          '孙子女',
+          '兄弟姐妹',
+          '其他',
+        ],
+        d4List: [
+          '男',
+          '女'
+        ],
+        d7List: [
+          '本普查小区',
+          '本村（居）委会其他普查小区',
+          '本乡（镇、街道）其他村（居）委会',
+          '本县（市、区、旗）其他乡（镇、街道）',
+          '其他县（市、区、旗），请在下面填写地址',
+          '香港特别行政区、澳门特别行政区、台湾地区',
+          '国外',
+        ],
+        d8List: [
+          '本村（居）委会',
+          '本乡（镇、街道）其他村（居）委会',
+          '本县（市、区、旗）其他乡（镇、街道）',
+          '其他县（市、区、旗），请在下面填写地址',
+          '户口待定',
+        ],
+        d9List: [
+          '没有离开户口登记地',
+          '不满半年',
+          '半年以上',
+          '一年',
+          '一年以上，不满二年',
+          '二年以上，不满三年',
+          '三年以上，不满四年',
+          '四年以上，不满五年',
+          '五年以上，不满十年',
+          '十年以上',
+        ],
+        d10List:[
+          '工作就业',
+          '学习培训',
+          '随同离开/投亲靠友',
+          '拆迁/搬家',
+          '寄挂户口',
+          '婚姻嫁娶',
+          '照料孙子女',
+          '为子女就学',
+          '养老/康养',
+          '其他',
+        ],
+        d11List:[
+          '未上过学',
+          '学前教育',
+          '小学',
+          '初中',
+          '高中',
+          '大学专科',
+          '大学本科',
+          '硕士研究生',
+          '博士研究生 ',
+        ],
+        d12List:[
+          '是',
+          '否',
+        ],
+        personInfo: {
+          id: '',
+          d1: '',
+          d2: '',
+          d3: '',
+          d4: '',
+          d5: '',
+          d6: '',
+          d7: '',
+          d7Province: '',
+          d7City: '',
+          d7County: '',
+          d8: '',
+          d8Province: '',
+          d8City: '',
+          d8County: '',
+          d9: '',
+          d10: '',
+          d11: '',
+          d12: '',
+        }
       }
     },
     created() {
@@ -272,6 +644,133 @@
       this.getUserList()
     },
     methods: {
+      showRoomAddress(data){
+        this.roomAddress = Object.assign({}, data) // copy obj
+        this.roomAddressForDialogFormVisible = true;
+        console.log(this.roomAddress)
+      },
+      showHouseHold(data){
+        this.houseHold = Object.assign({}, data) // copy obj
+        this.houseHoldForDialogFormVisible = true;
+      },
+      showPersonInfo(data){
+        this.personInfo = Object.assign({}, data) // copy obj
+        this.personInfoForDialogFormVisible = true;
+      },
+      submitRoomAddress(){
+        console.log(this.roomAddress)
+        this.$confirm('确定修改地址数据', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          apiCensusSurveyEditRoomAddress(this.roomAddress).then(() => {
+            this.resetRoomAddress();
+            this.handleFilter();
+            this.$notify({
+              title: '修改地址信息',
+              message: '修改成功',
+              type: 'success',
+              duration: 3000
+            })
+          })
+        })
+      },
+      submitHouseHold(){
+        console.log(this.houseHold)
+        this.$confirm('确定修改户主数据', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          apiCensusSurveyEditHouseHold(this.houseHold).then(() => {
+            this.resetHouseHold();
+            this.handleFilter();
+            this.$notify({
+              title: '修改户主信息',
+              message: '修改成功',
+              type: 'success',
+              duration: 3000
+            })
+          })
+        })
+      },
+      submitPersonInfo(){
+        console.log(this.personInfo)
+        this.$confirm('确定修改个人数据', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          apiCensusSurveyEditPersonInfo(this.personInfo).then(() => {
+            this.resetPersonInfo();
+            this.handleFilter();
+            this.$notify({
+              title: '修改个人信息',
+              message: '修改成功',
+              type: 'success',
+              duration: 3000
+            })
+          })
+        })
+
+      },
+      resetRoomAddress(){
+        this.roomAddress = {
+          id: '',
+          buildNum: '',
+          unitNum: '',
+          floorNum: '',
+          roomNum: '',
+          fillPersonPhone: '',
+          examinePersonName: '',
+        }
+        this.roomAddressForDialogFormVisible = false;
+
+      },
+      resetHouseHold(){
+        this.houseHold= {
+            id: '',
+            h1: '',
+            h2Live: '',
+            h2NoLive: '',
+            h3Man: '',
+            h3Woman: '',
+            h4Man: '',
+            h4Woman: '',
+            h5: '',
+            h6: '',
+            h7: '',
+            h8: '',
+            h9: '',
+        };
+        this.houseHoldForDialogFormVisible = false;
+      },
+      resetPersonInfo(){
+        this.personInfo = {
+          id: '',
+          d1: '',
+          d2: '',
+          d3: '',
+          d4: '',
+          d5: '',
+          d6: '',
+          d7: '',
+          d7Province: '',
+          d7City: '',
+          d7County: '',
+          d8: '',
+          d8Province: '',
+          d8City: '',
+          d8County: '',
+          d9: '',
+          d10: '',
+          d11: '',
+          d12: '',
+        };
+        this.personInfoForDialogFormVisible = false;
+
+      },
       handleDelete(id){
         this.$confirm('确定删除数据', '提示', {
           confirmButtonText: '确定',

@@ -73,8 +73,9 @@
             <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
                 AND created_date &gt; #{startTime,jdbcType=VARCHAR} and created_date &lt; #{endTime,jdbcType=VARCHAR}
             </if>
-
         </where>
+
+        order by created_date desc
 
     </select>
 
