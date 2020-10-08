@@ -1,10 +1,8 @@
 package com.zmn.census.api.qo;
 
-import cn.hutool.core.collection.CollUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
 
 /**
  * @ClassName CensusSurveyQueryQO

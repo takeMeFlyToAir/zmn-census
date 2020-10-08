@@ -1,5 +1,6 @@
 package com.zmn.census.admin.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.zmn.census.action.api.CensusSurveyService;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -42,6 +44,8 @@ import static com.zmn.census.common.core.result.ResultCode.DOWNLOAD_FILE_ERROR;
 @Slf4j
 public class CensusSurveyController {
 
+    private static String XLSX = ".xlsx";
+    private static String ZIP = ".zip";
 
     @Autowired
     private CensusSurveyService censusSurveyService;
@@ -143,4 +147,103 @@ public class CensusSurveyController {
         return CommonResult.success();
     }
 
+    @ApiOperation("导出小区人数的统计数据")
+    @GetMapping(value = "/exportCommunityPersonInfo")
+    public void exportCommunityPersonInfo(HttpServletResponse response, CensusSurveyQueryQO censusSurveyQueryQO)
+            throws IOException {
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        try {
+
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = getName(censusSurveyQueryQO);
+            response = initResponse(response,fileName,XLSX);
+            // 这里需要设置不关闭流
+            List<ExportCommunityPersonInfoVO> exportCommunityPersonInfoVOList= censusSurveyService.exportCommunityPersonInfo(censusSurveyQueryQO);
+            EasyExcel.write(response.getOutputStream(), ExportCommunityPersonInfoVO.class).autoCloseStream(Boolean.FALSE).sheet("小区户数和人数统计")
+                    .doWrite(exportCommunityPersonInfoVOList);
+        } catch (Exception e) {
+            log.error("下载文件出错{}",e);
+            // 重置response
+            errorResponse(response);
+
+        }
+    }
+
+    private String getName(CensusSurveyQueryQO censusSurveyQueryQO){
+        if(StrUtil.isNotBlank(censusSurveyQueryQO.getStartTime()) && StrUtil.isNotBlank(censusSurveyQueryQO.getEndTime())){
+            return censusSurveyQueryQO.getStartTime()+"到"+ censusSurveyQueryQO.getEndTime()+"数据";
+        }else {
+            return "部分数据";
+        }
+    }
+
+    private HttpServletResponse initResponse(HttpServletResponse response,String fileName,String fileSuffix) throws UnsupportedEncodingException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        fileName = URLEncoder.encode(fileName, "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + fileSuffix);
+        return response;
+    }
+
+    private HttpServletResponse errorResponse(HttpServletResponse response) throws IOException {
+        response.reset();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().println(JSON.toJSONString(CommonResult.failed(DOWNLOAD_FILE_ERROR)));
+        return response;
+    }
+
+    @ApiOperation("导出户主底册")
+    @GetMapping(value = "/exportHouseHoldInfo")
+    public void exportHouseHoldInfo(HttpServletResponse response, CensusSurveyQueryQO censusSurveyQueryQO)
+            throws IOException {
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        try {
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = getName(censusSurveyQueryQO);
+            response = initResponse(response,fileName,XLSX);
+            // 这里需要设置不关闭流
+            List<ExportHouseHoldVO> exportHouseHoldVOList = censusSurveyService.exportHouseHoldInfo(censusSurveyQueryQO);
+            EasyExcel.write(response.getOutputStream(), ExportHouseHoldVO.class).autoCloseStream(Boolean.FALSE).sheet("户主姓名底层")
+                    .doWrite(exportHouseHoldVOList);
+        } catch (Exception e) {
+            log.error("下载文件出错{}",e);
+            // 重置response
+            errorResponse(response);
+
+        }
+    }
+
+    @ApiOperation("导出短表")
+    @GetMapping(value = "/exportHouseHoldAndPersonInfo")
+    public void exportHouseHoldAndPersonInfo(HttpServletResponse response, CensusSurveyQueryQO censusSurveyQueryQO)
+            throws IOException {
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        try {
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = getName(censusSurveyQueryQO);
+            response = initResponse(response,fileName,XLSX);
+            // 这里需要设置不关闭流
+            List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOList = censusSurveyService.exportHouseHoldAndPersonInfo(censusSurveyQueryQO);
+            //需要合并的列
+            int needMergeIndex = 17;
+            int[] mergeColumeIndex = new int[needMergeIndex];
+            for (int i = 0; i < needMergeIndex; i++) {
+                mergeColumeIndex[i] = i;
+            }
+            int mergeRowIndex = 1;
+
+            EasyExcel.write(response.getOutputStream(), ExportHouseHoldAndPersonInfoVO.class)
+                    .autoCloseStream(Boolean.FALSE)
+//                    .registerWriteHandler(new ExcelFillCellMergeStrategy(mergeRowIndex, mergeColumeIndex))
+                    .sheet("短表")
+                    .doWrite(exportHouseHoldAndPersonInfoVOList);
+        } catch (Exception e) {
+            log.error("下载文件出错{}",e);
+            // 重置response
+            errorResponse(response);
+
+        }
+    }
 }

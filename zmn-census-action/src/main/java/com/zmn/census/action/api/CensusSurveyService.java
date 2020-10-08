@@ -29,7 +29,10 @@ public interface CensusSurveyService {
 
     List<CensusDownloadVO> findDownloadData(CensusSurveyQueryQO censusSurveyQueryQO);
 
+    List<ExportCommunityPersonInfoVO> exportCommunityPersonInfo(CensusSurveyQueryQO censusSurveyQueryQO);
 
+    List<ExportHouseHoldVO> exportHouseHoldInfo(CensusSurveyQueryQO censusSurveyQueryQO);
 
+    List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfo(CensusSurveyQueryQO censusSurveyQueryQO);
 
 }

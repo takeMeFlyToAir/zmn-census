@@ -37,6 +37,15 @@
       <el-button  class="filter-item" type="primary" @click="handleFilter">
         搜索
       </el-button>
+      <el-button  class="filter-item" type="primary" @click="exportCommunityPersonInfo">
+        导出人数统计
+      </el-button>
+      <el-button  class="filter-item" type="primary" @click="exportHouseHoldInfo">
+        导出户主姓名底册统计
+      </el-button>
+      <el-button  class="filter-item" type="primary" @click="exportHouseHoldAndPersonInfo">
+        导出短表
+      </el-button>
       <!--<el-button  :loading="downloadLoading" class="filter-item" type="primary"  @click="handleDownload">-->
         <!--导出-->
       <!--</el-button>-->
@@ -486,15 +495,15 @@
         listQuery: {
           pageNo: 1,
           pageSize: 10,
-          chargePersonId: null,
-          town: null,
-          village: null,
-          community: null,
-          buildNum: null,
-          unitNum: null,
-          floorNum: null,
-          roomNum: null,
-          examinePersonName: null,
+          chargePersonId: "",
+          town: "",
+          village: "",
+          community: "",
+          buildNum: "",
+          unitNum: "",
+          floorNum: "",
+          roomNum: "",
+          examinePersonName: "",
           startTime:'',
           endTime:'',
         },
@@ -821,6 +830,51 @@
           this.listQuery.endTime = ''
         }
         this.getList()
+      },
+      getParams(){
+        let communityParam = "";
+        if(this.listQuery.community){
+          communityParam = this.listQuery.community
+        }
+        let param = "?community="+communityParam;
+        if(this.listQuery.chargePersonId){
+          param += "&chargePersonId="+this.listQuery.chargePersonId;
+        }
+        if(this.listQuery.town){
+          param += "&town="+this.listQuery.town;
+        }
+        if(this.listQuery.village){
+          param += "&village="+this.listQuery.village;
+        }
+        if(this.listQuery.buildNum){
+          param += "&buildNum="+this.listQuery.buildNum;
+        }
+        if(this.listQuery.unitNum){
+          param += "&unitNum="+this.listQuery.unitNum;
+        }
+        if(this.listQuery.floorNum){
+          param += "&floorNum="+this.listQuery.floorNum;
+        }
+        if(this.listQuery.roomNum){
+          param += "&roomNum="+this.listQuery.roomNum;
+        }
+        if(this.listQuery.examinePersonName){
+          param += "&examinePersonName="+this.listQuery.examinePersonName;
+        }
+        if(this.listQuery.startTime && this.listQuery.endTime){
+          param += "&startTime="+this.listQuery.startTime;
+          param += "&endTime="+this.listQuery.endTime;
+        }
+        return param;
+      },
+      exportCommunityPersonInfo(){
+        window.location.href='/api/censusSurvey/exportCommunityPersonInfo'+this.getParams()
+      },
+      exportHouseHoldInfo(){
+        window.location.href='/api/censusSurvey/exportHouseHoldInfo'+this.getParams()
+      },
+      exportHouseHoldAndPersonInfo(){
+        window.location.href='/api/censusSurvey/exportHouseHoldAndPersonInfo'+this.getParams()
       },
       handleDownload() {
         this.downloadLoading = true

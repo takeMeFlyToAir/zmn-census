@@ -37,6 +37,13 @@
         where t1.deleted=0 and  t1.room_address_id = #{roomAddressId}
     </select>
 
+    <select id="queryD7AndD8ByRoomAddressId" resultType="com.zmn.census.api.vo.ExportHouseHoldDataPersonVO">
+        select
+        d7,d8
+        from zmn_census_person_info t1
+        where t1.deleted=0 and  t1.room_address_id = #{roomAddressId}
+    </select>
+
     <update id="deleteByRoomAddressId">
         update zmn_census_person_info set deleted = 1 where
         room_address_id = #{roomAddressId}

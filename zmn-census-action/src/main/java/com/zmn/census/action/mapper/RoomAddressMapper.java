@@ -3,9 +3,7 @@ package com.zmn.census.action.mapper;
 import com.zmn.census.action.entity.RoomAddressEntity;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
-import com.zmn.census.api.vo.CensusSurveyCommonCountVO;
-import com.zmn.census.api.vo.CensusSurveyCountVO;
-import com.zmn.census.api.vo.CensusSurveyVO;
+import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.dao.MyMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -34,5 +32,11 @@ public interface RoomAddressMapper extends MyMapper<RoomAddressEntity> {
     int selectTodaySurveyCount();
 
     List<CensusSurveyCountVO> selectSurveyCount(CensusSurveyCountQO censusSurveyCountQO);
+
+    List<ExportCommunityPersonInfoVO> findExportCommunityPersonInfo(CensusSurveyQueryQO censusSurveyQueryQO);
+
+    List<ExportHouseHoldDataVO> findExportHouseHoldInfo(CensusSurveyQueryQO censusSurveyQueryQO);
+
+    List<ExportHouseHoldAndPersonInfoVO> findExportHouseHoldAndPersonInfo(CensusSurveyQueryQO censusSurveyQueryQO);
 
 }

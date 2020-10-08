@@ -37,6 +37,66 @@
                     select="com.zmn.census.action.mapper.PersonInfoMapper.queryByRoomAddressId"/>
     </resultMap>
 
+    <resultMap type="com.zmn.census.api.vo.ExportHouseHoldDataVO" id="ExportHouseHoldDataMap">
+        <result property="createdDate" column="createdDate" />
+        <result property="roomAddressId" column="roomAddressId" />
+        <result property="community" column="community" />
+        <result property="buildNum" column="buildNum" />
+        <result property="unitNum" column="unitNum" />
+        <result property="floorNum" column="floorNum" />
+        <result property="roomNum" column="roomNum" />
+        <result property="fillPersonPhone" column="fillPersonPhone" />
+        <result property="h2Live" column="h2Live" />
+        <result property="h2NoLive" column="h2NoLive" />
+        <result property="h3Man" column="h3Man" />
+        <result property="h3Woman" column="h3Woman" />
+        <result property="h4Man" column="h4Man" />
+        <result property="h4Woman" column="h4Woman" />
+        <result property="d1" column="d1" />
+        <result property="d2" column="d2" />
+        <result property="d7" column="d7" />
+        <result property="d8" column="d8" />
+    </resultMap>
+
+    <resultMap type="com.zmn.census.api.vo.ExportHouseHoldAndPersonInfoVO" id="ZmnCensusHouseHoldAndPersonInfoMap">
+        <result property="roomAddressId" column="roomAddressId" />
+        <result property="community" column="community" jdbcType="VARCHAR"/>
+        <result property="buildNum" column="build_num" jdbcType="VARCHAR"/>
+        <result property="unitNum" column="unit_num" jdbcType="VARCHAR"/>
+        <result property="floorNum" column="floor_num" jdbcType="VARCHAR"/>
+        <result property="roomNum" column="room_num" jdbcType="VARCHAR"/>
+        <result property="h1" column="h1" jdbcType="VARCHAR"/>
+        <result property="h2Live" column="h2_live" jdbcType="VARCHAR"/>
+        <result property="h2NoLive" column="h2_no_live" jdbcType="VARCHAR"/>
+        <result property="h3Man" column="h3_man" jdbcType="VARCHAR"/>
+        <result property="h3Woman" column="h3_woman" jdbcType="VARCHAR"/>
+        <result property="h4Man" column="h4_man" jdbcType="VARCHAR"/>
+        <result property="h4Woman" column="h4_woman" jdbcType="VARCHAR"/>
+        <result property="h5" column="h5" jdbcType="VARCHAR"/>
+        <result property="h6" column="h6" jdbcType="VARCHAR"/>
+        <result property="h7" column="h7" jdbcType="VARCHAR"/>
+        <result property="h8" column="h8" jdbcType="VARCHAR"/>
+        <result property="h9" column="h9" jdbcType="VARCHAR"/>
+        <result property="d1" column="d1" jdbcType="VARCHAR"/>
+        <result property="d2" column="d2" jdbcType="VARCHAR"/>
+        <result property="d3" column="d3" jdbcType="VARCHAR"/>
+        <result property="d4" column="d4" jdbcType="VARCHAR"/>
+        <result property="d5" column="d5" jdbcType="VARCHAR"/>
+        <result property="d6" column="d6" jdbcType="VARCHAR"/>
+        <result property="d7" column="d7" jdbcType="VARCHAR"/>
+        <result property="d7Province" column="d7_province" jdbcType="VARCHAR"/>
+        <result property="d7City" column="d7_city" jdbcType="VARCHAR"/>
+        <result property="d7County" column="d7_county" jdbcType="VARCHAR"/>
+        <result property="d8" column="d8" jdbcType="VARCHAR"/>
+        <result property="d8Province" column="d8_province" jdbcType="VARCHAR"/>
+        <result property="d8City" column="d8_city" jdbcType="VARCHAR"/>
+        <result property="d8County" column="d8_county" jdbcType="VARCHAR"/>
+        <result property="d9" column="d9" jdbcType="VARCHAR"/>
+        <result property="d10" column="d10" jdbcType="VARCHAR"/>
+        <result property="d11" column="d11" jdbcType="VARCHAR"/>
+        <result property="d12" column="d12" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <select id="findCensusSurveyVOList" resultMap="CensusSurveyInfoMap">
         select
         id
@@ -122,6 +182,132 @@
         </where>
         GROUP BY  time
         ORDER BY time ASC;
+    </select>
+
+    <select id="findExportCommunityPersonInfo" resultType="com.zmn.census.api.vo.ExportCommunityPersonInfoVO">
+        select
+        community,count(*) as realHoldCount, sum(person_count) as realPersonCount
+        from zmn_census_room_address as t1
+        <where>
+            AND t1.deleted =0
+            <if test="town !=null and town!=''">
+                AND t1.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="village !=null and village!=''">
+                AND t1.village LIKE concat('%',#{village,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="community !=null and community!=''">
+                AND t1.community LIKE concat('%',#{community,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="buildNum !=null and buildNum!=''">
+                AND t1.build_num LIKE concat('%',#{buildNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="unitNum !=null and unitNum!=''">
+                AND t1.unit_num LIKE concat('%',#{unitNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="floorNum !=null and floorNum!=''">
+                AND t1.floor_num LIKE concat('%',#{floorNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="roomNum !=null and roomNum!=''">
+                AND t1.room_num LIKE concat('%',#{roomNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="examinePersonName !=null and examinePersonName!=''">
+                AND t1.examine_person_name LIKE concat('%',#{examinePersonName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="chargePersonId !=null">
+                and t1.charge_person_id= #{chargePersonId,jdbcType=INTEGER}
+            </if>
+            <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
+                AND t1.created_date &gt; #{startTime,jdbcType=VARCHAR} and t1.created_date &lt; #{endTime,jdbcType=VARCHAR}
+            </if>
+        </where>
+        group by t1.community
+        order by t1.community
+
+    </select>
+
+    <select id="findExportHouseHoldInfo" resultMap="ExportHouseHoldDataMap">
+       select zcra.id as roomAddressId, zcra.community as community, zcra.build_num as buildNum,zcra.unit_num as unitNum,zcra.floor_num as floorNum,zcra.room_num as roomNum,
+        zcra.created_date as createdDate,
+        zcra.fill_person_phone as fillPersonPhone,
+       zchh.h2_live as h2Live,zchh.h2_no_live as h2NoLive, zchh.h3_man as h3Man, zchh.h3_woman as h3Woman,
+       zchh.h4_man as h4Man, zchh.h4_woman as h4Woman,
+        zcpi.d1 as d1, zcpi.d2 as d2,zcpi.d7 as d7, zcpi.d8 as d8
+       from zmn_census_room_address zcra left join zmn_census_house_hold zchh on zcra.id = zchh.room_address_id
+        left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
+        <where>
+            AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="town !=null and town!=''">
+                AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="village !=null and village!=''">
+                AND zcra.village LIKE concat('%',#{village,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="community !=null and community!=''">
+                AND zcra.community LIKE concat('%',#{community,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="buildNum !=null and buildNum!=''">
+                AND zcra.build_num LIKE concat('%',#{buildNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="unitNum !=null and unitNum!=''">
+                AND zcra.unit_num LIKE concat('%',#{unitNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="floorNum !=null and floorNum!=''">
+                AND zcra.floor_num LIKE concat('%',#{floorNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="roomNum !=null and roomNum!=''">
+                AND zcra.room_num LIKE concat('%',#{roomNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="examinePersonName !=null and examinePersonName!=''">
+                AND zcra.examine_person_name LIKE concat('%',#{examinePersonName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="chargePersonId !=null">
+                and zcra.charge_person_id= #{chargePersonId,jdbcType=INTEGER}
+            </if>
+            <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
+                AND zcra.created_date &gt; #{startTime,jdbcType=VARCHAR} and zcra.created_date &lt; #{endTime,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findExportHouseHoldAndPersonInfo" resultMap="ZmnCensusHouseHoldAndPersonInfoMap">
+        select zcra.id as roomAddressId,zcra.*,zchh.*,zcpi.*
+        from zmn_census_room_address zcra left join zmn_census_house_hold zchh on zcra.id = zchh.room_address_id
+        left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
+        <where>
+            AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="town !=null and town!=''">
+                AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="village !=null and village!=''">
+                AND zcra.village LIKE concat('%',#{village,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="community !=null and community!=''">
+                AND zcra.community LIKE concat('%',#{community,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="buildNum !=null and buildNum!=''">
+                AND zcra.build_num LIKE concat('%',#{buildNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="unitNum !=null and unitNum!=''">
+                AND zcra.unit_num LIKE concat('%',#{unitNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="floorNum !=null and floorNum!=''">
+                AND zcra.floor_num LIKE concat('%',#{floorNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="roomNum !=null and roomNum!=''">
+                AND zcra.room_num LIKE concat('%',#{roomNum,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="examinePersonName !=null and examinePersonName!=''">
+                AND zcra.examine_person_name LIKE concat('%',#{examinePersonName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="chargePersonId !=null">
+                and zcra.charge_person_id= #{chargePersonId,jdbcType=INTEGER}
+            </if>
+            <if test="startTime !=null and startTime!='' and endTime !=null and endTime!=''">
+                AND zcra.created_date &gt; #{startTime,jdbcType=VARCHAR} and zcra.created_date &lt; #{endTime,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by zcra.community,zcra.build_num
     </select>
 
 </mapper>
