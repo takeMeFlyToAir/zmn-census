@@ -155,7 +155,7 @@ public class CensusSurveyController {
         try {
 
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-            String fileName = getName(censusSurveyQueryQO);
+            String fileName = getName(censusSurveyQueryQO,"小区户数和人数统计");
             response = initResponse(response,fileName,XLSX);
             // 这里需要设置不关闭流
             List<ExportCommunityPersonInfoVO> exportCommunityPersonInfoVOList= censusSurveyService.exportCommunityPersonInfo(censusSurveyQueryQO);
@@ -169,11 +169,11 @@ public class CensusSurveyController {
         }
     }
 
-    private String getName(CensusSurveyQueryQO censusSurveyQueryQO){
+    private String getName(CensusSurveyQueryQO censusSurveyQueryQO,String name){
         if(StrUtil.isNotBlank(censusSurveyQueryQO.getStartTime()) && StrUtil.isNotBlank(censusSurveyQueryQO.getEndTime())){
-            return censusSurveyQueryQO.getStartTime()+"到"+ censusSurveyQueryQO.getEndTime()+"数据";
+            return censusSurveyQueryQO.getStartTime()+"到"+ censusSurveyQueryQO.getEndTime()+name+"数据";
         }else {
-            return "部分数据";
+            return name+"数据";
         }
     }
 
@@ -201,7 +201,7 @@ public class CensusSurveyController {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-            String fileName = getName(censusSurveyQueryQO);
+            String fileName = getName(censusSurveyQueryQO,"户主姓名底层");
             response = initResponse(response,fileName,XLSX);
             // 这里需要设置不关闭流
             List<ExportHouseHoldVO> exportHouseHoldVOList = censusSurveyService.exportHouseHoldInfo(censusSurveyQueryQO);
@@ -222,7 +222,7 @@ public class CensusSurveyController {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-            String fileName = getName(censusSurveyQueryQO);
+            String fileName = getName(censusSurveyQueryQO,"短表");
             response = initResponse(response,fileName,XLSX);
             // 这里需要设置不关闭流
             List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOList = censusSurveyService.exportHouseHoldAndPersonInfo(censusSurveyQueryQO);

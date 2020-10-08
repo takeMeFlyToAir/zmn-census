@@ -303,7 +303,7 @@
                 </div>
 
                 <van-field :disabled='submitButtonDisable' required readonly clickable label="D8.户口登记地：" name="户口登记地" :value="item.d8" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD8')"
+                           @click="clickD8(index,'showPickerD8')"
                            :rules="[{ required: true, message:'请选择户口登记地' }]"
                 />
                 <van-popup v-model="item.showPickerD8" round position="bottom">
@@ -641,6 +641,7 @@
         d5: "",//出生年月
         d6: "",//民族
         d7: "",//普查时点居住地
+        d7Index: "",//普查时点居住地
         d7Province: "",//普查时点居住地不在本地的省
         d7City: "",//普查时点居住地不在本地的市
         d7County: "",//普查时点居住地不在本地的县
@@ -809,7 +810,19 @@
         this.$toast.fail("请先填写身份证");
       }
     },
+    clickD8(index,showPicker){
+      if(!this.personInfoList[index].d7){
+        this.$toast.fail("请先选择D7");
+        return
+      }
+      this.personInfoList[index][showPicker] = true;
+      this.currentPersonInfoIndex = index;
+    },
     clickD9(index,showPicker){
+      if(!this.personInfoList[index].d7){
+        this.$toast.fail("请先选择D7");
+        return
+      }
       if(!this.personInfoList[index].d8){
         this.$toast.fail("请先选择D8");
         return
@@ -904,24 +917,29 @@
     choiceD7(value, index){
       this.personInfoList[this.currentPersonInfoIndex].d7 = value
       this.personInfoList[this.currentPersonInfoIndex].showPickerD7 = false
+      this.personInfoList[this.currentPersonInfoIndex].d7Index = index;
+
       if(index == 4){
         this.personInfoList[this.currentPersonInfoIndex].isShowD7Other = true;
       }else {
         this.personInfoList[this.currentPersonInfoIndex].isShowD7Other = false;
       }
+      this.personInfoList[this.currentPersonInfoIndex].d8 = '';
+      this.personInfoList[this.currentPersonInfoIndex].d9 = '';
     },
     choiceD8(value, index){
       this.personInfoList[this.currentPersonInfoIndex].d8 = value
       this.personInfoList[this.currentPersonInfoIndex].showPickerD8 = false
       this.personInfoList[this.currentPersonInfoIndex].d9 = '';
-      if(index == 0){
+      if((this.personInfoList[this.currentPersonInfoIndex].d7Index == 0
+        || this.personInfoList[this.currentPersonInfoIndex].d7Index == 1)
+        && index == 0){
         this.personInfoList[this.currentPersonInfoIndex].isShowD9Before = true;
         this.personInfoList[this.currentPersonInfoIndex].isShowD9After = false;
       }else{
         this.personInfoList[this.currentPersonInfoIndex].isShowD9Before = false;
         this.personInfoList[this.currentPersonInfoIndex].isShowD9After = true;
       }
-      console.log(this.personInfoList[this.currentPersonInfoIndex].d9List)
       if(index == 3){
         this.personInfoList[this.currentPersonInfoIndex].isShowD8Other = true;
       }else {
@@ -938,11 +956,13 @@
     choiceD9(value, index){
       this.personInfoList[this.currentPersonInfoIndex].d9 = value
       this.personInfoList[this.currentPersonInfoIndex].showPickerD9 = false
-      if(index == 0){
-        this.personInfoList[this.currentPersonInfoIndex].isShowD10 = false;
-      }else {
-        this.personInfoList[this.currentPersonInfoIndex].isShowD10 = true;
-      }
+      this.personInfoList[this.currentPersonInfoIndex].isShowD10 =
+        this.personInfoList[this.currentPersonInfoIndex].isShowD9After
+      // if(index == 0){
+      //   this.personInfoList[this.currentPersonInfoIndex].isShowD10 = false;
+      // }else {
+      //   this.personInfoList[this.currentPersonInfoIndex].isShowD10 = true;
+      // }
     },
     choiceD10(value, index){
       this.personInfoList[this.currentPersonInfoIndex].d10 = value
