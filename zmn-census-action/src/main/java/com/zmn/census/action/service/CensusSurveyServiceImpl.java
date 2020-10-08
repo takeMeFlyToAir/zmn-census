@@ -172,13 +172,28 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 e.printStackTrace();
             }
         }
-        CollUtil.sortByProperty(exportHouseHoldVOList, "community");
-        for (int i = 0; i < exportHouseHoldVOList.size(); i++) {
-            exportHouseHoldVOList.get(i).setIndex(i+1);
+        Comparator<ExportHouseHoldVO> byCommunityAsc = Comparator.comparing(ExportHouseHoldVO::getCommunity);
+        Comparator<ExportHouseHoldVO> byBuildNumAsc = Comparator.comparing(ExportHouseHoldVO::getBuildNum);
+        Comparator<ExportHouseHoldVO> byUnitNumAsc = Comparator.comparing(ExportHouseHoldVO::getUnitNum);
+        Comparator<ExportHouseHoldVO> byFloorNumAsc = Comparator.comparing(ExportHouseHoldVO::getFloorNum);
+        Comparator<ExportHouseHoldVO> byRoomAsc = Comparator.comparing(ExportHouseHoldVO::getRoomNum);
+
+        // 联合排序
+        Comparator<ExportHouseHoldVO> finalComparator = byCommunityAsc
+                .thenComparing(byBuildNumAsc)
+                .thenComparing(byUnitNumAsc)
+                .thenComparing(byFloorNumAsc)
+                .thenComparing(byRoomAsc);
+
+        List<ExportHouseHoldVO> result = exportHouseHoldVOList.stream().sorted(finalComparator).collect(Collectors.toList());
+
+
+        for (int i = 0; i < result.size(); i++) {
+            result.get(i).setIndex(i+1);
         }
         long end = System.currentTimeMillis();
-        System.out.println("personInfoSize="+personInfoList.size()+",exportHouseHoldVOList.size="+exportHouseHoldVOList.size()+",costTime="+(end-start));
-        return exportHouseHoldVOList;
+        System.out.println("personInfoSize="+personInfoList.size()+",result.size="+result.size()+",costTime="+(end-start));
+        return result;
     }
 
     private List<List<ExportHouseHoldDataVO>> collectionToList(Collection<List<ExportHouseHoldDataVO>> personInfoCollection){

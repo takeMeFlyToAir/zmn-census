@@ -307,7 +307,7 @@
                 AND zcra.created_date &gt; #{startTime,jdbcType=VARCHAR} and zcra.created_date &lt; #{endTime,jdbcType=VARCHAR}
             </if>
         </where>
-        order by zcra.community,zcra.build_num
+        order by zcra.community,zcra.build_num,zcra.unit_num,zcra.floor_num,zcra.room_num
     </select>
 
 </mapper>
