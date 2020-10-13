@@ -13,8 +13,12 @@ import lombok.Data;
 @Data
 public class CommunityQueryQO {
 
+
     @ApiModelProperty("街道")
     private String town;
+
+    @ApiModelProperty("园办")
+    private String area;
 
     @ApiModelProperty("普查区")
     private String village;

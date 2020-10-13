@@ -19,6 +19,9 @@ public class CommunityAddVO {
     @ApiModelProperty("普查区")
     private String village;
 
+    @ApiModelProperty("园办")
+    private String area;
+
     @ApiModelProperty("小区名字")
     private String name;
 

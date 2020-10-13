@@ -58,6 +58,10 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         RoomAddressEntity roomAddressEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getRoomAddress(), RoomAddressEntity.class);
         HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getHouseHold(), HouseHoldEntity.class);
         List<PersonInfoEntity> personInfoEntityList = VoAndBeanUtils.fromVOList(censusSurveyAddVO.getPersonInfoList(), PersonInfoEntity.class);
+        CommunityVO communityVO = communityService.get(roomAddressEntity.getCommunityId());
+        if(communityVO  != null){
+            roomAddressEntity.setArea(communityVO.getArea());
+        }
         roomAddressApi.save(roomAddressEntity);
         houseHoldEntity.setRoomAddressId(roomAddressEntity.getId());
         houseHoldService.save(houseHoldEntity);
@@ -146,9 +150,20 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 exportHouseHoldDataVOList.stream().collect(Collectors.groupingBy(ExportHouseHoldDataVO::getRoomAddressId));
         Collection<List<ExportHouseHoldDataVO>> personInfoCollection = roomAddressMapPersonInfo.values();
         List<List<ExportHouseHoldDataVO>> personInfoList = collectionToList(personInfoCollection);
+
 //        ForkJoinPool pool = new ForkJoinPool(4);
 //        ForkJoinTaskForHouseHold forkJoinTaskForHouseHold = new ForkJoinTaskForHouseHold(personInfoList, 0, personInfoList.size());
-//        exportHouseHoldVOList = pool.invoke(forkJoinTaskForHouseHold);
+//        // 提交可分解的ForkJoinTask任务
+//        ForkJoinTask<List<ExportHouseHoldVO>> future = pool.submit(forkJoinTaskForHouseHold);
+//        try {
+//            exportHouseHoldVOList = future.get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        // 关闭线程池
+//        pool.shutdown();
 
 
         ExecutorService pool = Executors.newCachedThreadPool();
@@ -232,6 +247,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             for (List<ExportHouseHoldDataVO> exportHouseHoldDataVOList : personInfoList) {
                 ExportHouseHoldDataVO exportHouseHoldDataVO = exportHouseHoldDataVOList.get(0);
                 ExportHouseHoldVO exportHouseHoldVO = new ExportHouseHoldVO();
+                exportHouseHoldVO.setRoomAddressId(exportHouseHoldDataVO.getRoomAddressId());
                 exportHouseHoldVO.setCommunity(exportHouseHoldDataVO.getCommunity());
                 exportHouseHoldVO.setBuildNum(exportHouseHoldDataVO.getBuildNum());
                 exportHouseHoldVO.setUnitNum(exportHouseHoldDataVO.getUnitNum());
@@ -344,7 +360,6 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 exportHouseHoldVO.setM16(exportHouseHoldDataVO.getFillPersonPhone());
                 exportHouseHoldVOS.add(exportHouseHoldVO);
             }
-            System.out.println(exportHouseHoldVOS.size());
             return exportHouseHoldVOS;
         }
 
@@ -380,36 +395,18 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         }
         @Override
         protected List<ExportHouseHoldVO> compute() {
-            ArrayList<ExportHouseHoldVO> exportHouseHoldVOS = new ArrayList<>();
-
             if ((end - start) <= THRESHOLD) {
-                System.out.println(String.format("compute %d~%d", start, end));
-//                int tempEnd = end + 1;
-//                int tempStart = start + 1;
-//                if(end == this.personInfoList.size()){
-//                    tempEnd = end;
-//                }
-//                if(start == 0){
-//                    tempStart = 0;
-//                }
-
                 return dealExportHouseHoldDataVO(start,end);
             }
 
             int middle = (start + end) / 2;
-            System.out.println(String.format("split %d~%d ==> %d~%d, %d~%d", start, end, start, middle, middle, end));
             ForkJoinTaskForHouseHold left = new ForkJoinTaskForHouseHold(personInfoList, start, middle);
             ForkJoinTaskForHouseHold right = new ForkJoinTaskForHouseHold(personInfoList, middle, end);
-            invokeAll(left, right);
+            left.fork();
+            right.fork();
             List<ExportHouseHoldVO> leftJoin = left.join();
-            List<ExportHouseHoldVO> rightJoin = left.join();
-            System.out.println("leftJoin.size()==="+leftJoin.size());
-            System.out.println("rightJoin.size()==="+rightJoin.size());
-            exportHouseHoldVOS.addAll(leftJoin);
-            exportHouseHoldVOS.addAll(rightJoin);
-            System.out.println("result = " + exportHouseHoldVOS.size());
-
-            return exportHouseHoldVOS;
+            leftJoin.addAll(right.join());
+            return leftJoin;
         }
     }
 

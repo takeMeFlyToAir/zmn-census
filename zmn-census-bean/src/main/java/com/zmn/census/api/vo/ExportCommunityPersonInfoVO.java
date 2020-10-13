@@ -15,6 +15,15 @@ import lombok.Data;
 @Data
 public class ExportCommunityPersonInfoVO {
 
+
+    @ExcelProperty("园办")
+    @ColumnWidth(20)
+    private String area;
+
+    @ExcelProperty("负责人")
+    @ColumnWidth(20)
+    private String chargePersonName;
+
     @ExcelProperty("小区名称")
     @ColumnWidth(20)
     private String community;

@@ -58,6 +58,11 @@ public class CommunityServiceImpl extends BaseService<CommunityEntity> implement
         if(StrUtil.isNotEmpty(condition.getVillage())){
             criteria.andLike("village", "%"+condition.getVillage()+"%");
         }
+
+        if(StrUtil.isNotEmpty(condition.getArea())){
+            criteria.andLike("area", "%"+condition.getArea()+"%");
+        }
+
         if(StrUtil.isNotEmpty(condition.getName())){
             criteria.andLike("name", "%"+condition.getName()+"%");
         }

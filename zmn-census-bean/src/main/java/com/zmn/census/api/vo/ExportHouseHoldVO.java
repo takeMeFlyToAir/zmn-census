@@ -20,6 +20,11 @@ public class ExportHouseHoldVO {
     @ExcelProperty("序号")
     private int index;
 
+
+    @ExcelProperty("唯一编号")
+    @ColumnWidth(20)
+    private Integer roomAddressId;
+
     @ExcelProperty("小区名称")
     @ColumnWidth(20)
     private String community;

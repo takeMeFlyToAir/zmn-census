@@ -44,6 +44,7 @@ public class RoomAddressServiceApi extends BaseService<RoomAddressEntity> implem
         roomAddressEntity.setCommunity(communityEditVO.getName());
         roomAddressEntity.setChargePersonId(communityEditVO.getChargePersonId());
         roomAddressEntity.setChargePersonName(communityEditVO.getChargePersonName());
+        roomAddressEntity.setArea(communityEditVO.getArea());
         roomAddressMapper.updateByExampleSelective(roomAddressEntity,example);
     }
 

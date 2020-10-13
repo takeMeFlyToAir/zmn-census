@@ -13,6 +13,7 @@
         <result property="city" column="city" jdbcType="VARCHAR"/>
         <result property="county" column="county" jdbcType="VARCHAR"/>
         <result property="town" column="town" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
         <result property="village" column="village" jdbcType="VARCHAR"/>
         <result property="community" column="community" jdbcType="VARCHAR"/>
         <result property="buildNum" column="build_num" jdbcType="VARCHAR"/>
@@ -103,6 +104,9 @@
         from zmn_census_room_address t1
         <where>
             AND t1.deleted =0
+            <if test="area !=null and area!=''">
+                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
             <if test="town !=null and town!=''">
                 AND t1.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
             </if>
@@ -186,10 +190,13 @@
 
     <select id="findExportCommunityPersonInfo" resultType="com.zmn.census.api.vo.ExportCommunityPersonInfoVO">
         select
-        community,count(*) as realHoldCount, sum(person_count) as realPersonCount
+        charge_person_name as chargePersonName, area as area,community,count(*) as realHoldCount, sum(person_count) as realPersonCount
         from zmn_census_room_address as t1
         <where>
             AND t1.deleted =0
+            <if test="area !=null and area!=''">
+                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
             <if test="town !=null and town!=''">
                 AND t1.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
             </if>
@@ -237,6 +244,9 @@
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="area !=null and area!=''">
+                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
             <if test="town !=null and town!=''">
                 AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
             </if>
@@ -276,6 +286,9 @@
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="area !=null and area!=''">
+                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+            </if>
             <if test="town !=null and town!=''">
                 AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
             </if>

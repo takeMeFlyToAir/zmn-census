@@ -14,6 +14,9 @@ import lombok.Data;
 @Data
 public class CensusSurveyQueryQO {
 
+    @ApiModelProperty("园办")
+    private String area;
+
     @ApiModelProperty("街道")
     private String town;
 

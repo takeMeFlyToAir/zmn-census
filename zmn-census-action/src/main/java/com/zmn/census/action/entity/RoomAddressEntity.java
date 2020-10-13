@@ -17,6 +17,8 @@ import javax.persistence.Table;
 @Table(name = "zmn_census_room_address")
 public class RoomAddressEntity  extends BaseEntity {
 
+    private String area;
+
     @ApiModelProperty("负责人id")
     private Integer chargePersonId;
 

@@ -23,6 +23,8 @@ public class CommunityEntity extends BaseEntity {
 
     private String name;
 
+    private String area;
+
     @ApiModelProperty("计划统计户数")
     private Integer planHoldCount;
 

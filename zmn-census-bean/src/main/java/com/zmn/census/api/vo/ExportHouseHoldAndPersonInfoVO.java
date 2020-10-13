@@ -15,12 +15,13 @@ import lombok.Data;
 @Data
 public class ExportHouseHoldAndPersonInfoVO{
 
-    @ExcelIgnore
-    private Integer roomAddressId;
-
 
     @ExcelProperty("序号")
     private Integer index;
+
+    @ExcelProperty("唯一编号")
+    @ColumnWidth(20)
+    private Integer roomAddressId;
 
     @ExcelProperty("小区名称")
     @ColumnWidth(20)

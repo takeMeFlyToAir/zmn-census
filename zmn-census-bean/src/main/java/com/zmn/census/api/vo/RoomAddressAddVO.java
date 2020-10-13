@@ -1,10 +1,7 @@
 package com.zmn.census.api.vo;
 
-import com.zmn.census.common.core.model.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Table;
 
 /**
  * @ClassName RoomAddressEntity
@@ -15,6 +12,8 @@ import javax.persistence.Table;
  **/
 @Data
 public class RoomAddressAddVO {
+
+    private String area;
 
     @ApiModelProperty("负责人id")
     private Integer chargePersonId;

@@ -1,12 +1,20 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.chargePersonId" placeholder="请选择" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+      <el-select v-model="listQuery.chargePersonId" placeholder="请选择负责人" style="width: 150px;"  @change="handleFilter" clearable @clear="handleFilter" >
         <el-option
           v-for="item in userList"
           :key="item.id"
           :label="item.nickName"
           :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="listQuery.area" placeholder="请选择园办" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+        <el-option
+          v-for="item in areaList"
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
       </el-select>
       <el-input v-model="listQuery.town" placeholder="街道" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
@@ -144,6 +152,11 @@
           <!--<span>{{ row.id }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
+      <el-table-column label="园办" >
+        <template slot-scope="{row}">
+          <span>{{ row.roomAddress.area }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="街道" >
         <template slot-scope="{row}">
           <span>{{ row.roomAddress.town }}</span>
@@ -486,6 +499,14 @@
             }
           }]
         },
+        areaList:[
+          '商贸',
+          '湿地',
+          '总部',
+          '金融',
+          '世园',
+          '雁鸣湖',
+        ],
         userList:[],
         tableKey: 0,
         list: null,
@@ -496,6 +517,7 @@
           pageNo: 1,
           pageSize: 10,
           chargePersonId: "",
+          area: "",
           town: "",
           village: "",
           community: "",

@@ -1,12 +1,20 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.chargePersonId" placeholder="请选择" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+      <el-select v-model="listQuery.chargePersonId" placeholder="请选择负责人" style="width: 150px;"  @change="handleFilter" clearable @clear="handleFilter" >
         <el-option
           v-for="item in userList"
           :key="item.id"
           :label="item.nickName"
           :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="listQuery.area" placeholder="请选择园办" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+        <el-option
+          v-for="item in areaList"
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
       </el-select>
       <el-input v-model="listQuery.town" placeholder="街道" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
@@ -34,6 +42,11 @@
       <el-table-column label="ID" prop="id" sortable="custom"   >
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="园办" >
+        <template slot-scope="{row}">
+          <span>{{ row.area }}</span>
         </template>
       </el-table-column>
       <el-table-column label="街道" >
@@ -106,6 +119,16 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="园办" prop="area">
+          <el-select v-model="temp.area" placeholder="请选择">
+            <el-option
+              v-for="item in areaList"
+              value-key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="街道" prop="town">
           <el-input v-model="temp.town" placeholder="街道" />
         </el-form-item>
@@ -197,6 +220,14 @@
             }
           ]
         },
+        areaList:[
+          '商贸',
+          '湿地',
+          '总部',
+          '金融',
+          '世园',
+          '雁鸣湖',
+        ],
         userList:[],
         frontUrl:'',
         downloadButton:true,
@@ -228,6 +259,7 @@
           pageNo: 1,
           pageSize: 10,
           chargePersonId: null,
+          area: null,
           town: null,
           village: null,
           name: null,
@@ -244,6 +276,7 @@
         },
         temp:{
           id:null,
+          area:'',
           town:'',
           village:'',
           planHoldCount:0,
@@ -253,6 +286,7 @@
         },
         rules: {
           town: [{ required: true, message: '街道是必填', trigger: 'blur' }],
+          area: [{ required: true, message: '园办是必填', trigger: 'blur' }],
           village: [{ required: true, message: '普查区是必填', trigger: 'blur' }],
           name: [{ required: true, message: '小区名字是必填', trigger: 'blur' }],
           planHoldCount: [{ required: true, message: '计划统计户数是必填', trigger: 'blur' }],
@@ -355,6 +389,7 @@
       resetTemp(){
         this.temp = {
           id:null,
+          area:'',
           town:'',
           village:'',
           planHoldCount:'0',
