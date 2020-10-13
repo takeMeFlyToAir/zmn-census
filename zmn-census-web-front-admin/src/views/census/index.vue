@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.chargePersonId" placeholder="请选择负责人" style="width: 150px;"  @change="handleFilter" clearable @clear="handleFilter" >
+      <el-select v-model="listQuery.chargePersonId" placeholder="请选择负责人" style="width: 140px;"  @change="handleFilter" clearable @clear="handleFilter" >
         <el-option
           v-for="item in userList"
           :key="item.id"
@@ -17,13 +17,13 @@
           :value="item">
         </el-option>
       </el-select>
-      <el-input v-model="listQuery.town" placeholder="街道" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
-      <el-input v-model="listQuery.village" placeholder="普查小区" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.community" placeholder="住宅小区" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.buildNum" placeholder="楼栋号" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.unitNum" placeholder="单元号" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.floorNum" placeholder="楼层" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
-      <el-input v-model="listQuery.roomNum" placeholder="房间号" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.town" placeholder="街道" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter" />
+      <el-input v-model="listQuery.village" placeholder="普查小区" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.community" placeholder="住宅小区" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.buildNum" placeholder="楼栋号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.unitNum" placeholder="单元号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.floorNum" placeholder="楼层" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.roomNum" placeholder="房间号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <br>
       <br>
       <el-input v-model="listQuery.examinePersonName" placeholder="普查员" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
@@ -890,13 +890,13 @@
         return param;
       },
       exportCommunityPersonInfo(){
-        window.location.href='/api/censusSurvey/exportCommunityPersonInfo'+this.getParams()
+        window.location.href='/censusSurvey/exportCommunityPersonInfo'+this.getParams()
       },
       exportHouseHoldInfo(){
-        window.location.href='/api/censusSurvey/exportHouseHoldInfo'+this.getParams()
+        window.location.href='/censusSurvey/exportHouseHoldInfo'+this.getParams()
       },
       exportHouseHoldAndPersonInfo(){
-        window.location.href='/api/censusSurvey/exportHouseHoldAndPersonInfo'+this.getParams()
+        window.location.href='/censusSurvey/exportHouseHoldAndPersonInfo'+this.getParams()
       },
       handleDownload() {
         this.downloadLoading = true
