@@ -10,6 +10,7 @@ import com.zmn.census.action.entity.HouseHoldEntity;
 import com.zmn.census.action.entity.PersonInfoEntity;
 import com.zmn.census.action.entity.RoomAddressEntity;
 import com.zmn.census.action.mapper.RoomAddressMapper;
+import com.zmn.census.api.common.CensusConstant;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
 import com.zmn.census.api.vo.*;
@@ -190,7 +191,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         Comparator<ExportHouseHoldVO> byCommunityAsc = Comparator.comparing(ExportHouseHoldVO::getCommunity);
         Comparator<ExportHouseHoldVO> byBuildNumAsc = Comparator.comparing(ExportHouseHoldVO::getBuildNum);
         Comparator<ExportHouseHoldVO> byUnitNumAsc = Comparator.comparing(ExportHouseHoldVO::getUnitNum);
-        Comparator<ExportHouseHoldVO> byFloorNumAsc = Comparator.comparing(ExportHouseHoldVO::getFloorNum);
+        Comparator<ExportHouseHoldVO> byFloorNumAsc = Comparator.comparingInt(ExportHouseHoldVO::getFloorNumInt);
         Comparator<ExportHouseHoldVO> byRoomAsc = Comparator.comparing(ExportHouseHoldVO::getRoomNum);
 
         // 联合排序
@@ -258,11 +259,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 //设置户主姓名
                 exportHouseHoldVO.setM4(getM4(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM5(exportHouseHoldDataVO.getH2Live());
-                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D71,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM7(getM7(exportHouseHoldDataVOList));
-                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D71,D85).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D85).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM9(exportHouseHoldDataVO.getH2NoLive());
-                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D72,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D72,D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM11(getM11(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM12(exportHouseHoldDataVO.getH3());
                 exportHouseHoldVO.setM13(exportHouseHoldDataVO.getH4());
@@ -349,11 +350,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 //设置户主姓名
                 exportHouseHoldVO.setM4(getM4(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM5(exportHouseHoldDataVO.getH2Live());
-                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D71,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM7(getM7(exportHouseHoldDataVOList));
-                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D71,D85).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D85).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM9(exportHouseHoldDataVO.getH2NoLive());
-                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(D72,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D72,D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM11(getM11(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM12(exportHouseHoldDataVO.getH3());
                 exportHouseHoldVO.setM13(exportHouseHoldDataVO.getH4());

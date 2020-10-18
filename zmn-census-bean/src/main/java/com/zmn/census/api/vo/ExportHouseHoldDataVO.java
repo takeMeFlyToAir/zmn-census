@@ -3,6 +3,7 @@ package com.zmn.census.api.vo;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import com.zmn.census.api.common.CensusConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -71,7 +72,7 @@ public class ExportHouseHoldDataVO {
 
 
     public String getM3(){
-        return StrUtil.join("-",this.buildNum,this.unitNum,this.roomNum);
+        return StrUtil.join(CensusConstant.JOIN_CHAR,this.buildNum,this.unitNum,this.roomNum);
     }
 
     public Integer getH3(){
@@ -83,7 +84,7 @@ public class ExportHouseHoldDataVO {
     }
 
     public String getD7AndD8(){
-        return StrUtil.join(d7,d8);
+        return StrUtil.join(CensusConstant.JOIN_CHAR,d7,d8);
     }
 
     public String getCreatedDateStr() {

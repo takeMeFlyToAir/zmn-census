@@ -83,4 +83,13 @@ public class ExportHouseHoldVO {
     @ColumnWidth(20)
     private String createdDateStr;
 
+    public Integer getFloorNumInt() {
+        Integer floorNumInt = 0;
+        try {
+            floorNumInt = Integer.parseInt(this.floorNum);
+        }catch (Exception e){
+            floorNumInt = 0;
+        }
+        return floorNumInt;
+    }
 }

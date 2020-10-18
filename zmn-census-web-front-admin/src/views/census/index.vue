@@ -26,6 +26,7 @@
       <el-input v-model="listQuery.roomNum" placeholder="房间号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <br>
       <br>
+      <el-input v-model="listQuery.roomAddressId" placdeholder="编号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-input v-model="listQuery.examinePersonName" placeholder="普查员" style="width: 120px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-date-picker
         v-model="timeQuery"
@@ -152,6 +153,11 @@
           <!--<span>{{ row.id }}</span>-->
         <!--</template>-->
       <!--</el-table-column>-->
+      <el-table-column label="编号" >
+        <template slot-scope="{row}">
+          <span>{{ row.roomAddress.id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="园办" >
         <template slot-scope="{row}">
           <span>{{ row.roomAddress.area }}</span>
@@ -517,6 +523,7 @@
           pageNo: 1,
           pageSize: 10,
           chargePersonId: "",
+          roomAddressId: "",
           area: "",
           town: "",
           village: "",

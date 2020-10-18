@@ -1,5 +1,7 @@
 package com.zmn.census.api.qo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -13,6 +15,9 @@ import lombok.Data;
  **/
 @Data
 public class CensusSurveyQueryQO {
+
+    @ExcelProperty("唯一编号")
+    private Integer roomAddressId;
 
     @ApiModelProperty("园办")
     private String area;

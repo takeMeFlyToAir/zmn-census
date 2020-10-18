@@ -9,4 +9,6 @@ package com.zmn.census.api.common;
  **/
 public class CensusConstant {
 
+    public static String JOIN_CHAR="-";
+
 }

@@ -104,6 +104,9 @@
         from zmn_census_room_address t1
         <where>
             AND t1.deleted =0
+            <if test="roomAddressId !=null and roomAddressId!=''">
+                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
             <if test="area !=null and area!=''">
                 AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
@@ -194,6 +197,9 @@
         from zmn_census_room_address as t1
         <where>
             AND t1.deleted =0
+            <if test="roomAddressId !=null and roomAddressId!=''">
+                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
             <if test="area !=null and area!=''">
                 AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
@@ -244,6 +250,9 @@
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="roomAddressId !=null and roomAddressId!=''">
+                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
             <if test="area !=null and area!=''">
                 AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
@@ -281,11 +290,14 @@
     </select>
 
     <select id="findExportHouseHoldAndPersonInfo" resultMap="ZmnCensusHouseHoldAndPersonInfoMap">
-        select zcra.id as roomAddressId,zcra.*,zchh.*,zcpi.*
+        select zcra.id as roomAddressId,zcra.*,zchh.*,zcpi.*,CONVERT(zcra.floor_num,SIGNED) as floorNumInt
         from zmn_census_room_address zcra left join zmn_census_house_hold zchh on zcra.id = zchh.room_address_id
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
+            <if test="roomAddressId !=null and roomAddressId!=''">
+                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
             <if test="area !=null and area!=''">
                 AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
@@ -320,7 +332,7 @@
                 AND zcra.created_date &gt; #{startTime,jdbcType=VARCHAR} and zcra.created_date &lt; #{endTime,jdbcType=VARCHAR}
             </if>
         </where>
-        order by zcra.community,zcra.build_num,zcra.unit_num,zcra.floor_num,zcra.room_num
+        order by zcra.community,zcra.build_num,zcra.unit_num,floorNumInt,zcra.room_num
     </select>
 
 </mapper>
