@@ -26,7 +26,7 @@
       <el-input v-model="listQuery.roomNum" placeholder="房间号" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <br>
       <br>
-      <el-input v-model="listQuery.roomAddressId" placdeholder="编号" style="width: 80px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-input v-model="listQuery.roomAddressId" placeholder="编号" style="width: 80px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-input v-model="listQuery.examinePersonName" placeholder="普查员" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-date-picker
         v-model="timeQuery"
