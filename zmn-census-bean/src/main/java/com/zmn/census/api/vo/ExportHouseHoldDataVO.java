@@ -72,7 +72,7 @@ public class ExportHouseHoldDataVO {
 
 
     public String getM3(){
-        return StrUtil.join(CensusConstant.JOIN_CHAR,this.buildNum,this.unitNum,this.roomNum);
+        return StrUtil.join(CensusConstant.JOIN_CHAR,this.unitNum,this.floorNum,this.roomNum);
     }
 
     public Integer getH3(){
