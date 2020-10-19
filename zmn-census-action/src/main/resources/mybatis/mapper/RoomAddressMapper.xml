@@ -290,7 +290,11 @@
     </select>
 
     <select id="findExportHouseHoldAndPersonInfo" resultMap="ZmnCensusHouseHoldAndPersonInfoMap">
-        select zcra.id as roomAddressId,zcra.*,zchh.*,zcpi.*,CONVERT(zcra.floor_num,SIGNED) as floorNumInt
+        select zcra.id as roomAddressId,zcra.*,zchh.*,zcpi.*,
+        CONVERT(zcra.build_num,SIGNED) as buildNumInt,
+        CONVERT(zcra.unit_num,SIGNED) as unitNumInt,
+        CONVERT(zcra.floor_num,SIGNED) as floorNumInt,
+        CONVERT(zcra.room_num,SIGNED) as roomNumInt
         from zmn_census_room_address zcra left join zmn_census_house_hold zchh on zcra.id = zchh.room_address_id
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
@@ -332,7 +336,7 @@
                 AND zcra.created_date &gt; #{startTime,jdbcType=VARCHAR} and zcra.created_date &lt; #{endTime,jdbcType=VARCHAR}
             </if>
         </where>
-        order by zcra.community,zcra.build_num,zcra.unit_num,floorNumInt,zcra.room_num
+        order by zcra.community,buildNumInt,unitNumInt,floorNumInt,roomNumInt
     </select>
 
 </mapper>

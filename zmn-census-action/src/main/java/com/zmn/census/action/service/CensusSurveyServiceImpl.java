@@ -189,10 +189,10 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             }
         }
         Comparator<ExportHouseHoldVO> byCommunityAsc = Comparator.comparing(ExportHouseHoldVO::getCommunity);
-        Comparator<ExportHouseHoldVO> byBuildNumAsc = Comparator.comparing(ExportHouseHoldVO::getBuildNum);
-        Comparator<ExportHouseHoldVO> byUnitNumAsc = Comparator.comparing(ExportHouseHoldVO::getUnitNum);
+        Comparator<ExportHouseHoldVO> byBuildNumAsc = Comparator.comparing(ExportHouseHoldVO::getBuildNumInt);
+        Comparator<ExportHouseHoldVO> byUnitNumAsc = Comparator.comparing(ExportHouseHoldVO::getUnitNumInt);
         Comparator<ExportHouseHoldVO> byFloorNumAsc = Comparator.comparingInt(ExportHouseHoldVO::getFloorNumInt);
-        Comparator<ExportHouseHoldVO> byRoomAsc = Comparator.comparing(ExportHouseHoldVO::getRoomNum);
+        Comparator<ExportHouseHoldVO> byRoomAsc = Comparator.comparing(ExportHouseHoldVO::getRoomNumInt);
 
         // 联合排序
         Comparator<ExportHouseHoldVO> finalComparator = byCommunityAsc
