@@ -28,6 +28,8 @@ public class ExportHouseHoldDataVO {
 
     private Integer roomAddressId;
 
+    private String area;
+
     private String community;
 
     @ApiModelProperty("楼栋号")

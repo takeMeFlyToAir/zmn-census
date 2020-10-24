@@ -39,6 +39,7 @@ public class RoomAddressServiceApi extends BaseService<RoomAddressEntity> implem
                 .andEqualTo("communityId",communityEditVO.getId());
 
         RoomAddressEntity roomAddressEntity = new RoomAddressEntity();
+        roomAddressEntity.setArea(communityEditVO.getArea());
         roomAddressEntity.setTown(communityEditVO.getTown());
         roomAddressEntity.setVillage(communityEditVO.getVillage());
         roomAddressEntity.setCommunity(communityEditVO.getName());

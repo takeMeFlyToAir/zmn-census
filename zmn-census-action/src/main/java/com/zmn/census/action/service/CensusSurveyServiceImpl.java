@@ -188,6 +188,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 e.printStackTrace();
             }
         }
+        Comparator<ExportHouseHoldVO> byAreaAsc = Comparator.comparing(ExportHouseHoldVO::getArea);
         Comparator<ExportHouseHoldVO> byCommunityAsc = Comparator.comparing(ExportHouseHoldVO::getCommunity);
         Comparator<ExportHouseHoldVO> byBuildNumAsc = Comparator.comparing(ExportHouseHoldVO::getBuildNumInt);
         Comparator<ExportHouseHoldVO> byUnitNumAsc = Comparator.comparing(ExportHouseHoldVO::getUnitNumInt);
@@ -195,7 +196,8 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         Comparator<ExportHouseHoldVO> byRoomAsc = Comparator.comparing(ExportHouseHoldVO::getRoomNumInt);
 
         // 联合排序
-        Comparator<ExportHouseHoldVO> finalComparator = byCommunityAsc
+        Comparator<ExportHouseHoldVO> finalComparator = byAreaAsc
+                .thenComparing(byCommunityAsc)
                 .thenComparing(byBuildNumAsc)
                 .thenComparing(byUnitNumAsc)
                 .thenComparing(byFloorNumAsc)
@@ -249,6 +251,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 ExportHouseHoldDataVO exportHouseHoldDataVO = exportHouseHoldDataVOList.get(0);
                 ExportHouseHoldVO exportHouseHoldVO = new ExportHouseHoldVO();
                 exportHouseHoldVO.setRoomAddressId(exportHouseHoldDataVO.getRoomAddressId());
+                String area = exportHouseHoldDataVO.getArea();
+                if(StrUtil.isEmpty(area)){
+                    area = "";
+                }
+                exportHouseHoldVO.setArea(area);
                 exportHouseHoldVO.setCommunity(exportHouseHoldDataVO.getCommunity());
                 exportHouseHoldVO.setBuildNum(exportHouseHoldDataVO.getBuildNum());
                 exportHouseHoldVO.setUnitNum(exportHouseHoldDataVO.getUnitNum());

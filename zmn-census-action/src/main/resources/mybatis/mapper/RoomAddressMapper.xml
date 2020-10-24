@@ -41,6 +41,7 @@
     <resultMap type="com.zmn.census.api.vo.ExportHouseHoldDataVO" id="ExportHouseHoldDataMap">
         <result property="createdDate" column="createdDate" />
         <result property="roomAddressId" column="roomAddressId" />
+        <result property="area" column="area" />
         <result property="community" column="community" />
         <result property="buildNum" column="buildNum" />
         <result property="unitNum" column="unitNum" />
@@ -240,7 +241,7 @@
     </select>
 
     <select id="findExportHouseHoldInfo" resultMap="ExportHouseHoldDataMap">
-       select zcra.id as roomAddressId, zcra.community as community, zcra.build_num as buildNum,zcra.unit_num as unitNum,zcra.floor_num as floorNum,zcra.room_num as roomNum,
+       select zcra.id as roomAddressId, zcra.area as area,zcra.community as community, zcra.build_num as buildNum,zcra.unit_num as unitNum,zcra.floor_num as floorNum,zcra.room_num as roomNum,
         zcra.created_date as createdDate,
         zcra.fill_person_phone as fillPersonPhone,
        zchh.h2_live as h2Live,zchh.h2_no_live as h2NoLive, zchh.h3_man as h3Man, zchh.h3_woman as h3Woman,
