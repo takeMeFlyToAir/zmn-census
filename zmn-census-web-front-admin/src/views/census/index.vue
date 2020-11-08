@@ -897,13 +897,13 @@
         return param;
       },
       exportCommunityPersonInfo(){
-        window.location.href='/censusSurvey/exportCommunityPersonInfo'+this.getParams()
+        window.location.href='/api/censusSurvey/exportCommunityPersonInfo'+this.getParams()
       },
       exportHouseHoldInfo(){
-        window.location.href='/censusSurvey/exportHouseHoldInfo'+this.getParams()
+        window.location.href='/api/censusSurvey/exportHouseHoldInfo'+this.getParams()
       },
       exportHouseHoldAndPersonInfo(){
-        window.location.href='/censusSurvey/exportHouseHoldAndPersonInfo'+this.getParams()
+        window.location.href='/api/censusSurvey/exportHouseHoldAndPersonInfo'+this.getParams()
       },
       handleDownload() {
         this.downloadLoading = true

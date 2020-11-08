@@ -1,7 +1,7 @@
 package com.zmn.census.action.service;
 
-import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,8 +17,6 @@ import com.zmn.census.api.vo.*;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 import com.zmn.census.common.utils.object.VoAndBeanUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +35,21 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class CensusSurveyServiceImpl implements CensusSurveyService {
+
+    private static String D71 = "本普查小区";
+    private static String D72 = "本村（居）委会其他普查小区";
+    private static String D73 = "本乡（镇、街道）其他村（居）委会";
+    private static String D74 = "本县（市、区、旗）其他乡（镇、街道）";
+    private static String D75 = "其他县（市、区、旗），请在下面填写地址";
+    private static String D76 = "香港特别行政区、澳门特别行政区、台湾地区）";
+    private static String D77 = "国外";
+
+    private static String D81 = "本村（居）委会";
+    private static String D82 = "本乡（镇、街道）其他村（居）委会";
+    private static String D83 = "本县（市、区、旗）其他乡（镇、街道）";
+    private static String D84 = "其他县（市、区、旗），请在下面填写地址";
+    private static String D85 = "户口待定";
+
 
     @Autowired
     private RoomAddressMapper roomAddressMapper;
@@ -60,7 +73,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getHouseHold(), HouseHoldEntity.class);
         List<PersonInfoEntity> personInfoEntityList = VoAndBeanUtils.fromVOList(censusSurveyAddVO.getPersonInfoList(), PersonInfoEntity.class);
         CommunityVO communityVO = communityService.get(roomAddressEntity.getCommunityId());
-        if(communityVO  != null){
+        if (communityVO != null) {
             roomAddressEntity.setArea(communityVO.getArea());
         }
         roomAddressApi.save(roomAddressEntity);
@@ -70,7 +83,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             personInfoEntity.setRoomAddressId(roomAddressEntity.getId());
         }
         //更新小区对应的户数和人数
-        synchronized (this){
+        synchronized (this) {
             communityService.updateCount(censusSurveyAddVO.getCommunityUpdateCountVO());
         }
         personInfoService.saveList(personInfoEntityList);
@@ -79,7 +92,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
     @Override
     public PagerResult<CensusSurveyVO> findPage(Pager<CensusSurveyQueryQO> pager) {
         CensusSurveyQueryQO condition = pager.getCondition();
-        PageHelper.startPage(pager.getPageNo(),pager.getPageSize());
+        PageHelper.startPage(pager.getPageNo(), pager.getPageSize());
         List<CensusSurveyVO> filterList = roomAddressMapper.findCensusSurveyVOList(condition);
         PageInfo<CensusSurveyVO> pageInfo = new PageInfo<>(filterList);
         PagerResult<CensusSurveyVO> pagerResult = new PagerResult<>(pageInfo.getList(), pageInfo.getTotal());
@@ -95,7 +108,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         houseHoldService.deleteByRoomAddressId(roomAddressId);
         personInfoService.deleteByRoomAddressId(roomAddressId);
         //更新小区对应的户数和人数
-        synchronized (this){
+        synchronized (this) {
             CommunityUpdateCountVO communityUpdateCountVO = new CommunityUpdateCountVO();
             communityUpdateCountVO.setId(roomAddressEntity.getCommunityId());
             communityUpdateCountVO.setAddHoldCount(-1);
@@ -125,13 +138,13 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         ArrayList<CensusDownloadVO> censusDownloadVOS = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             CensusDownloadVO censusDownloadVO = new CensusDownloadVO();
-            censusDownloadVO.setCommunity("小区"+i);
-            censusDownloadVO.setBuildNum("楼栋"+i);
-            censusDownloadVO.setUnitNum("单元"+i);
-            censusDownloadVO.setFloorNum("楼层"+i);
-            censusDownloadVO.setRoomNum("房间"+i);
-            censusDownloadVO.setExaminePersonName("检查人"+i);
-            censusDownloadVO.setFillPersonPhone("填报人电话"+i);
+            censusDownloadVO.setCommunity("小区" + i);
+            censusDownloadVO.setBuildNum("楼栋" + i);
+            censusDownloadVO.setUnitNum("单元" + i);
+            censusDownloadVO.setFloorNum("楼层" + i);
+            censusDownloadVO.setRoomNum("房间" + i);
+            censusDownloadVO.setExaminePersonName("检查人" + i);
+            censusDownloadVO.setFillPersonPhone("填报人电话" + i);
             censusDownloadVOS.add(censusDownloadVO);
         }
         return censusDownloadVOS;
@@ -172,7 +185,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
 
         int totalSize = personInfoList.size();
         final int THRESHOLD = 1000;
-        int count = totalSize/THRESHOLD;
+        int count = totalSize / THRESHOLD;
         for (int i = 0; i < count; i++) {
             Future<List<ExportHouseHoldVO>> submit = pool.submit(new FutureTaskForHouseHold(CollUtil.sub(personInfoList, i * THRESHOLD, (i + 1) * THRESHOLD)));
             futureList.add(submit);
@@ -207,21 +220,20 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
 
 
         for (int i = 0; i < result.size(); i++) {
-            result.get(i).setIndex(i+1);
+            result.get(i).setIndex(i + 1);
         }
         long end = System.currentTimeMillis();
-        System.out.println("personInfoSize="+personInfoList.size()+",result.size="+result.size()+",costTime="+(end-start));
+        System.out.println("personInfoSize=" + personInfoList.size() + ",result.size=" + result.size() + ",costTime=" + (end - start));
         return result;
     }
 
-    private List<List<ExportHouseHoldDataVO>> collectionToList(Collection<List<ExportHouseHoldDataVO>> personInfoCollection){
+    private List<List<ExportHouseHoldDataVO>> collectionToList(Collection<List<ExportHouseHoldDataVO>> personInfoCollection) {
         ArrayList<List<ExportHouseHoldDataVO>> lists = new ArrayList<>();
         lists.addAll(personInfoCollection);
         return lists;
     }
 
-    private static class FutureTaskForHouseHold implements Callable<List<ExportHouseHoldVO>>{
-
+    private static class FutureTaskForHouseHold implements Callable<List<ExportHouseHoldVO>> {
 
 
         private static String D71 = "本普查小区";
@@ -245,14 +257,14 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             personInfoList = personInfoCollection;
         }
 
-        private List<ExportHouseHoldVO> dealExportHouseHoldDataVO(){
+        private List<ExportHouseHoldVO> dealExportHouseHoldDataVO() {
             ArrayList<ExportHouseHoldVO> exportHouseHoldVOS = new ArrayList<>();
             for (List<ExportHouseHoldDataVO> exportHouseHoldDataVOList : personInfoList) {
                 ExportHouseHoldDataVO exportHouseHoldDataVO = exportHouseHoldDataVOList.get(0);
                 ExportHouseHoldVO exportHouseHoldVO = new ExportHouseHoldVO();
                 exportHouseHoldVO.setRoomAddressId(exportHouseHoldDataVO.getRoomAddressId());
                 String area = exportHouseHoldDataVO.getArea();
-                if(StrUtil.isEmpty(area)){
+                if (StrUtil.isEmpty(area)) {
                     area = "";
                 }
                 exportHouseHoldVO.setArea(area);
@@ -266,11 +278,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 //设置户主姓名
                 exportHouseHoldVO.setM4(getM4(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM5(exportHouseHoldDataVO.getH2Live());
-                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D71, D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM7(getM7(exportHouseHoldDataVOList));
-                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D85).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D71, D85).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM9(exportHouseHoldDataVO.getH2NoLive());
-                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D72,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D72, D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM11(getM11(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM12(exportHouseHoldDataVO.getH3());
                 exportHouseHoldVO.setM13(exportHouseHoldDataVO.getH4());
@@ -280,16 +292,16 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             return exportHouseHoldVOS;
         }
 
-        private String getM4(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private String getM4(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             for (ExportHouseHoldDataVO exportHouseHoldDataVO : exportHouseHoldDataVOList) {
-                if("户主".endsWith(exportHouseHoldDataVO.getD2())){
+                if ("户主".endsWith(exportHouseHoldDataVO.getD2())) {
                     return exportHouseHoldDataVO.getD1();
                 }
             }
             return "无";
         }
 
-        private long getM7(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private long getM7(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             return exportHouseHoldDataVOList.stream().filter(new Predicate<ExportHouseHoldDataVO>() {
                 @Override
                 public boolean test(ExportHouseHoldDataVO exportHouseHoldDataVO) {
@@ -300,7 +312,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             }).count();
         }
 
-        private long getM11(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private long getM11(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             return exportHouseHoldDataVOList.stream().filter(new Predicate<ExportHouseHoldDataVO>() {
                 @Override
                 public boolean test(ExportHouseHoldDataVO exportHouseHoldDataVO) {
@@ -317,24 +329,9 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         }
     }
 
-    private static class ForkJoinTaskForHouseHold extends RecursiveTask<List<ExportHouseHoldVO>>{
+    private static class ForkJoinTaskForHouseHold extends RecursiveTask<List<ExportHouseHoldVO>> {
 
         private static final int THRESHOLD = 1000;
-
-
-        private static String D71 = "本普查小区";
-        private static String D72 = "本村（居）委会其他普查小区";
-        private static String D73 = "本乡（镇、街道）其他村（居）委会";
-        private static String D74 = "本县（市、区、旗）其他乡（镇、街道）";
-        private static String D75 = "其他县（市、区、旗），请在下面填写地址";
-        private static String D76 = "香港特别行政区、澳门特别行政区、台湾地区）";
-        private static String D77 = "国外";
-
-        private static String D81 = "本村（居）委会";
-        private static String D82 = "本乡（镇、街道）其他村（居）委会";
-        private static String D83 = "本县（市、区、旗）其他乡（镇、街道）";
-        private static String D84 = "其他县（市、区、旗），请在下面填写地址";
-        private static String D85 = "户口待定";
 
 
         private List<List<ExportHouseHoldDataVO>> personInfoList;
@@ -347,7 +344,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             this.end = end;
         }
 
-        private List<ExportHouseHoldVO> dealExportHouseHoldDataVO(int start,int end){
+        private List<ExportHouseHoldVO> dealExportHouseHoldDataVO(int start, int end) {
             ArrayList<ExportHouseHoldVO> exportHouseHoldVOS = new ArrayList<>();
             for (; start < end; start++) {
                 List<ExportHouseHoldDataVO> exportHouseHoldDataVOList = this.personInfoList.get(start);
@@ -357,11 +354,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 //设置户主姓名
                 exportHouseHoldVO.setM4(getM4(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM5(exportHouseHoldDataVO.getH2Live());
-                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM6(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D71, D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM7(getM7(exportHouseHoldDataVOList));
-                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D71,D85).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM8(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D71, D85).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM9(exportHouseHoldDataVO.getH2NoLive());
-                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR,D72,D81).equals(item.getD7AndD8())).count());
+                exportHouseHoldVO.setM10(exportHouseHoldDataVOList.stream().filter(item -> StrUtil.join(CensusConstant.JOIN_CHAR, D72, D81).equals(item.getD7AndD8())).count());
                 exportHouseHoldVO.setM11(getM11(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM12(exportHouseHoldDataVO.getH3());
                 exportHouseHoldVO.setM13(exportHouseHoldDataVO.getH4());
@@ -371,16 +368,16 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             return exportHouseHoldVOS;
         }
 
-        private String getM4(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private String getM4(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             for (ExportHouseHoldDataVO exportHouseHoldDataVO : exportHouseHoldDataVOList) {
-                if("户主".endsWith(exportHouseHoldDataVO.getD2())){
+                if ("户主".endsWith(exportHouseHoldDataVO.getD2())) {
                     return exportHouseHoldDataVO.getD1();
                 }
             }
             return "无";
         }
 
-        private long getM7(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private long getM7(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             return exportHouseHoldDataVOList.stream().filter(new Predicate<ExportHouseHoldDataVO>() {
                 @Override
                 public boolean test(ExportHouseHoldDataVO exportHouseHoldDataVO) {
@@ -391,7 +388,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             }).count();
         }
 
-        private long getM11(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList){
+        private long getM11(List<ExportHouseHoldDataVO> exportHouseHoldDataVOList) {
             return exportHouseHoldDataVOList.stream().filter(new Predicate<ExportHouseHoldDataVO>() {
                 @Override
                 public boolean test(ExportHouseHoldDataVO exportHouseHoldDataVO) {
@@ -401,10 +398,11 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 }
             }).count();
         }
+
         @Override
         protected List<ExportHouseHoldVO> compute() {
             if ((end - start) <= THRESHOLD) {
-                return dealExportHouseHoldDataVO(start,end);
+                return dealExportHouseHoldDataVO(start, end);
             }
 
             int middle = (start + end) / 2;
@@ -423,21 +421,129 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfo = roomAddressMapper.findExportHouseHoldAndPersonInfo(censusSurveyQueryQO);
         List<ExportHouseHoldAndPersonInfoVO> result = new ArrayList<>(exportHouseHoldAndPersonInfo.size() * 2);
         int index = 1;
-        Set<Integer> container = new HashSet<>();
+        List<Integer> idList = new ArrayList<>();
+        Set<Integer> idSet = new HashSet<>();
         for (ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO : exportHouseHoldAndPersonInfo) {
-            if(container.contains(exportHouseHoldAndPersonInfoVO.getRoomAddressId())){
-                dealMerge(exportHouseHoldAndPersonInfoVO);
-
+            if(!idSet.contains(exportHouseHoldAndPersonInfoVO.getRoomAddressId())){
+                idSet.add(exportHouseHoldAndPersonInfoVO.getRoomAddressId());
+                idList.add(exportHouseHoldAndPersonInfoVO.getRoomAddressId());
             }
-            exportHouseHoldAndPersonInfoVO.setIndex(index++);
-            result.add(exportHouseHoldAndPersonInfoVO);
-            container.add(exportHouseHoldAndPersonInfoVO.getRoomAddressId());
+
+        }
+        Map<Integer, List<ExportHouseHoldAndPersonInfoVO>> integerListMap = exportHouseHoldAndPersonInfo.stream().collect(Collectors.groupingBy(ExportHouseHoldAndPersonInfoVO::getRoomAddressId));
+        for (Integer id : idList) {
+            List<ExportHouseHoldAndPersonInfoVO> tempResultList = new ArrayList<>();
+            List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOS = integerListMap.get(id);
+            ExportHouseHoldAndPersonInfoVO first = null;
+            ExportHouseHoldAndPersonInfoVO second = null;
+            for (ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO : exportHouseHoldAndPersonInfoVOS) {
+                exportHouseHoldAndPersonInfoVO.setIndex(index++);
+                if (first ==  null && "户主".equals(exportHouseHoldAndPersonInfoVO.getD2())) {
+                    first = exportHouseHoldAndPersonInfoVO;
+                } else if (second == null && "配偶".equals(exportHouseHoldAndPersonInfoVO.getD2())) {
+                    second = exportHouseHoldAndPersonInfoVO;
+                } else {
+                    tempResultList.add(dealMerge(exportHouseHoldAndPersonInfoVO));
+                }
+            }
+
+            Boolean isFirstNull = first == null;
+            if (first == null) {
+                first = exportHouseHoldAndPersonInfoVOS.get(0);
+            }
+
+            first.setH2LiveCompare(getH2LiveCompare(exportHouseHoldAndPersonInfoVOS));
+            first.setH2Live(getH2LiveCompare(exportHouseHoldAndPersonInfoVOS).toString());
+
+            first.setH2NoLiveCompare(getH2NoLiveCompare(exportHouseHoldAndPersonInfoVOS));
+            first.setH2NoLive(getH2NoLiveCompare(exportHouseHoldAndPersonInfoVOS).toString());
+
+            first.setH2LiveCompareResult(getH2LiveCompareResult(first.getH2Live(), first.getH2LiveCompare().toString()));
+
+            first.setH2NoLiveCompareResult(getH2NoLiveCompareResult(first.getH2NoLive(), first.getH2NoLiveCompare().toString()));
+            if(isFirstNull){
+                tempResultList.remove(0);
+            }
+            if (second != null) {
+                second = dealMerge(second);
+                tempResultList.add(0, second);
+            }
+            if((Integer.parseInt(first.getH2Live())+Integer.parseInt(first.getH2NoLive()) == 1)){
+                first.setH1("家庭户");
+            }
+            first.setH3Man(getH3Man(exportHouseHoldAndPersonInfoVOS).toString());
+            first.setH3Woman(getH3Woman(exportHouseHoldAndPersonInfoVOS).toString());
+            tempResultList.add(0, first);
+
+            result.addAll(tempResultList);
         }
         return result;
     }
 
-    private ExportHouseHoldAndPersonInfoVO dealMerge(ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO){
-        exportHouseHoldAndPersonInfoVO.setCommunity("");
+    /**
+     *                and zmn_census_person_info.d4 = '男' and zmn_census_person_info.d5 >='2019-11-1' and zmn_census_person_info <='2020-10-31' );
+     * @param exportHouseHoldAndPersonInfoVOS
+     * @return
+     */
+
+    private static final String startTime = "2019-10";
+    private static final String endTime = "2020-11";
+
+    private Long getH3Man(List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOS) {
+        return exportHouseHoldAndPersonInfoVOS.stream().filter(new Predicate<ExportHouseHoldAndPersonInfoVO>() {
+            @Override
+            public boolean test(ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO) {
+                String d4 = exportHouseHoldAndPersonInfoVO.getD4();
+                String d5 = exportHouseHoldAndPersonInfoVO.getD5();
+                return "男".equals(d4) && (d5.compareTo(startTime) > 0) && (endTime.compareTo(d5) > 0);
+            }
+        }).count();
+    }
+
+    private Long getH3Woman(List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOS) {
+        return exportHouseHoldAndPersonInfoVOS.stream().filter(new Predicate<ExportHouseHoldAndPersonInfoVO>() {
+            @Override
+            public boolean test(ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO) {
+                String d4 = exportHouseHoldAndPersonInfoVO.getD4();
+                String d5 = exportHouseHoldAndPersonInfoVO.getD5();
+                return "女".equals(d4) && (d5.compareTo(startTime) > 0) && (endTime.compareTo(d5) > 0);
+            }
+        }).count();
+    }
+
+    private Long getH2LiveCompare(List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOS) {
+        return exportHouseHoldAndPersonInfoVOS.stream().filter(new Predicate<ExportHouseHoldAndPersonInfoVO>() {
+            @Override
+            public boolean test(ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO) {
+                String d7 = exportHouseHoldAndPersonInfoVO.getD7();
+                return D71.equals(d7);
+            }
+        }).count();
+    }
+
+
+    private String getH2LiveCompareResult(String h2Live, String h2LiveCompare) {
+        return h2LiveCompare.equals(h2Live) ? "是" : "否";
+    }
+
+
+    private Long getH2NoLiveCompare(List<ExportHouseHoldAndPersonInfoVO> exportHouseHoldAndPersonInfoVOS) {
+        return exportHouseHoldAndPersonInfoVOS.stream().filter(new Predicate<ExportHouseHoldAndPersonInfoVO>() {
+            @Override
+            public boolean test(ExportHouseHoldAndPersonInfoVO exportHouseHoldDataVO) {
+                String d7 = exportHouseHoldDataVO.getD7();
+                String d8 = exportHouseHoldDataVO.getD8();
+                return !D71.equals(d7) && D81.equals(d8);
+            }
+        }).count();
+    }
+
+    private String getH2NoLiveCompareResult(String h2NoLive, String h2NoLiveCompare) {
+        return h2NoLiveCompare.equals(h2NoLive) ? "是" : "否";
+    }
+
+    private ExportHouseHoldAndPersonInfoVO dealMerge(ExportHouseHoldAndPersonInfoVO exportHouseHoldAndPersonInfoVO) {
+//        exportHouseHoldAndPersonInfoVO.setCommunity("");
         exportHouseHoldAndPersonInfoVO.setBuildNum("");
         exportHouseHoldAndPersonInfoVO.setUnitNum("");
         exportHouseHoldAndPersonInfoVO.setFloorNum("");

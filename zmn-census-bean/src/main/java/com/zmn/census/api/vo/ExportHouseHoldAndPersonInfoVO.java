@@ -43,9 +43,16 @@ public class ExportHouseHoldAndPersonInfoVO{
     private String h1;
     @ExcelProperty("本户应登记人数,2020年10月31日晚居住本户的人数")
     private String h2Live;
-
+    @ExcelProperty("h2居住核对数")
+    private Long h2LiveCompare;
+    @ExcelProperty("h2居住核对数核对结果")
+    private String h2LiveCompareResult;
     @ExcelProperty("户口在本户，2020年10月31日晚未住本户的人数")
     private String h2NoLive;
+    @ExcelProperty("h2未居住核对数")
+    private Long h2NoLiveCompare;
+    @ExcelProperty("h2未居住核对数核对结果")
+    private String h2NoLiveCompareResult;
     @ExcelProperty("户2019年11月1日至2020年10月31日期间的出生人口,男人")
     private String h3Man;
     @ExcelProperty("本户2019年11月1日至2020年10月31日期间的出生人口,女人")
