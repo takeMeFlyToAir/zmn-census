@@ -275,6 +275,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 exportHouseHoldVO.setRoomNum(exportHouseHoldDataVO.getRoomNum());
                 exportHouseHoldVO.setM3(exportHouseHoldDataVO.getM3());
                 exportHouseHoldVO.setCreatedDateStr(exportHouseHoldDataVO.getCreatedDateStr());
+                exportHouseHoldVO.setExaminePersonName(exportHouseHoldDataVO.getExaminePersonName());
                 //设置户主姓名
                 exportHouseHoldVO.setM4(getM4(exportHouseHoldDataVOList));
                 exportHouseHoldVO.setM5(exportHouseHoldDataVO.getH2Live());

@@ -25,6 +25,17 @@ public class ExportHouseHoldVO {
     @ColumnWidth(20)
     private Integer roomAddressId;
 
+
+    @ExcelProperty("创建时间")
+    @ColumnWidth(20)
+    private String createdDateStr;
+
+
+    @ExcelProperty("普查员")
+    @ColumnWidth(20)
+    private String examinePersonName;
+
+
     @ExcelProperty("园办")
     @ColumnWidth(20)
     private String area;
@@ -82,10 +93,6 @@ public class ExportHouseHoldVO {
     @ExcelProperty("m16")
     @ColumnWidth(15)
     private String m16;
-
-    @ExcelProperty("创建时间")
-    @ColumnWidth(20)
-    private String createdDateStr;
 
     public Integer getBuildNumInt() {
         Integer buildNumInt = 0;

@@ -40,6 +40,7 @@
 
     <resultMap type="com.zmn.census.api.vo.ExportHouseHoldDataVO" id="ExportHouseHoldDataMap">
         <result property="createdDate" column="createdDate" />
+        <result property="examinePersonName" column="examinePersonName" />
         <result property="roomAddressId" column="roomAddressId" />
         <result property="area" column="area" />
         <result property="community" column="community" />
@@ -97,6 +98,8 @@
         <result property="d10" column="d10" jdbcType="VARCHAR"/>
         <result property="d11" column="d11" jdbcType="VARCHAR"/>
         <result property="d12" column="d12" jdbcType="VARCHAR"/>
+        <result property="createdDate" column="created_date" />
+        <result property="examinePersonName" column="examine_person_name" />
     </resultMap>
 
     <select id="findCensusSurveyVOList" resultMap="CensusSurveyInfoMap">
@@ -243,7 +246,7 @@
     <select id="findExportHouseHoldInfo" resultMap="ExportHouseHoldDataMap">
        select zcra.id as roomAddressId, zcra.area as area,zcra.community as community, zcra.build_num as buildNum,zcra.unit_num as unitNum,zcra.floor_num as floorNum,zcra.room_num as roomNum,
         zcra.created_date as createdDate,
-        zcra.fill_person_phone as fillPersonPhone,
+        zcra.fill_person_phone as fillPersonPhone, zcra.examine_person_name as examinePersonName,
        zchh.h2_live as h2Live,zchh.h2_no_live as h2NoLive, zchh.h3_man as h3Man, zchh.h3_woman as h3Woman,
        zchh.h4_man as h4Man, zchh.h4_woman as h4Woman,
         zcpi.d1 as d1, zcpi.d2 as d2,zcpi.d7 as d7, zcpi.d8 as d8

@@ -1,9 +1,12 @@
 package com.zmn.census.api.vo;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @ClassName ExportHouseHoldAndPersonInfoVO
@@ -22,6 +25,15 @@ public class ExportHouseHoldAndPersonInfoVO{
     @ExcelProperty("唯一编号")
     @ColumnWidth(20)
     private Integer roomAddressId;
+
+
+    @ExcelProperty("创建时间")
+    @ColumnWidth(20)
+    private String createdDateStr;
+
+    @ExcelProperty("普查员")
+    @ColumnWidth(20)
+    private String examinePersonName;
 
     @ExcelProperty("小区名称")
     @ColumnWidth(20)
@@ -126,5 +138,20 @@ public class ExportHouseHoldAndPersonInfoVO{
     @ExcelProperty("是否识字")
     private String d12;
 
+
+    /**
+     * 创建日期
+     */
+    private Date createdDate;
+
+
+
+
+    public String getCreatedDateStr() {
+        if(this.createdDate != null){
+            return DateUtil.formatDateTime(this.createdDate);
+        }
+        return "";
+    }
 
 }

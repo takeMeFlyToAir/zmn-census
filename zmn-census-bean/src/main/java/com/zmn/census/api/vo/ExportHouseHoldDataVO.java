@@ -26,6 +26,8 @@ public class ExportHouseHoldDataVO {
      */
     private Date createdDate;
 
+    private String examinePersonName;
+
     private Integer roomAddressId;
 
     private String area;
