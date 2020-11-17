@@ -320,6 +320,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 exportHouseHoldVO.setH18(exportHouseHoldDataVO.getH18());
                 exportHouseHoldVO.setH19(exportHouseHoldDataVO.getH19());
                 exportHouseHoldVO.setH20(exportHouseHoldDataVO.getH20());
+                exportHouseHoldVO.setH21(exportHouseHoldDataVO.getH21());
                 exportHouseHoldVOS.add(exportHouseHoldVO);
             }
             return exportHouseHoldVOS;
@@ -604,6 +605,7 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         exportHouseHoldAndPersonInfoVO.setH18("");
         exportHouseHoldAndPersonInfoVO.setH19("");
         exportHouseHoldAndPersonInfoVO.setH20("");
+        exportHouseHoldAndPersonInfoVO.setH21("");
         return exportHouseHoldAndPersonInfoVO;
     }
 }

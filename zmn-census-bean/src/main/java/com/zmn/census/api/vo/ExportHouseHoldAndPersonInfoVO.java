@@ -107,6 +107,8 @@ public class ExportHouseHoldAndPersonInfoVO{
     private String h19;
     @ExcelProperty("拥有全部家用汽车的总价")
     private String h20;
+    @ExcelProperty("住房所在建筑的总层数")
+    private String h21;
 
     @ExcelProperty("姓名")
     private String d1;

@@ -55,5 +55,6 @@ public class HouseHoldEntity  extends BaseEntity {
     private String h18;
     private String h19;
     private String h20;
+    private String h21;
 
 }

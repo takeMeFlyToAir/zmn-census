@@ -4,7 +4,7 @@
     <van-form @submit="onSubmit" @failed="onFailed">
       <div class="div_top">
         <div class="div_top_text">
-          人口普查抽样
+          浐灞生态区第七次人口普查长表
         </div>
       </div>
       <div class="div_content">
@@ -201,7 +201,7 @@
               </van-popup>
             </div>
             <div class="houseHold_item">
-              <p class="houseHold_title">H14.住房内有无管道自来水：</p>
+              <p class="houseHold_title">H14.住房内有无自来水管道：</p>
               <van-field :disabled='submitButtonDisable' required readonly clickable :value="houseHold.h14"
                          label-width="5em" placeholder="请选择" @click="showPickerH14 = true"
                          :rules="[{ required: true, message:'请选择住房内有无管道自来水' }]"
@@ -309,6 +309,22 @@
                   :columns="h20List"
                   @cancel="showPickerH20 = false"
                   @confirm="choiceH20"
+                />
+              </van-popup>
+            </div>
+            <div class="houseHold_item">
+              <p class="houseHold_title">H21.住房所在建筑的总层数：</p>
+              <van-field :disabled='submitButtonDisable' required readonly clickable :value="houseHold.h21"
+                         label-width="5em" placeholder="请选择" @click="showPickerH21 = true"
+                         :rules="[{ required: true, message:'请选择住房所在建筑的总层数' }]"
+              />
+              <van-popup v-model="showPickerH21" round position="bottom">
+                <van-picker
+                  title="住房所在建筑的总层数"
+                  show-toolbar
+                  :columns="h21List"
+                  @cancel="showPickerH21 = false"
+                  @confirm="choiceH21"
                 />
               </van-popup>
             </div>
@@ -501,44 +517,47 @@
                     />
                   </van-popup>
                 </div>
-             <div>
-               <van-field :disabled='submitButtonDisable' required readonly clickable label="D20.工作情况：(10月25—31日是否为取得收入而工作了一小时以上（包括临时工、依托互联网灵活就业、家庭经营无酬帮工）)" :value="item.d20" label-width="8em" placeholder="请选择"
-                          @click="recordCurrentPersonInfoIndex(index,'showPickerD20')"
-                          :rules="[{ required: true ,message:'请选择'}]"
-               />
-               <van-popup v-model="item.showPickerD20" round position="bottom">
-                 <van-picker
-                   title="工作情况"
-                   show-toolbar
-                   :columns="d20List"
-                   @cancel="item.showPickerD20 = false"
-                   @confirm="choiceD20"
-                 />
-               </van-popup>
-               <div v-if="item.isShowD20Other" style="margin-left: 50px">
-                 <van-field :disabled='submitButtonDisable' type="number" required v-model="item.d20Hour" label="上周工作时间-小时"
-                            label-width="8em" placeholder="输入小时数"
-                            :rules="[{ required: true }]"
-                 />
-               </div>
-             </div>
-              <div v-if="item.isShowD21">
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D21.工作单位或生产经营活动所属类型："
-                           :value="item.d21" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD21')"
-                           :rules="[{ required: true ,message:'请选择'}]"
-                />
-                <van-popup v-model="item.showPickerD21" round position="bottom">
-                  <van-picker
-                    title="工作单位或生产经营活动所属类型"
-                    show-toolbar
-                    :columns="d21List"
-                    @cancel="item.showPickerD21 = false"
-                    @confirm="choiceD21"
+                <div v-if="item.d5 < '2015-11'">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable
+                             label="D20.工作情况：(10月25—31日是否为取得收入而工作了一小时以上（包括临时工、依托互联网灵活就业、家庭经营无酬帮工）)" :value="item.d20"
+                             label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD20')"
+                             :rules="[{ required: true ,message:'请选择'}]"
                   />
-                </van-popup>
-              </div>
-                <div v-if="item.isShowD22">
+                  <van-popup v-model="item.showPickerD20" round position="bottom">
+                    <van-picker
+                      title="工作情况"
+                      show-toolbar
+                      :columns="d20List"
+                      @cancel="item.showPickerD20 = false"
+                      @confirm="choiceD20"
+                    />
+                  </van-popup>
+                  <div v-if="item.isShowD20Other" style="margin-left: 50px">
+                    <van-field :disabled='submitButtonDisable' type="number" required v-model="item.d20Hour"
+                               label="上周工作时间-小时"
+                               label-width="8em" placeholder="输入小时数"
+                               :rules="[{ required: true }]"
+                    />
+                  </div>
+                </div>
+                <div v-if="item.isShowD21 && item.d5 < '2015-11'">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D21.工作单位或生产经营活动所属类型："
+                             :value="item.d21" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD21')"
+                             :rules="[{ required: true ,message:'请选择'}]"
+                  />
+                  <van-popup v-model="item.showPickerD21" round position="bottom">
+                    <van-picker
+                      title="工作单位或生产经营活动所属类型"
+                      show-toolbar
+                      :columns="d21List"
+                      @cancel="item.showPickerD21 = false"
+                      @confirm="choiceD21"
+                    />
+                  </van-popup>
+                </div>
+                <div v-if="item.isShowD22 && item.d5 < '2015-11'">
                   <van-field v-model="item.d22Name" required label-width="8em" label="D22.行业:单位详细名称："
                              :rules="[{ required: true ,message:'请填写'}]"
 
@@ -550,7 +569,7 @@
                   >
                   </van-field>
                 </div>
-                <div v-if="item.isShowD23">
+                <div v-if="item.isShowD23 && item.d5 < '2015-11'">
                   <van-field :disabled='submitButtonDisable' v-model="item.d23" required label-width="8em"
                              :rules="[{ required: true ,message:'请填写'}]"
                              @blur="choiceD23(index)"
@@ -558,60 +577,87 @@
                   </van-field>
                 </div>
 
-              <div v-if="item.isShowD24">
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D24.未工作原因："
-                           :value="item.d24" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD24')"
-                           :rules="[{ required: true ,message:'请选择'}]"
-                />
-                <van-popup v-model="item.showPickerD24" round position="bottom">
-                  <van-picker
-                    title="未工作原因"
-                    show-toolbar
-                    :columns="d24List"
-                    @cancel="item.showPickerD24 = false"
-                    @confirm="choiceD24"
+                <div v-if="item.isShowD24 && item.d5 < '2015-11'">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D24.未工作原因："
+                             :value="item.d24" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD24')"
+                             :rules="[{ required: true ,message:'请选择'}]"
                   />
-                </van-popup>
-              </div>
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D25.主要生活来源："
-                           :value="item.d25" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD25')"
-                           :rules="[{ required: true ,message:'请选择'}]"
-                />
-                <van-popup v-model="item.showPickerD25" round position="bottom">
-                  <van-picker
-                    title="主要生活来源"
-                    show-toolbar
-                    :columns="d25List"
-                    @cancel="item.showPickerD25 = false"
-                    @confirm="choiceD25"
+                  <van-popup v-model="item.showPickerD24" round position="bottom">
+                    <van-picker
+                      title="未工作原因"
+                      show-toolbar
+                      :columns="d24List"
+                      @cancel="item.showPickerD24 = false"
+                      @confirm="choiceD24"
+                    />
+                  </van-popup>
+                </div>
+                <div v-if="item.d5 < '2015-11'">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D25.主要生活来源："
+                             :value="item.d25" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD25')"
+                             :rules="[{ required: true ,message:'请选择'}]"
                   />
-                </van-popup>
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D26.婚姻状况："
-                           :value="item.d26" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD26')"
-                           :rules="[{ required: true ,message:'请选择'}]"
-                />
-                <van-popup v-model="item.showPickerD26" round position="bottom">
-                  <van-picker
-                    title="婚姻状况"
-                    show-toolbar
-                    :columns="d26List"
-                    @cancel="item.showPickerD26 = false"
-                    @confirm="choiceD26"
-                  />
-                </van-popup>
-                <div v-if="item.isShowD27">
-                  <van-field :disabled='submitButtonDisable' required type="number" v-model="item.d27Year" required label-width="8em"
-                             :rules="[{ required: true ,message:'请填写'}]"
+                  <van-popup v-model="item.showPickerD25" round position="bottom">
+                    <van-picker
+                      title="主要生活来源"
+                      show-toolbar
+                      :columns="d25List"
+                      @cancel="item.showPickerD25 = false"
+                      @confirm="choiceD25"
+                    />
+                  </van-popup>
+                </div>
 
-                             label="D27.初婚:年：">
-                  </van-field>
-                  <van-field :disabled='submitButtonDisable' required type="number" v-model="item.d27Month" required label-width="8em"
-                             :rules="[{ required: true ,message:'请填写'}]"
-                             label="D27.初婚:月：">
-                  </van-field>
+                <div v-if="item.d5 < '2015-11'">
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D26.婚姻状况："
+                             :value="item.d26" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD26')"
+                             :rules="[{ required: true ,message:'请选择'}]"
+                  />
+                  <van-popup v-model="item.showPickerD26" round position="bottom">
+                    <van-picker
+                      title="婚姻状况"
+                      show-toolbar
+                      :columns="d26List"
+                      @cancel="item.showPickerD26 = false"
+                      @confirm="choiceD26"
+                    />
+                  </van-popup>
+                </div>
+
+
+                <div v-if="item.isShowD27 && item.d5 < '2015-11'">
+
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D27.初婚："  name="初婚年月"  :value="item.d27" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD27')"
+                             :rules="[{ required: true,message:'请选择初婚年月' }]"
+                  />
+                  <van-popup v-model="item.showPickerD27" round position="bottom">
+                    <van-datetime-picker
+                      v-model="currentDate"
+                      type="year-month"
+                      title="选择年月"
+                      :min-date="minDate"
+                      :max-date="maxDate"
+                      :formatter="formatter"
+                      @cancel="item.showPickerD27 = false"
+                      @confirm="choiceD27"
+                    />
+                  </van-popup>
+
+<!--                  <van-field :disabled='submitButtonDisable' required type="number"  v-model="item.d27Year" required-->
+<!--                             label-width="8em"-->
+<!--                             :rules="[{ required: true ,message:'请填写'}]"-->
+
+<!--                             label="D27.初婚:年：">-->
+<!--                  </van-field>-->
+<!--                  <van-field :disabled='submitButtonDisable' required type="number" v-model="item.d27Month" required-->
+<!--                             label-width="8em"-->
+<!--                             :rules="[{ required: true ,message:'请填写'}]"-->
+<!--                             label="D27.初婚:月：">-->
+<!--                  </van-field>-->
                 </div>
                 <div v-if="item.isShowD28 && (item.d5 > '1955-10' && item.d5 < '2005-11') && item.d4=='女'">
                   <van-field :disabled='submitButtonDisable' required readonly clickable label="D28.生育子女数："
@@ -629,16 +675,20 @@
                     />
                   </van-popup>
                   <div v-if="item.isShowD28Other" style="margin-left: 50px">
-                    <van-field :disabled='submitButtonDisable' required v-model="item.d28BirthMan" label="D28.生过几个孩子:男"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' required v-model="item.d28BirthMan" label="D28.生过几个孩子:男"
+                               label-width="8em" placeholder="输入" type="number"
                                :rules="[{ required: true }]"
                     />
-                    <van-field :disabled='submitButtonDisable' required v-model="item.d28BirthWoman" label="D28.生过几个孩子:女"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' required v-model="item.d28BirthWoman"
+                               label="D28.生过几个孩子:女" label-width="8em" placeholder="输入" type="number"
                                :rules="[{ required: true }]"
                     />
-                    <van-field :disabled='submitButtonDisable' required v-model="item.d28LiveMan" label="D28.其中现在存活几个孩子:男"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' required v-model="item.d28LiveMan"
+                               label="D28.其中现在存活几个孩子:男" label-width="8em" placeholder="输入" type="number"
                                :rules="[{ required: true }]"
                     />
-                    <van-field :disabled='submitButtonDisable' required v-model="item.d28LiveWoman" label="D28.其中现在存活几个孩子:女"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' required v-model="item.d28LiveWoman"
+                               label="D28.其中现在存活几个孩子:女" label-width="8em" placeholder="输入" type="number"
                                :rules="[{ required: true }]"
                     />
                   </div>
@@ -660,10 +710,13 @@
                     />
                   </van-popup>
                   <div v-if="item.isShowD29Other" style="margin-left: 50px">
-                    <van-field :disabled='submitButtonDisable' required v-model="item.d29FirstBirth" type="number" label="D29.生育时间:月"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' required v-model="item.d29FirstBirth" type="number"
+                               label="D29.生育时间:月" label-width="8em" placeholder="输入"
                                :rules="[{ required: true }]"
                     />
-                    <van-field :disabled='submitButtonDisable' required readonly clickable label="婴儿性别是：" name="性别" :value="item.d29FirstGender" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD29FirstGender')"
+                    <van-field :disabled='submitButtonDisable' required readonly clickable label="婴儿性别是：" name="性别"
+                               :value="item.d29FirstGender" label-width="8em" placeholder="请选择"
+                               @click="recordCurrentPersonInfoIndex(index,'showPickerD29FirstGender')"
                                :rules="[{ required: true ,message:'请选择性别'}]"
                     />
                     <van-popup v-model="item.showPickerD29FirstGender" round position="bottom">
@@ -676,9 +729,12 @@
                       />
                     </van-popup>
 
-                    <van-field :disabled='submitButtonDisable'  v-model="item.d29SecondBirth" type="number" label="D29.如果一年内有两次生育或生育多胞胎的，请填报其他孩子的:月"  label-width="8em" placeholder="输入"
+                    <van-field :disabled='submitButtonDisable' v-model="item.d29SecondBirth" type="number"
+                               label="D29.如果一年内有两次生育或生育多胞胎的，请填报其他孩子的:月" label-width="8em" placeholder="输入"
                     />
-                    <van-field :disabled='submitButtonDisable'  readonly clickable label="婴儿性别是：" name="性别" :value="item.d29SecondGender" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD29SecondGender')"
+                    <van-field :disabled='submitButtonDisable' readonly clickable label="婴儿性别是：" name="性别"
+                               :value="item.d29SecondGender" label-width="8em" placeholder="请选择"
+                               @click="recordCurrentPersonInfoIndex(index,'showPickerD29SecondGender')"
                     />
                     <van-popup v-model="item.showPickerD29SecondGender" round position="bottom">
                       <van-picker
@@ -710,20 +766,23 @@
                     />
                   </van-popup>
                 </div>
-                <van-field :disabled='submitButtonDisable' required readonly clickable label="D31.身体健康状况："
-                           :value="item.d31" label-width="8em" placeholder="请选择"
-                           @click="recordCurrentPersonInfoIndex(index,'showPickerD31')"
-                           :rules="[{ required: true ,message:'请选择'}]"
-                />
-                <van-popup v-model="item.showPickerD31" round position="bottom">
-                  <van-picker
-                    title="身体健康状况"
-                    show-toolbar
-                    :columns="d31List"
-                    @cancel="item.showPickerD31 = false"
-                    @confirm="choiceD31"
+                <div v-if="item.d5 < '1960-11' ">
+
+                  <van-field :disabled='submitButtonDisable' required readonly clickable label="D31.身体健康状况："
+                             :value="item.d31" label-width="8em" placeholder="请选择"
+                             @click="recordCurrentPersonInfoIndex(index,'showPickerD31')"
+                             :rules="[{ required: true ,message:'请选择'}]"
                   />
-                </van-popup>
+                  <van-popup v-model="item.showPickerD31" round position="bottom">
+                    <van-picker
+                      title="身体健康状况"
+                      show-toolbar
+                      :columns="d31List"
+                      @cancel="item.showPickerD31 = false"
+                      @confirm="choiceD31"
+                    />
+                  </van-popup>
+                </div>
               </van-collapse-item>
             </van-collapse>
 
@@ -733,7 +792,8 @@
             <template #title>
               <div>其他信息</div>
             </template>
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em"
+            <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名："
+                       label-width="8em"
                        placeholder="输入姓名"
             />
             <van-field
@@ -773,10 +833,11 @@
 
 <script>
 import {
-  community_getById,
+  community_getById
 } from '@/api/community.js'
 import { censusSurvey_update, censusSurvey_getById } from '@/api/censusSurvey.js'
 import { mapGetters } from 'vuex'
+import { formatDate } from '@/utils'
 
 export default {
   inject: ['reload'],
@@ -883,11 +944,9 @@ export default {
         '1000-1999元',
         '2000-2999元',
         '3000-3999元',
-        '4000-4999元',
-        '6000-5999元',
+        '4000-5999元',
         '6000-7999元',
-        '8000-8999元',
-        '9000-9999元',
+        '8000-9999元',
         '10000元以上'
       ],
       h20List: [
@@ -898,6 +957,12 @@ export default {
         '50万元以上，不满100万元',
         '100万元以上',
         '没有汽车'
+      ],
+      h21List: [
+        '平房',
+        '多层（7层及以下）',
+        '高层（8-33层）',
+        '超高层（34层及以上）',
       ],
       isShowH19: true,
       showPickerH10: false,
@@ -911,6 +976,7 @@ export default {
       showPickerH18: false,
       showPickerH19: false,
       showPickerH20: false,
+      showPickerH21: false,
       houseHold: {
         h1: '',//户别
         h2Live: '0',//本户应登记人数,2020年10月31日晚居住本户的人数 _____人
@@ -934,7 +1000,8 @@ export default {
         h17: '',
         h18: '',
         h19: '',
-        h20: ''
+        h20: '',
+        h21: ''
       },
       activePersonInfoList: [],
       currentPersonInfoIndex: null,
@@ -1052,8 +1119,8 @@ export default {
         isShowD27: true,
         isShowD28: true,
         isShowD29: true,
-        isShowD28Other:false,
-        isShowD29Other:false,
+        isShowD28Other: false,
+        isShowD29Other: false,
         showPickerD13: false,
         showPickerD14: false,
         showPickerD15: false,
@@ -1066,6 +1133,7 @@ export default {
         showPickerD24: false,
         showPickerD25: false,
         showPickerD26: false,
+        showPickerD27: false,
         showPickerD28: false,
         showPickerD29: false,
         showPickerD29FirstGender: false,
@@ -1110,13 +1178,14 @@ export default {
         d24: '',
         d25: '',
         d26: '',
+        d27: '',
         d27Year: '',
         d27Month: '',
         d28: '',
-        d28BirthMan:'',
-        d28BirthWoman:'',
-        d28LiveMan:'',
-        d28LiveWoman:'',
+        d28BirthMan: '',
+        d28BirthWoman: '',
+        d28LiveMan: '',
+        d28LiveWoman: '',
         d29: '',
         d29FirstBirth: '',
         d29FirstGender: '',
@@ -1152,6 +1221,7 @@ export default {
             if (res.data) {
               _this.personInfoList = []
               Object.assign(_this.roomAddress, res.data.roomAddress)
+              _this.roomAddress.examinePersonName=''
               Object.assign(_this.houseHold, res.data.houseHold)
               let tempPersonInfoList = res.data.personInfoList
               for (let i = 0; i < tempPersonInfoList.length; i++) {
@@ -1166,7 +1236,7 @@ export default {
               }
               let length = _this.personInfoList.length
               for (let i = 0; i < length; i++) {
-                _this.activePersonInfoList.splice(0,0,i)
+                _this.activePersonInfoList.splice(0, 0, i)
               }
             } else {
               this.$toast.fail('没查到对应的问卷，请检查唯一编码是否正确')
@@ -1306,6 +1376,10 @@ export default {
       this.houseHold.h20 = value
       this.showPickerH20 = false
     },
+    choiceH21(value, index) {
+      this.houseHold.h21 = value
+      this.showPickerH21 = false
+    },
 
     recordCurrentPersonInfoIndex(index, showPicker) {
       this.personInfoList[index][showPicker] = true
@@ -1353,7 +1427,7 @@ export default {
         this.personInfoList[this.currentPersonInfoIndex].isShowD20Other = true
       } else {
         this.personInfoList[this.currentPersonInfoIndex].isShowD20Other = false
-        this.personInfoList[this.currentPersonInfoIndex].d20Hour=''
+        this.personInfoList[this.currentPersonInfoIndex].d20Hour = ''
       }
       if (index == 2) {
         this.personInfoList[this.currentPersonInfoIndex].isShowD21 = false
@@ -1374,10 +1448,10 @@ export default {
     },
     choiceD23(index) {
       let value = this.personInfoList[index].d23
-      if(value){
+      if (value) {
         this.personInfoList[index].isShowD24 = false
         this.personInfoList[index].d24 = ''
-      }else {
+      } else {
         this.personInfoList[index].isShowD24 = true
       }
     },
@@ -1413,6 +1487,17 @@ export default {
         this.personInfoList[this.currentPersonInfoIndex].isShowD28 = true
         this.personInfoList[this.currentPersonInfoIndex].isShowD29 = true
       }
+    },
+    choiceD27(value, index) {
+      console.log(value)
+      let normalData = formatDate(value)
+      let yearAndMonth = normalData.split('-')
+      let year = yearAndMonth[0]
+      let month = yearAndMonth[1]
+      this.personInfoList[this.currentPersonInfoIndex].d27 = normalData
+      this.personInfoList[this.currentPersonInfoIndex].d27Year = year
+      this.personInfoList[this.currentPersonInfoIndex].d27Month = month
+      this.personInfoList[this.currentPersonInfoIndex].showPickerD27 = false
     },
     choiceD28(value, index) {
       this.personInfoList[this.currentPersonInfoIndex].d28 = value

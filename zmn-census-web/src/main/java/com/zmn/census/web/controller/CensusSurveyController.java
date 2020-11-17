@@ -42,7 +42,6 @@ public class CensusSurveyController {
     @ApiOperation("更新问卷")
     @PostMapping(value = "/update")
     public CommonResult update(@RequestBody CensusSurveySampleVO censusSurveySampleVO){
-        System.out.println(1111);
         censusSurveyService.update(censusSurveySampleVO);
         return CommonResult.success();
     }

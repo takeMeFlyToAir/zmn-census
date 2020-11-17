@@ -71,6 +71,7 @@ public class ExportHouseHoldDataVO {
     private String h18;
     private String h19;
     private String h20;
+    private String h21;
 
     @ApiModelProperty("姓名")
     private String d1;
