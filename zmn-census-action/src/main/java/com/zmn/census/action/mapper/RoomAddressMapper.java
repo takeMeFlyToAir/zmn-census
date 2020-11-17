@@ -21,6 +21,8 @@ public interface RoomAddressMapper extends MyMapper<RoomAddressEntity> {
 
     List<CensusSurveyVO> findCensusSurveyVOList(CensusSurveyQueryQO censusSurveyQueryQO);
 
+    CensusSurveyVO getCensusSurveyVO(Integer id);
+
     int selectAllCommunityCount();
 
     int selectAllSurveyCount();

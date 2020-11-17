@@ -60,6 +60,18 @@ public class ExportHouseHoldDataVO {
     @ApiModelProperty("本户2019年11月1日至2020年10月31日期间的死亡人口,女人")
     private Integer h4Woman;
 
+    private String h10;
+    private String h11;
+    private String h12;
+    private String h13;
+    private String h14;
+    private String h15;
+    private String h16;
+    private String h17;
+    private String h18;
+    private String h19;
+    private String h20;
+
     @ApiModelProperty("姓名")
     private String d1;
 

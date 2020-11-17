@@ -14,6 +14,8 @@ import lombok.Data;
 @Data
 public class RoomAddressVO extends BaseVO {
 
+    private String type;
+
     @ApiModelProperty("园办")
     private String area;
 

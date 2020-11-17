@@ -3,6 +3,7 @@ package com.zmn.census.action.api;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
 import com.zmn.census.api.vo.*;
+import com.zmn.census.api.vo.sample.CensusSurveySampleVO;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 
@@ -18,6 +19,10 @@ import java.util.List;
 public interface CensusSurveyService {
 
     void save(CensusSurveyAddVO censusSurveyAddVO);
+
+    void update(CensusSurveySampleVO censusSurveySampleVO);
+
+    CensusSurveyVO getById(Integer id);
 
     PagerResult<CensusSurveyVO> findPage(Pager<CensusSurveyQueryQO> pager);
 

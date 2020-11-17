@@ -19,6 +19,12 @@ export const constantRouterMap = [
         meta: { title: '人口普查', keepAlive: false }
       },
       {
+        path: '/censusSample',
+        name: 'censusSample',
+        component: () => import('@/views/censusSample/index'),
+        meta: { title: '人口普查抽样', keepAlive: false }
+      },
+      {
         path: '/home',
         name: 'Home',
         component: () => import('@/views/home/index'),

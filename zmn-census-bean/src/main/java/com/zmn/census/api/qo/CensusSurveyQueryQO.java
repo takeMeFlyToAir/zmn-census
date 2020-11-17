@@ -16,6 +16,9 @@ import lombok.Data;
 @Data
 public class CensusSurveyQueryQO {
 
+    @ExcelProperty("类型")
+    private String type;
+
     @ExcelProperty("唯一编号")
     private Integer roomAddressId;
 

@@ -28,6 +28,14 @@
       <br>
       <el-input v-model="listQuery.roomAddressId" placeholder="编号" style="width: 80px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
       <el-input v-model="listQuery.examinePersonName" placeholder="普查员" style="width: 100px;" class="filter-item" @keyup.enter.native="handleFilter" clearable @clear="handleFilter"  />
+      <el-select v-model="listQuery.type" placeholder="请选择问卷类型" style="width: 120px;"  @change="handleFilter" clearable @clear="handleFilter" >
+        <el-option
+          v-for="item in typeList"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
       <el-date-picker
         v-model="timeQuery"
         type="daterange"
@@ -513,6 +521,10 @@
           '世园',
           '雁鸣湖',
         ],
+        typeList:[
+          'sample',
+          'census',
+        ],
         userList:[],
         tableKey: 0,
         list: null,
@@ -525,6 +537,7 @@
           chargePersonId: "",
           roomAddressId: "",
           area: "",
+          type: "",
           town: "",
           village: "",
           community: "",
@@ -871,6 +884,9 @@
         }
         if(this.listQuery.town){
           param += "&town="+this.listQuery.town;
+        }
+        if(this.listQuery.type){
+          param += "&type="+this.listQuery.type;
         }
         if(this.listQuery.village){
           param += "&village="+this.listQuery.village;

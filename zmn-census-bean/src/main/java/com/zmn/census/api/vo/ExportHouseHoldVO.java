@@ -94,6 +94,31 @@ public class ExportHouseHoldVO {
     @ColumnWidth(15)
     private String m16;
 
+
+    @ExcelProperty("承重类型")
+    private String h10;
+    @ExcelProperty("住房建成年代")
+    private String h11;
+    @ExcelProperty("住房所在建筑有无电梯")
+    private String h12;
+    @ExcelProperty("主要炊事燃料")
+    private String h13;
+    @ExcelProperty("住房内有无管道自来水")
+    private String h14;
+    @ExcelProperty("住房内有无厨房")
+    private String h15;
+    @ExcelProperty("住房内有无厕所")
+    private String h16;
+    @ExcelProperty("住房内有无洗澡设施")
+    private String h17;
+    @ExcelProperty("住房来源")
+    private String h18;
+    @ExcelProperty("月租房费用")
+    private String h19;
+    @ExcelProperty("拥有全部家用汽车的总价")
+    private String h20;
+
+
     public Integer getBuildNumInt() {
         Integer buildNumInt = 0;
         try {

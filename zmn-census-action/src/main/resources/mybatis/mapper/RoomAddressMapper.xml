@@ -23,6 +23,7 @@
         <result property="fillPersonPhone" column="fill_person_phone" jdbcType="VARCHAR"/>
         <result property="examinePersonName" column="examine_person_name" jdbcType="VARCHAR"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
         <result property="deleted" column="deleted" jdbcType="INTEGER"/>
         <result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
         <result property="modifiedDate" column="modified_date" jdbcType="TIMESTAMP"/>
@@ -55,6 +56,17 @@
         <result property="h3Woman" column="h3Woman" />
         <result property="h4Man" column="h4Man" />
         <result property="h4Woman" column="h4Woman" />
+        <result property="h10" column="h10"/>
+        <result property="h11" column="h11"/>
+        <result property="h12" column="h12"/>
+        <result property="h13" column="h13"/>
+        <result property="h14" column="h14"/>
+        <result property="h15" column="h15"/>
+        <result property="h16" column="h16"/>
+        <result property="h17" column="h17"/>
+        <result property="h18" column="h18"/>
+        <result property="h19" column="h19"/>
+        <result property="h20" column="h20"/>
         <result property="d1" column="d1" />
         <result property="d2" column="d2" />
         <result property="d7" column="d7" />
@@ -80,6 +92,17 @@
         <result property="h7" column="h7" jdbcType="VARCHAR"/>
         <result property="h8" column="h8" jdbcType="VARCHAR"/>
         <result property="h9" column="h9" jdbcType="VARCHAR"/>
+        <result property="h10" column="h10"/>
+        <result property="h11" column="h11"/>
+        <result property="h12" column="h12"/>
+        <result property="h13" column="h13"/>
+        <result property="h14" column="h14"/>
+        <result property="h15" column="h15"/>
+        <result property="h16" column="h16"/>
+        <result property="h17" column="h17"/>
+        <result property="h18" column="h18"/>
+        <result property="h19" column="h19"/>
+        <result property="h20" column="h20"/>
         <result property="d1" column="d1" jdbcType="VARCHAR"/>
         <result property="d2" column="d2" jdbcType="VARCHAR"/>
         <result property="d3" column="d3" jdbcType="VARCHAR"/>
@@ -98,9 +121,48 @@
         <result property="d10" column="d10" jdbcType="VARCHAR"/>
         <result property="d11" column="d11" jdbcType="VARCHAR"/>
         <result property="d12" column="d12" jdbcType="VARCHAR"/>
+        <result property="d13" column="d13"/>
+        <result property="d14" column="d14"/>
+        <result property="d15" column="d15"/>
+        <result property="d15Province" column="d15_province"/>
+        <result property="d16" column="d16"/>
+        <result property="d16Province" column="d16_province"/>
+        <result property="d16City" column="d16_city"/>
+        <result property="d16County" column="d16_county"/>
+        <result property="d18" column="d18"/>
+        <result property="d20" column="d20"/>
+        <result property="d20Hour" column="d20_hour"/>
+        <result property="d21" column="d21"/>
+        <result property="d22Name" column="d22_name"/>
+        <result property="d22Business" column="d22_business"/>
+        <result property="d23" column="d23"/>
+        <result property="d24" column="d24"/>
+        <result property="d25" column="d25"/>
+        <result property="d26" column="d26"/>
+        <result property="d27Year" column="d27_year"/>
+        <result property="d27Month" column="d27_month"/>
+        <result property="d28" column="d28"/>
+        <result property="d28BirthMan" column="d28_birth_man"/>
+        <result property="d28BirthWoman" column="d28_birth_woman"/>
+        <result property="d28LiveMan" column="d28_live_man"/>
+        <result property="d28LiveWoman" column="d28_live_woman"/>
+        <result property="d29" column="d29"/>
+        <result property="d29FirstBirth" column="d29_first_birth"/>
+        <result property="d29FirstGender" column="d29_first_gender"/>
+        <result property="d29SecondBirth" column="d29_second_birth"/>
+        <result property="d29SecondGender" column="d29_second_gender"/>
+        <result property="d30" column="d30"/>
+        <result property="d31" column="d31"/>
         <result property="createdDate" column="created_date" />
         <result property="examinePersonName" column="examine_person_name" />
     </resultMap>
+
+    <select id="getCensusSurveyVO" resultMap="CensusSurveyInfoMap">
+        select
+        id
+        from zmn_census_room_address t1
+        where  t1.deleted =0 and t1.id= #{id,jdbcType=INTEGER}
+    </select>
 
     <select id="findCensusSurveyVOList" resultMap="CensusSurveyInfoMap">
         select
@@ -108,6 +170,9 @@
         from zmn_census_room_address t1
         <where>
             AND t1.deleted =0
+            <if test="type !=null and type!=''">
+                and t1.type= #{type,jdbcType=VARCHAR}
+            </if>
             <if test="roomAddressId !=null and roomAddressId!=''">
                 and t1.id= #{roomAddressId,jdbcType=INTEGER}
             </if>
@@ -204,6 +269,9 @@
             <if test="roomAddressId !=null and roomAddressId!=''">
                 and t1.id= #{roomAddressId,jdbcType=INTEGER}
             </if>
+            <if test="type !=null and type!=''">
+                and t1.type= #{type,jdbcType=VARCHAR}
+            </if>
             <if test="area !=null and area!=''">
                 AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
@@ -248,17 +316,20 @@
         zcra.created_date as createdDate,
         zcra.fill_person_phone as fillPersonPhone, zcra.examine_person_name as examinePersonName,
        zchh.h2_live as h2Live,zchh.h2_no_live as h2NoLive, zchh.h3_man as h3Man, zchh.h3_woman as h3Woman,
-       zchh.h4_man as h4Man, zchh.h4_woman as h4Woman,
+       zchh.h4_man as h4Man, zchh.h4_woman as h4Woman,zchh.h10,zchh.h11,zchh.h12,zchh.h13,zchh.h14,zchh.h15,zchh.h16,zchh.h17,zchh.h18,zchh.h19,zchh.h20,
         zcpi.d1 as d1, zcpi.d2 as d2,zcpi.d7 as d7, zcpi.d8 as d8
        from zmn_census_room_address zcra left join zmn_census_house_hold zchh on zcra.id = zchh.room_address_id
         left join zmn_census_person_info zcpi on zcra.id = zcpi.room_address_id
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
             <if test="roomAddressId !=null and roomAddressId!=''">
-                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+                and zcra.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
+            <if test="type !=null and type!=''">
+                and zcra.type= #{type,jdbcType=VARCHAR}
             </if>
             <if test="area !=null and area!=''">
-                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+                AND zcra.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
             <if test="town !=null and town!=''">
                 AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')
@@ -304,10 +375,13 @@
         <where>
             AND zcra.deleted = 0 and zcra.deleted = 0 and zcpi.deleted = 0
             <if test="roomAddressId !=null and roomAddressId!=''">
-                and t1.id= #{roomAddressId,jdbcType=INTEGER}
+                and zcra.id= #{roomAddressId,jdbcType=INTEGER}
+            </if>
+            <if test="type !=null and type!=''">
+                and zcra.type= #{type,jdbcType=VARCHAR}
             </if>
             <if test="area !=null and area!=''">
-                AND t1.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+                AND zcra.area LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
             </if>
             <if test="town !=null and town!=''">
                 AND zcra.town LIKE concat('%',#{town,jdbcType=VARCHAR},'%')

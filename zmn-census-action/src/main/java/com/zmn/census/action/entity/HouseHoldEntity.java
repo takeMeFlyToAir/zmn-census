@@ -44,4 +44,16 @@ public class HouseHoldEntity  extends BaseEntity {
     private String h8;
     private String h9;
 
+    private String h10;
+    private String h11;
+    private String h12;
+    private String h13;
+    private String h14;
+    private String h15;
+    private String h16;
+    private String h17;
+    private String h18;
+    private String h19;
+    private String h20;
+
 }

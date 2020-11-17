@@ -10,7 +10,9 @@ const api = {
     list:  '/community/list',
   },
   censusSurvey: {
-    save: '/censusSurvey/save'
+    save: '/censusSurvey/save',
+    update: '/censusSurvey/update',
+    getById: '/censusSurvey/getById'
   }
 }
 

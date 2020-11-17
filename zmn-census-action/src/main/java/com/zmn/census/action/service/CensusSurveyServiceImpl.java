@@ -14,6 +14,7 @@ import com.zmn.census.api.common.CensusConstant;
 import com.zmn.census.api.qo.CensusSurveyCountQO;
 import com.zmn.census.api.qo.CensusSurveyQueryQO;
 import com.zmn.census.api.vo.*;
+import com.zmn.census.api.vo.sample.CensusSurveySampleVO;
 import com.zmn.census.common.core.result.Pager;
 import com.zmn.census.common.core.result.PagerResult;
 import com.zmn.census.common.utils.object.VoAndBeanUtils;
@@ -67,9 +68,15 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
     private CommunityService communityService;
 
     @Override
+    public CensusSurveyVO getById(Integer id) {
+        return roomAddressMapper.getCensusSurveyVO(id);
+    }
+
+    @Override
     @Transactional
     public void save(CensusSurveyAddVO censusSurveyAddVO) {
         RoomAddressEntity roomAddressEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getRoomAddress(), RoomAddressEntity.class);
+        roomAddressEntity.setType("census");
         HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(censusSurveyAddVO.getHouseHold(), HouseHoldEntity.class);
         List<PersonInfoEntity> personInfoEntityList = VoAndBeanUtils.fromVOList(censusSurveyAddVO.getPersonInfoList(), PersonInfoEntity.class);
         CommunityVO communityVO = communityService.get(roomAddressEntity.getCommunityId());
@@ -87,6 +94,20 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
             communityService.updateCount(censusSurveyAddVO.getCommunityUpdateCountVO());
         }
         personInfoService.saveList(personInfoEntityList);
+    }
+
+    @Override
+    public void update(CensusSurveySampleVO censusSurveySampleVO) {
+        RoomAddressEntity roomAddressEntity = VoAndBeanUtils.fromVO(censusSurveySampleVO.getRoomAddress(), RoomAddressEntity.class);
+        roomAddressEntity.setType("sample");
+        HouseHoldEntity houseHoldEntity = VoAndBeanUtils.fromVO(censusSurveySampleVO.getHouseHold(), HouseHoldEntity.class);
+        List<PersonInfoEntity> personInfoEntityList = VoAndBeanUtils.fromVOList(censusSurveySampleVO.getPersonInfoList(), PersonInfoEntity.class);
+        roomAddressApi.updateNotNull(roomAddressEntity);
+        houseHoldService.updateNotNull(houseHoldEntity);
+        for (PersonInfoEntity personInfoEntity : personInfoEntityList) {
+            personInfoEntity.setRoomAddressId(roomAddressEntity.getId());
+            personInfoService.updateNotNull(personInfoEntity);
+        }
     }
 
     @Override
@@ -288,6 +309,17 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
                 exportHouseHoldVO.setM12(exportHouseHoldDataVO.getH3());
                 exportHouseHoldVO.setM13(exportHouseHoldDataVO.getH4());
                 exportHouseHoldVO.setM16(exportHouseHoldDataVO.getFillPersonPhone());
+                exportHouseHoldVO.setH10(exportHouseHoldDataVO.getH10());
+                exportHouseHoldVO.setH11(exportHouseHoldDataVO.getH11());
+                exportHouseHoldVO.setH12(exportHouseHoldDataVO.getH12());
+                exportHouseHoldVO.setH13(exportHouseHoldDataVO.getH13());
+                exportHouseHoldVO.setH14(exportHouseHoldDataVO.getH14());
+                exportHouseHoldVO.setH15(exportHouseHoldDataVO.getH15());
+                exportHouseHoldVO.setH16(exportHouseHoldDataVO.getH16());
+                exportHouseHoldVO.setH17(exportHouseHoldDataVO.getH17());
+                exportHouseHoldVO.setH18(exportHouseHoldDataVO.getH18());
+                exportHouseHoldVO.setH19(exportHouseHoldDataVO.getH19());
+                exportHouseHoldVO.setH20(exportHouseHoldDataVO.getH20());
                 exportHouseHoldVOS.add(exportHouseHoldVO);
             }
             return exportHouseHoldVOS;
@@ -561,6 +593,17 @@ public class CensusSurveyServiceImpl implements CensusSurveyService {
         exportHouseHoldAndPersonInfoVO.setH7("");
         exportHouseHoldAndPersonInfoVO.setH8("");
         exportHouseHoldAndPersonInfoVO.setH9("");
+        exportHouseHoldAndPersonInfoVO.setH10("");
+        exportHouseHoldAndPersonInfoVO.setH11("");
+        exportHouseHoldAndPersonInfoVO.setH12("");
+        exportHouseHoldAndPersonInfoVO.setH13("");
+        exportHouseHoldAndPersonInfoVO.setH14("");
+        exportHouseHoldAndPersonInfoVO.setH15("");
+        exportHouseHoldAndPersonInfoVO.setH16("");
+        exportHouseHoldAndPersonInfoVO.setH17("");
+        exportHouseHoldAndPersonInfoVO.setH18("");
+        exportHouseHoldAndPersonInfoVO.setH19("");
+        exportHouseHoldAndPersonInfoVO.setH20("");
         return exportHouseHoldAndPersonInfoVO;
     }
 }

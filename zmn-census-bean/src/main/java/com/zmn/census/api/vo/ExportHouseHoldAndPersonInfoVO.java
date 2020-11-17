@@ -84,6 +84,30 @@ public class ExportHouseHoldAndPersonInfoVO{
     @ExcelProperty("填报人类型")
     private String h9;
 
+
+    @ExcelProperty("承重类型")
+    private String h10;
+    @ExcelProperty("住房建成年代")
+    private String h11;
+    @ExcelProperty("住房所在建筑有无电梯")
+    private String h12;
+    @ExcelProperty("主要炊事燃料")
+    private String h13;
+    @ExcelProperty("住房内有无管道自来水")
+    private String h14;
+    @ExcelProperty("住房内有无厨房")
+    private String h15;
+    @ExcelProperty("住房内有无厕所")
+    private String h16;
+    @ExcelProperty("住房内有无洗澡设施")
+    private String h17;
+    @ExcelProperty("住房来源")
+    private String h18;
+    @ExcelProperty("月租房费用")
+    private String h19;
+    @ExcelProperty("拥有全部家用汽车的总价")
+    private String h20;
+
     @ExcelProperty("姓名")
     private String d1;
 
@@ -137,6 +161,71 @@ public class ExportHouseHoldAndPersonInfoVO{
 
     @ExcelProperty("是否识字")
     private String d12;
+
+    @ExcelProperty("户口登记地类型")
+    private String d13;
+    @ExcelProperty("是否有农村土地承包经营权")
+    private String d14;
+    @ExcelProperty("出生地")
+    private String d15;
+    @ExcelProperty("省（区、市）")
+    private String d15Province;
+    @ExcelProperty("五年前常住地")
+    private String d16;
+    @ExcelProperty("省")
+    private String d16Province;
+    @ExcelProperty("市")
+    private String d16City;
+    @ExcelProperty("县")
+    private String d16County;
+    @ExcelProperty("学业完成情况")
+    private String d18;
+    @ExcelProperty("工作情况")
+    private String d20;
+    @ExcelProperty("上周工作时间-小时")
+    private String d20Hour;
+    @ExcelProperty("工作单位或生产经营活动所属类型")
+    private String d21;
+    @ExcelProperty("行业:单位详细名称")
+    private String d22Name;
+    @ExcelProperty("行业:主要产品或主要业务")
+    private String d22Business;
+    @ExcelProperty("本人从事的具体工作")
+    private String d23;
+    @ExcelProperty("未工作原因")
+    private String d24;
+    @ExcelProperty("主要生活来源")
+    private String d25;
+    @ExcelProperty("婚姻状况")
+    private String d26;
+    @ExcelProperty("初婚:年")
+    private String d27Year;
+    @ExcelProperty("初婚:月")
+    private String d27Month;
+    @ExcelProperty("生育子女数")
+    private String d28;
+    @ExcelProperty("生过几个孩子:男")
+    private String d28BirthMan;
+    @ExcelProperty("生过几个孩子:女")
+    private String d28BirthWoman;
+    @ExcelProperty("现在存活几个孩子:男")
+    private String d28LiveMan;
+    @ExcelProperty("现在存活几个孩子:女")
+    private String d28LiveWoman;
+    @ExcelProperty("过去一年的生育状况")
+    private String d29;
+    @ExcelProperty("1胎生育时间:月")
+    private String d29FirstBirth;
+    @ExcelProperty("1胎:性别")
+    private String d29FirstGender;
+    @ExcelProperty("2胎生育时间:月")
+    private String d29SecondBirth;
+    @ExcelProperty("2胎:性别")
+    private String d29SecondGender;
+    @ExcelProperty("居住状况")
+    private String d30;
+    @ExcelProperty("身体健康状况")
+    private String d31;
 
 
     /**
