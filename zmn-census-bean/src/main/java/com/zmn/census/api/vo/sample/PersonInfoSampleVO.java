@@ -14,6 +14,15 @@ import lombok.Data;
 @Data
 public class PersonInfoSampleVO extends BaseIdVO {
 
+    @ApiModelProperty("公民身份号码")
+    private String d3;
+
+    @ApiModelProperty("性别")
+    private String d4;
+
+    @ApiModelProperty("出生年月")
+    private String d5;
+
     private String d13;
     private String d14;
     private String d15;

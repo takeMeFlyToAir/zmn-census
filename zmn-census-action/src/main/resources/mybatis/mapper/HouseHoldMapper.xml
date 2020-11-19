@@ -30,6 +30,7 @@
         <result property="h18" column="h18" jdbcType="VARCHAR"/>
         <result property="h19" column="h19" jdbcType="VARCHAR"/>
         <result property="h20" column="h20" jdbcType="VARCHAR"/>
+        <result property="h21" column="h21" jdbcType="VARCHAR"/>
         <result property="deleted" column="deleted" jdbcType="INTEGER"/>
         <result property="createdDate" column="created_date" jdbcType="TIMESTAMP"/>
         <result property="modifiedDate" column="modified_date" jdbcType="TIMESTAMP"/>

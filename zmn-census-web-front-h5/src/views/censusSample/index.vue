@@ -342,8 +342,11 @@
                     <span>{{ (index + 1) + ':  ' + item.d1 }}</span>
                   </div>
                 </template>
-                <van-field :disabled='queryDisable' v-model="item.d1" label="D1.姓名：" name="姓名" label-width="8em"
-                           placeholder="输入姓名"
+<!--                <van-field :disabled='queryDisable' v-model="item.d1" label="D1.姓名：" name="姓名" label-width="8em"-->
+<!--                           placeholder="输入姓名"-->
+<!--                />-->
+                <van-field :disabled='submitButtonDisable' required v-model="item.d1" label="D1.姓名："  name="姓名" label-width="8em" placeholder="输入姓名"
+                           :rules="[{ required: true,message:'请填写姓名' }]"
                 />
                 <van-field :disabled='queryDisable' readonly label="D2.与户主关系："
                            name="与户主关系" :value="item.d2" label-width="8em" placeholder="请查询">
@@ -352,13 +355,27 @@
                 <p class="question_tip question_tip_field">
                   提示：这里的户主按家庭日常生活习惯确定为户主,在登记集体户时,任选一人登记为户主,本户其他成员与户主关系一律登记为其他
                 </p>
-                <van-field :disabled='queryDisable' v-model="item.d3" label="D3.公民身份证号：" name="身份证号" label-width="8em"
-                           placeholder="输入身份证号"
+<!--                <van-field :disabled='queryDisable' v-model="item.d3" label="D3.公民身份证号：" name="身份证号" label-width="8em"-->
+<!--                           placeholder="输入身份证号"-->
+<!--                />-->
+
+                <van-field :disabled='submitButtonDisable' required v-model="item.d3" label="D3.公民身份证号：" name="身份证号"  label-width="8em" placeholder="输入身份证号"
+                           @blur="choiceD3(index)"
+                           :rules="[{ pattern:idCardNumPattern, message: '请输入正确的身份证号' }]"
                 />
 
-                <van-field :disabled='queryDisable' readonly label="D4.性别：" name="性别" :value="item.d4" label-width="8em"
-                           placeholder="请查询"
+                <van-field :disabled='submitButtonDisable' required readonly clickable label="D4.性别：" name="性别" :value="item.d4" label-width="8em" placeholder="请选择" @click="recordCurrentPersonInfoIndex(index,'showPickerD4')"
+                           :rules="[{ required: true ,message:'请选择性别'}]"
                 />
+                <van-popup v-model="item.showPickerD4" round position="bottom">
+                  <van-picker
+                    title="性别"
+                    show-toolbar
+                    :columns="d4List"
+                    @cancel="item.showPickerD4 = false"
+                    @confirm="choiceD4"
+                  />
+                </van-popup>
                 <van-field :disabled='true' readonly label="D5.出生年月：" name="出生年月" :value="item.d5" label-width="8em"
                            placeholder="请查询"
                 />
@@ -792,9 +809,8 @@
             <template #title>
               <div>其他信息</div>
             </template>
-            <van-field :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名："
-                       label-width="8em"
-                       placeholder="输入姓名"
+            <van-field required :disabled='submitButtonDisable' v-model="roomAddress.examinePersonName" label="普查员姓名：" label-width="8em" placeholder="输入姓名"
+                       :rules="[{ required: true, message:'请输入普查员姓名' }]"
             />
             <van-field
               :disabled='submitButtonDisable'
@@ -837,7 +853,7 @@ import {
 } from '@/api/community.js'
 import { censusSurvey_update, censusSurvey_getById } from '@/api/censusSurvey.js'
 import { mapGetters } from 'vuex'
-import { formatDate } from '@/utils'
+import { formatDate, getBirthdayByIdNo, getBirthYearAndMonthByIdNo } from '@/utils'
 
 export default {
   inject: ['reload'],
@@ -850,6 +866,7 @@ export default {
       submitButtonText: '提交',
       isAgain: false,
       queryDisable: true,
+      idCardNumPattern: /^(\d{15}|\d18|^\d{17}(\d|X|x))$/,
       submitButtonDisable: false,
       minDate: new Date(1900, 1, 1),
       maxDate: new Date(2020, 12, 30),
@@ -1005,6 +1022,10 @@ export default {
       },
       activePersonInfoList: [],
       currentPersonInfoIndex: null,
+      d4List: [
+        '男',
+        '女'
+      ],
       d13List: [
         '乡',
         '镇的村委会',
@@ -1121,6 +1142,7 @@ export default {
         isShowD29: true,
         isShowD28Other: false,
         isShowD29Other: false,
+        showPickerD4: false,
         showPickerD13: false,
         showPickerD14: false,
         showPickerD15: false,
@@ -1248,6 +1270,48 @@ export default {
     },
     onSubmit(values) {
       this.roomAddress.personCount = this.personInfoList.length
+      for (let i = 0; i < this.personInfoList.length; i++) {
+        if(this.personInfoList[i].d5 >= '2015-11'){
+          this.personInfoList[i].d16 = '';
+          this.personInfoList[i].d16Province = '';
+          this.personInfoList[i].d16City = '';
+          this.personInfoList[i].d16County = '';
+          this.personInfoList[i].d20=''
+          this.personInfoList[i].d20Hour=''
+          this.personInfoList[i].d21=''
+          this.personInfoList[i].d22Name=''
+          this.personInfoList[i].d22Business=''
+          this.personInfoList[i].d23=''
+          this.personInfoList[i].d24=''
+          this.personInfoList[i].d25=''
+          this.personInfoList[i].d26=''
+          this.personInfoList[i].d27=''
+          this.personInfoList[i].d27Month=''
+          this.personInfoList[i].d27Year=''
+          this.personInfoList[i].d26=''
+        }
+        if(this.personInfoList[i].d5 >= '2017-11'){
+          this.personInfoList[i].d18 = '';
+        }
+        if(this.personInfoList[i].d5 <= '1955-10' || this.personInfoList[i].d5 >= '2005-11' || this.personInfoList[i].d4=='男'){
+          this.personInfoList[i].d28= '';
+          this.personInfoList[i].d28BirthWoman= '';
+          this.personInfoList[i].d28BirthMan= '';
+          this.personInfoList[i].d28LiveMan= '';
+          this.personInfoList[i].d28LiveWoman= '';
+        }
+        if(this.personInfoList[i].d5 <= '1969-10' || this.personInfoList[i].d5 >= '2005-11' || this.personInfoList[i].d4=='男'){
+          this.personInfoList[i].d29= '';
+          this.personInfoList[i].d29FirstBirth= '';
+          this.personInfoList[i].d29FirstGender= '';
+          this.personInfoList[i].d29SecondBirth= '';
+          this.personInfoList[i].d29SecondGender= '';
+        }
+        if(this.personInfoList[i].d5 >= '1960-11' ){
+          this.personInfoList[i].d30 = '';
+          this.personInfoList[i].d31 = '';
+        }
+      }
       let censusSurvey = {
         roomAddress: this.roomAddress,
         houseHold: this.houseHold,
@@ -1273,8 +1337,6 @@ export default {
               if (res.code == 200) {
                 this.submitButtonText = '提交'
                 this.isAgain = true
-                this.submitButtonDisable = false
-
                 this.$toast.success('提交成功，衷心感谢您的参与！')
               } else {
                 console.log(res)
@@ -1385,7 +1447,18 @@ export default {
       this.personInfoList[index][showPicker] = true
       this.currentPersonInfoIndex = index
     },
-
+    choiceD3(index){
+      let idCardNum = this.personInfoList[index].d3
+      if(!this.idCardNumPattern.test(idCardNum)){
+        return
+      }
+      let birthYearAndMonth = getBirthYearAndMonthByIdNo(idCardNum)
+      this.personInfoList[index].d5 = birthYearAndMonth
+    },
+    choiceD4(value, index){
+      this.personInfoList[this.currentPersonInfoIndex].d4 = value
+      this.personInfoList[this.currentPersonInfoIndex].showPickerD4 = false
+    },
     choiceD13(value, index) {
       this.personInfoList[this.currentPersonInfoIndex].d13 = value
       this.personInfoList[this.currentPersonInfoIndex].showPickerD13 = false

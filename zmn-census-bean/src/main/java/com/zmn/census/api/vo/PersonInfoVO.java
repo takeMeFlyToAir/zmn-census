@@ -75,6 +75,39 @@ public class PersonInfoVO extends BaseVO {
     private String d7AddressALl;
     private String d8AddressALl;
 
+    private String d13;
+    private String d14;
+    private String d15;
+    private String d15Province;
+    private String d16;
+    private String d16Province;
+    private String d16City;
+    private String d16County;
+    private String d18;
+    private String d20;
+    private String d20Hour;
+    private String d21;
+    private String d22Name;
+    private String d22Business;
+    private String d23;
+    private String d24;
+    private String d25;
+    private String d26;
+    private String d27Year;
+    private String d27Month;
+    private String d28;
+    private String d28BirthMan;
+    private String d28BirthWoman;
+    private String d28LiveMan;
+    private String d28LiveWoman;
+    private String d29;
+    private String d29FirstBirth;
+    private String d29FirstGender;
+    private String d29SecondBirth;
+    private String d29SecondGender;
+    private String d30;
+    private String d31;
+
     public String getD7AddressAll(){
         if(StrUtil.isNotBlank(this.getD7Province())
                 && StrUtil.isNotBlank(this.getD7City())

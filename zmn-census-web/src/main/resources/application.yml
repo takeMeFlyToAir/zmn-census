@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: release
+    active: dev
   application:
     name: zmn-census-web
   resources:
